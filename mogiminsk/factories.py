@@ -1,0 +1,35 @@
+import factory
+from factory.alchemy import SQLAlchemyModelFactory
+from .models import Provider, Car, Trip
+from .utils import threaded_session
+
+
+class ProviderFactory(SQLAlchemyModelFactory):
+    class Meta:
+        model = Provider
+        sqlalchemy_session = threaded_session
+
+    id = factory.Sequence(lambda x: x)
+    identifier = factory.LazyAttribute(lambda x: 'provider-%d' % x.id)
+    name = factory.LazyAttribute(lambda x: 'Provider %d' % x.id)
+
+
+class CarFactory(SQLAlchemyModelFactory):
+    class Meta:
+        model = Car
+        sqlalchemy_session = threaded_session
+
+    id = factory.Sequence(lambda x: x)
+    provider = factory.SubFactory(ProviderFactory)
+    name = factory.LazyAttribute(lambda x: 'Car %d' % x.id)
+    kind = Car.MINIBUS_KIND
+
+
+class TripFactory(SQLAlchemyModelFactory):
+    class Meta:
+        model = Trip
+        sqlalchemy_session = threaded_session
+
+    id = factory.Sequence(lambda x: x)
+    car = factory.SubFactory(CarFactory)
+    direction = Trip.MOG_MINSK_DIRECTION

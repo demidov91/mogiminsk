@@ -1,0 +1,9 @@
+*.pyc
+__pycache__/*
+
+.idea
+*.key
+*.pem
+
+mogiminsk_parsing
+mogiminsk/local_settings.py
