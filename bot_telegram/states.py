@@ -1,8 +1,10 @@
+import datetime
 import re
 from typing import Dict, Type
-import datetime
+
 from .util import Message
 from mogiminsk.defines import DATE_FORMAT
+from mogiminsk.models import User
 from .messages import BotMessage, DateBotMessage, OtherDateBotMessage
 
 
@@ -11,8 +13,8 @@ STATES = {}     # type: Dict[str, Type[BaseState]]
 
 class BaseState:
     _intro_message = None    # type: BotMessage
-    message_was_not_recognized = False  # type: bool
-    _name = None     # type: str
+    message_was_not_recognized = False
+    is_db_state = False
 
     @classmethod
     def get_name(cls):
@@ -22,10 +24,10 @@ class BaseState:
         super(BaseState, cls).__init_subclass__()
         STATES[cls.get_name()] = cls
 
-    def __init__(self, data: dict, app):
+    def __init__(self, data: dict, request):
         self.data = data
         self.value = self.get_value()
-        self.app = app
+        self.request = request
 
     @classmethod
     def get_intro_message(cls):
@@ -41,11 +43,24 @@ class BaseState:
         raise NotImplementedError()
 
     def produce(self) ->BotMessage:
-        message = STATES[self.data['state']].get_intro_message()
+        next_state_class = STATES[self.data['state']]
+        if next_state_class.is_db_state:
+            self.set_db_state(self.data['state'])
+
+        message = next_state_class.get_intro_message()
         if self.message_was_not_recognized:
             return message.error_variant()
 
         return message
+
+    def set_db_state(self, state: str):
+        if self.request['user'] is None:
+            self.request['db'].add(User(
+                telegam_id=None,
+                telegram_state=state
+            ))
+        else:
+            self.request['user'].state = state
 
 
 class InitialState(BaseState):
@@ -119,6 +134,7 @@ class TimeState(BaseState):
     )
 
     time_pattern = re.compile('(?P<hours>\d{1,2}?):?(?P<minutes>\d{2})?\s*$')
+    is_db_state = True
 
     def consume(self, text: str):
         if text == 'Back':
@@ -152,11 +168,21 @@ class ShowState(BaseState):
         raise NotImplementedError()
 
 
-def get_state(data, app) -> BaseState:
-    if data and ('state' in data) and (data['state'] in STATES):
-        return STATES[data['state']](data, app)
+def get_state(data, request) -> BaseState:
+    return STATES[get_state_name(data, request)](data, request)
 
-    return InitialState({}, app)
+
+def get_state_name(data, request) -> str:
+    """
+    Get state name either from data or from db.
+    """
+    if data and ('state' in data) and (data['state'] in STATES):
+        return data['state']
+
+    if request['user'] is not None and request['user'].telegram_state:
+        return request['user'].telegram_state
+
+    return 'initial'
 
 
 ERROR_MESSAGE = WhereState._intro_message.copy(

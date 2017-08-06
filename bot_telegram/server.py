@@ -1,6 +1,6 @@
 from aiohttp import web
 import logging
-from bot_telegram.util import Update, get_api_url
+from bot_telegram.util import Update, get_api_url, get_db_user
 from bot_telegram.states import get_state, ERROR_MESSAGE
 from bot_telegram.middleware import error_handler_middleware, session_initializer_middleware
 from mogiminsk.utils import init_client, destroy_client, init_db, close_db
@@ -12,8 +12,9 @@ logger = logging.getLogger(__name__)
 async def telegram_webhook(request):
     data = await request.json()
     update = Update.create(data)
+    request['user'] = get_db_user(request['db'], update.get_user())
     if update.message or update.callback_query:
-        state = get_state(update.get_data(), request.app)
+        state = get_state(update.get_data(), request)
         try:
             state.consume(update.get_text())
             bot_message = state.produce()
