@@ -41,8 +41,6 @@ class CallbackQuery(OptionalObjectFactoryMixin):
         self.user = TelegramUser.create(data['from'])
         self.message = Message.create(data.get('message'))
         self.data = data.get('data')
-        if self.data is not None:
-            self.data = dict(parse_qsl(self.data))
 
 
 class Update(OptionalObjectFactoryMixin):
@@ -87,3 +85,12 @@ def get_api_url(method: str):
 
 def get_db_user(db: Session, remote_user: TelegramUser) -> User:
     return db.query(User).filter(User.telegram_id == remote_user.id).first()
+
+
+def get_or_create_user(db: Session, remote_user: TelegramUser):
+    user = get_db_user(db, remote_user)
+    if user is None:
+        user = User(telegram_context={'state': 'initial'}, telegram_id=remote_user.id)
+        db.add(user)
+
+    return user

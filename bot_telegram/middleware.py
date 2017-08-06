@@ -1,5 +1,5 @@
 from aiohttp import web
-from mogiminsk.utils import Session
+from mogiminsk.utils import Session, set_db
 
 import logging
 logger = logging.getLogger(__name__)
@@ -19,6 +19,7 @@ async def error_handler_middleware(app, handler):
 async def session_initializer_middleware(app, handler):
     async def inner_handler(request):
         request['db'] = Session()
+        set_db(request['db'])
         try:
             response = await handler(request)
         except Exception as e:

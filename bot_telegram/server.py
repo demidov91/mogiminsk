@@ -1,12 +1,14 @@
 import asyncio
 import logging
+import sys
 
 from aiohttp import web
 
 from bot_telegram.middleware import error_handler_middleware, session_initializer_middleware
 from bot_telegram.utils.states_helper import get_state, ERROR_MESSAGE
-from bot_telegram.utils.telegram_helper import Update, get_api_url, get_db_user
-from mogiminsk.utils import init_client, destroy_client, init_db, close_db
+from bot_telegram.utils.telegram_helper import Update, get_api_url, get_or_create_user
+from bot_telegram import state_lib
+from mogiminsk.utils import init_client, destroy_client, init_db, close_db, load_sub_modules
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +16,7 @@ logger = logging.getLogger(__name__)
 async def telegram_webhook(request):
     data = await request.json()
     update = Update.create(data)
-    request['user'] = get_db_user(request['db'], update.get_user())
+    request['user'] = get_or_create_user(request['db'], update.get_user())
     if not (update.message or update.callback_query):
         raise ValueError('Got unexpected message type: {}'.format(update))
 
@@ -26,9 +28,9 @@ async def telegram_webhook(request):
     except Exception as e:
         logger.exception(e)
         bot_message = ERROR_MESSAGE
-        state.data = {'state': 'where'}
+        request['user'].telegram_context = {'state': 'where'}
 
-    response_data = bot_message.to_telegram_data(state.data)
+    response_data = bot_message.to_telegram_data()
 
     if update.callback_query and bot_message.buttons:
         response_data.update({
@@ -59,7 +61,7 @@ async def post_data(request_to_tg_server: dict, client):
     async with client.post(url, json=request_to_tg_server) as response:
         if response.status != 200:
             logger.error('Got unexpected tg server response status: %s. Content: %s',
-                         response.satus, (await response.read()))
+                         response.status, (await response.read()))
             return
 
         try:
@@ -80,9 +82,9 @@ def init(argv):
     app.on_startup.append(init_client)
     app.on_cleanup.append(destroy_client)
     app.on_cleanup.append(close_db)
+    load_sub_modules(state_lib)
     return app
 
 
 if __name__ == '__main__':
-    import sys
     web.run_app(init(sys.argv), host='127.0.0.1', port=8090)

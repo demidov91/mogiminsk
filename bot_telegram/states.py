@@ -6,10 +6,15 @@ import datetime
 import re
 from typing import Dict, Type
 
+from sqlalchemy.orm.attributes import flag_modified
+
 from bot_telegram.utils.telegram_helper import Message
 from mogiminsk.defines import DATE_FORMAT
 from mogiminsk.models import User
 from .messages import BotMessage, DateBotMessage, OtherDateBotMessage
+from bot_telegram.utils.message_builder import ShowMessageBuilder
+from bot_telegram import state_lib
+from mogiminsk.utils import load_sub_modules
 
 STATES = {}     # type: Dict[str, Type[BaseState]]
 
@@ -29,18 +34,14 @@ class BaseState:
 
     def __init__(self, update, request):
         self.update = update
-        self.data = update.get_data() or {
-            'state': self.get_name(),
-        }
-        self.value = self.get_value()
+        self.data = request['user'].telegram_context
+        self.value = update.get_data()
+        self.data[self.get_name()] = self.value
         self.request = request
 
     @classmethod
-    def get_intro_message(cls):
+    def get_intro_message(cls, data):
         return cls._intro_message
-
-    def get_value(self):
-        return self.data.get(self.get_name())
 
     def get_state(self) -> str:
         return self.data['state']
@@ -55,28 +56,17 @@ class BaseState:
         raise NotImplementedError()
 
     def produce(self) ->BotMessage:
+        self.save_data()
         next_state_class = STATES[self.get_state()]
-        if not next_state_class.is_callback_state:
-            self.set_db_state(self.get_state())
-
-        message = next_state_class.get_intro_message()
+        message = next_state_class.get_intro_message(self.data)
         if self.message_was_not_recognized:
-            return message.error_variant()
+            return message.get_error_message()
 
         return message
 
-    def set_db_state(self, state: str):
-        if self.request['user'] is None:
-            telegram_user = self.update.get_user()
-            if telegram_user is None or telegram_user.id is None:
-                raise ValueError("Can't set db state to undefined user.")
-
-            self.request['db'].add(User(
-                telegram_id=telegram_user.id,
-                telegram_state=state
-            ))
-        else:
-            self.request['user'].state = state
+    def save_data(self):
+        self.request['user'].telegram_context = self.data
+        flag_modified(self.request['user'], 'telegram_context')
 
 
 class InitialState(BaseState):
@@ -101,6 +91,15 @@ class WhereState(BaseState):
         }]]
     )
 
+    @classmethod
+    def get_intro_message(cls, data):
+        message = super().get_intro_message(data)
+
+        if data.get('reset_reason'):
+            message.text = '{}\n{}'.format(data['reset_reason'], message.text)
+
+        return message
+
     def consume(self, text: str):
         if self.value in ('mogilev', 'minsk'):
             self.set_state('date')
@@ -114,7 +113,7 @@ class DateState(BaseState):
     Store date of the trip.
     """
     @classmethod
-    def get_intro_message(cls):
+    def get_intro_message(cls, data):
         return DateBotMessage()
 
     def consume(self, text: str):
@@ -137,52 +136,9 @@ class DateState(BaseState):
 
 class OtherDateState(DateState):
     @classmethod
-    def get_intro_message(cls):
+    def get_intro_message(cls, data):
         return OtherDateBotMessage()
 
     def consume(self, text: str):
         super(OtherDateState, self).consume(text)
         self.data[DateState.get_name()] = self.data[self.get_name()]
-
-
-class TimeState(BaseState):
-    _intro_message = BotMessage(
-        text='Enter time. For example: 7, 1125 or 16:40.',
-        buttons=[
-            [{'data': 'back', 'text': 'Back'}]
-        ],
-    )
-
-    time_pattern = re.compile('(?P<hours>\d{1,2}?):?(?P<minutes>\d{2})?\s*$')
-    is_callback_state = False
-
-    def consume(self, text: str):
-        if self.value == 'back':
-            self.set_state('date')
-            return
-
-        match = self.time_pattern.search(text)
-        if match is None:
-            self.message_was_not_recognized = True
-            return
-
-        hours = match.group('hours')
-        minutes = match.group('minutes') or '00'
-
-        cleared_time = f'{hours}:{minutes}'
-
-        try:
-            datetime.datetime.strptime(cleared_time, '%H:%M')
-        except ValueError:
-            self.message_was_not_recognized = True
-            return
-
-        self.data[self.get_name()] = cleared_time
-        self.set_state('show')
-
-
-class ShowState(BaseState):
-    _intro_message = BotMessage(text='Not implemented yet')
-
-    def consume(self, text: str):
-        raise NotImplementedError()

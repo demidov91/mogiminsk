@@ -5,28 +5,26 @@ from mogiminsk.defines import DATE_FORMAT
 
 
 class BotMessage:
-    # Text to show.
-    text = None     # type: str
+    # Message which will be displayed in case of not parsed data on this step.
+    error_message = None    # type: BotMessage
 
-    # Array of arrays
-    buttons = None  # type: List[List[Dict]]
-
-    # Text which will be displayed in case of not parsed data on this step.
-    _error_variant = None    # type: str
-
-    def __init__(self, text, buttons=None, text_buttons: tuple=None, create_error_variant=True):
+    def __init__(self,
+                 text: str,
+                 buttons: List[List[Dict]]=None,
+                 text_buttons: List[List[str]]=None,
+                 create_error_text=True):
         self.text = text
         self.buttons = buttons
         self.text_buttons = text_buttons
-        if create_error_variant:
-            self._error_variant = BotMessage(
+        if create_error_text:
+            self.error_message = BotMessage(
                 'Unexpected response.\n' + self.text,
                 self.buttons,
-                create_error_variant=False
+                create_error_text=False
             )
 
-    def error_variant(self):
-        return self._error_variant
+    def get_error_message(self):
+        return self.error_message
 
     def copy(self, text=None, buttons=None) ->'BotMessage':
         if text is None:
@@ -35,11 +33,11 @@ class BotMessage:
         if buttons is None:
             buttons = self.buttons
 
-        copy = BotMessage(text, buttons, create_error_variant=False)
-        copy._error_variant = self._error_variant
+        copy = BotMessage(text, buttons, create_error_text=False)
+        copy.error_message = self.error_message
         return copy
 
-    def to_telegram_data(self, data):
+    def to_telegram_data(self):
         formatted = {
             'text': self.text,
         }
@@ -55,7 +53,7 @@ class BotMessage:
             formatted['reply_markup'] = {
                 'inline_keyboard': [
                     [
-                        self.to_telegram_inline_button(x, data) for x in line
+                        self.to_telegram_inline_button(x) for x in line
                     ] for line in self.buttons
                 ],
             }
@@ -63,12 +61,10 @@ class BotMessage:
         return formatted
 
     @classmethod
-    def to_telegram_inline_button(cls, button, user_data):
-        data = user_data.copy()
-        data[data['state']] = button['data']
+    def to_telegram_inline_button(cls, button):
         return {
             'text': button['text'],
-            'callback_data': urlencode(data),
+            'callback_data': button['data'],
         }
 
 
@@ -103,4 +99,3 @@ class OtherDateBotMessage(BotMessage):
         ]
 
         super(OtherDateBotMessage, self).__init__('Choose the date', buttons)
-

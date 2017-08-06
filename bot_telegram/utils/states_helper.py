@@ -1,3 +1,6 @@
+"""
+Module which helps working with states.
+"""
 from bot_telegram.states import STATES, BaseState, WhereState
 import logging
 
@@ -5,20 +8,12 @@ logger = logging.getLogger(__name__)
 
 
 def get_state(update, request) -> BaseState:
-    return STATES[get_state_name(update.get_data(), request)](update, request)
+    state_name = request['user'].telegram_context.get('state')
 
+    if state_name in STATES:
+        return STATES[request['user'].telegram_context['state']](update, request)
 
-def get_state_name(data, request) -> str:
-    """
-    Get state name either from data or from db.
-    """
-    if data and ('state' in data) and (data['state'] in STATES):
-        return data['state']
-
-    if request['user'] is not None and request['user'].telegram_state:
-        return request['user'].telegram_state
-
-    return 'initial'
+    raise ValueError(f'Unknown state {state_name}')
 
 
 ERROR_MESSAGE = WhereState._intro_message.copy(
