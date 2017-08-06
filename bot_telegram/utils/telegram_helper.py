@@ -69,6 +69,17 @@ class Update(OptionalObjectFactoryMixin):
 
         return None
 
+    def get_message(self):
+        if self.message:
+            return self.message
+
+        if self.callback_query:
+            return self.callback_query.message
+
+    def get_chat(self):
+        message = self.get_message()
+        return message and message.chat
+
 
 def get_api_url(method: str):
     return f'https://api.telegram.org/bot{TELEGRAM_TOKEN}/{method}'

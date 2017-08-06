@@ -1,11 +1,17 @@
 import datetime
+from typing import List, Dict
 from urllib.parse import urlencode
 from mogiminsk.defines import DATE_FORMAT
 
 
 class BotMessage:
+    # Text to show.
     text = None     # type: str
-    buttons = None  # type: str
+
+    # Array of arrays
+    buttons = None  # type: List[List[Dict]]
+
+    # Text which will be displayed in case of not parsed data on this step.
     _error_variant = None    # type: str
 
     def __init__(self, text, buttons=None, text_buttons: tuple=None, create_error_variant=True):
@@ -38,19 +44,26 @@ class BotMessage:
             'text': self.text,
         }
 
-        if self.buttons:
-            formatted.update({
-                'reply_markup': {
-                    'inline_keyboard': [
-                        [self.to_telegram_button(x, data) for x in line] for line in self.buttons
-                    ],
-                },
-            })
+        if self.text_buttons:
+            formatted['reply_markup'] = {
+                'keyboard': self.text_buttons,
+                'resize_keyboard': True,
+                'one_time_keyboard': True,
+            }
+
+        elif self.buttons:
+            formatted['reply_markup'] = {
+                'inline_keyboard': [
+                    [
+                        self.to_telegram_inline_button(x, data) for x in line
+                    ] for line in self.buttons
+                ],
+            }
 
         return formatted
 
     @classmethod
-    def to_telegram_button(cls, button,  user_data):
+    def to_telegram_inline_button(cls, button, user_data):
         data = user_data.copy()
         data[data['state']] = button['data']
         return {
@@ -83,8 +96,8 @@ class OtherDateBotMessage(BotMessage):
         second_line = [today + datetime.timedelta(days=x) for x in range(7, 14)]
 
         buttons = [
-            [{'text': x.day, 'data': x.strftime(DATE_FORMAT)} for x in first_line],
-            [{'text': x.day, 'data': x.strftime(DATE_FORMAT)} for x in second_line],
+            [{'text': str(x.day), 'data': x.strftime(DATE_FORMAT)} for x in first_line],
+            [{'text': str(x.day), 'data': x.strftime(DATE_FORMAT)} for x in second_line],
 
             [{'text': 'Back', 'data': 'back', }],
         ]

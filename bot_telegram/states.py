@@ -1,12 +1,15 @@
+"""
+Module with all states.
+"""
+
 import datetime
 import re
 from typing import Dict, Type
 
-from .util import Message
+from bot_telegram.utils.telegram_helper import Message
 from mogiminsk.defines import DATE_FORMAT
 from mogiminsk.models import User
 from .messages import BotMessage, DateBotMessage, OtherDateBotMessage
-
 
 STATES = {}     # type: Dict[str, Type[BaseState]]
 
@@ -14,7 +17,7 @@ STATES = {}     # type: Dict[str, Type[BaseState]]
 class BaseState:
     _intro_message = None    # type: BotMessage
     message_was_not_recognized = False
-    is_db_state = False
+    is_callback_state = True
 
     @classmethod
     def get_name(cls):
@@ -24,8 +27,11 @@ class BaseState:
         super(BaseState, cls).__init_subclass__()
         STATES[cls.get_name()] = cls
 
-    def __init__(self, data: dict, request):
-        self.data = data
+    def __init__(self, update, request):
+        self.update = update
+        self.data = update.get_data() or {
+            'state': self.get_name(),
+        }
         self.value = self.get_value()
         self.request = request
 
@@ -36,6 +42,12 @@ class BaseState:
     def get_value(self):
         return self.data.get(self.get_name())
 
+    def get_state(self) -> str:
+        return self.data['state']
+
+    def set_state(self, state_name: str):
+        self.data['state'] = state_name
+
     def consume(self, text: str):
         """
         Updates user state and sets *is_unrecognized* value.
@@ -43,9 +55,9 @@ class BaseState:
         raise NotImplementedError()
 
     def produce(self) ->BotMessage:
-        next_state_class = STATES[self.data['state']]
-        if next_state_class.is_db_state:
-            self.set_db_state(self.data['state'])
+        next_state_class = STATES[self.get_state()]
+        if not next_state_class.is_callback_state:
+            self.set_db_state(self.get_state())
 
         message = next_state_class.get_intro_message()
         if self.message_was_not_recognized:
@@ -55,8 +67,12 @@ class BaseState:
 
     def set_db_state(self, state: str):
         if self.request['user'] is None:
+            telegram_user = self.update.get_user()
+            if telegram_user is None or telegram_user.id is None:
+                raise ValueError("Can't set db state to undefined user.")
+
             self.request['db'].add(User(
-                telegam_id=None,
+                telegram_id=telegram_user.id,
                 telegram_state=state
             ))
         else:
@@ -64,8 +80,10 @@ class BaseState:
 
 
 class InitialState(BaseState):
+    is_callback_state = False
+
     def consume(self, message: Message):
-        self.data['state'] = 'where'
+        self.set_state('where')
 
 
 class WhereState(BaseState):
@@ -85,7 +103,7 @@ class WhereState(BaseState):
 
     def consume(self, text: str):
         if self.value in ('mogilev', 'minsk'):
-            self.data['state'] = 'date'
+            self.set_state('date')
 
         else:
             self.message_was_not_recognized = True
@@ -101,11 +119,11 @@ class DateState(BaseState):
 
     def consume(self, text: str):
         if self.value == 'back':
-            self.data['state'] = 'where'
+            self.set_state('where')
             return
 
         if self.value == 'other':
-            self.data['state'] = 'otherdate'
+            self.set_state('otherdate')
             return
 
         try:
@@ -114,7 +132,7 @@ class DateState(BaseState):
             self.message_was_not_recognized = True
             return
 
-        self.data['state'] = 'time'
+        self.set_state('time')
 
 
 class OtherDateState(DateState):
@@ -130,15 +148,17 @@ class OtherDateState(DateState):
 class TimeState(BaseState):
     _intro_message = BotMessage(
         text='Enter time. For example: 7, 1125 or 16:40.',
-        text_buttons=('Back', ),
+        buttons=[
+            [{'data': 'back', 'text': 'Back'}]
+        ],
     )
 
     time_pattern = re.compile('(?P<hours>\d{1,2}?):?(?P<minutes>\d{2})?\s*$')
-    is_db_state = True
+    is_callback_state = False
 
     def consume(self, text: str):
-        if text == 'Back':
-            self.data['state'] = 'date'
+        if self.value == 'back':
+            self.set_state('date')
             return
 
         match = self.time_pattern.search(text)
@@ -158,7 +178,7 @@ class TimeState(BaseState):
             return
 
         self.data[self.get_name()] = cleared_time
-        self.data['state'] = 'show'
+        self.set_state('show')
 
 
 class ShowState(BaseState):
@@ -166,27 +186,3 @@ class ShowState(BaseState):
 
     def consume(self, text: str):
         raise NotImplementedError()
-
-
-def get_state(data, request) -> BaseState:
-    return STATES[get_state_name(data, request)](data, request)
-
-
-def get_state_name(data, request) -> str:
-    """
-    Get state name either from data or from db.
-    """
-    if data and ('state' in data) and (data['state'] in STATES):
-        return data['state']
-
-    if request['user'] is not None and request['user'].telegram_state:
-        return request['user'].telegram_state
-
-    return 'initial'
-
-
-ERROR_MESSAGE = WhereState._intro_message.copy(
-    text='Something went wrong...\n' + WhereState._intro_message.text
-)
-
-

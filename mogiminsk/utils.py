@@ -22,7 +22,7 @@ def init_db(app):
 
 
 def close_db(app):
-    app['db_engine'].close()
+    pass
 
 
 def get_db_engine(config):
