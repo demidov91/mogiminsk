@@ -38,7 +38,7 @@ class ShowFullState(BaseState):
             self.set_state('time')
             return
 
-        self.set_state('trip')
+        self.set_state('tripafterfull')
 
 
 class ShowSplitState(BaseState):
@@ -68,4 +68,4 @@ class ShowSplitState(BaseState):
             self.set_state('showfull')
             return
 
-        self.set_state('trip')
+        self.set_state('tripaftersplit')
