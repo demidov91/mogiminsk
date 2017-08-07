@@ -23,9 +23,7 @@ def destroy_client(app):
 
 
 def init_db(app):
-    app['db_engine'] = get_db_engine(DB_CONNECTION)
-    Session.configure(bind=app['db_engine'])
-    Base.metadata.create_all(app['db_engine'])
+    Base.metadata.create_all(Session.kw['bind'])
 
 
 def close_db(app):
@@ -58,3 +56,4 @@ def set_db(db):
 
 Session = sessionmaker()
 threaded_session = scoped_session(Session)
+configure_session()

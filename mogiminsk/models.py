@@ -36,6 +36,23 @@ class Provider(Base):
     identifier = Column(String(15), nullable=False, unique=True)
 
     cars = relationship('Car', back_populates='provider')
+    contacts = relationship('ProviderContact', back_populates='provider')
+
+
+class ProviderContact(Base):
+    __tablename__ = 'mogiminsk_provider_contact'
+
+    VELCOM_KIND = 'velcom'
+    MTS_KIND = 'mts'
+    LIFE_KIND = 'life'
+    WEB_KIND = 'web'
+
+    id = Column(Integer, primary_key=True)
+    contact = Column(String(63), nullable=False)
+    kind = Column(String(15), nullable=False)
+
+    provider_id = Column(Integer, ForeignKey(Provider.id), nullable=False)
+    provider = relationship('Provider', back_populates='contacts')
 
 
 class Car(Base):
