@@ -1,16 +1,15 @@
 from bot_telegram.states import BaseState
 from bot_telegram.messages import BotMessage
+from bot_telegram.defines import FIRST_TRIPS_SWITCH
 from mogiminsk.utils import get_db
 from mogiminsk.models import Trip
 
 
-class TripStateMixin:
-    prev_state_name = None  # type:str
-
+class TripState(BaseState):
     @classmethod
     def get_intro_message(cls, data):
         db = get_db()
-        trip = db.query(Trip).get(Trip.id == data[cls.prev_state_name])
+        trip = db.query(Trip).get(Trip.id == data['show'])
         contacts = filter(lambda x: x.kind in (
             'velcom', 'mts', 'life'
         ), trip.contacts)
@@ -46,20 +45,12 @@ class TripStateMixin:
             buttons=buttons
         )
 
-    def consume(self):
+    def consume(self, text):
         if self.value == 'back':
-            self.set_state(self.prev_state_name)
+            self.set_state('show')
             return
 
         if self.value == 'finish':
             self.set_state('where')
             self.data['reset_reason'] = 'This is a beta-version, trip was not booked.'
             return
-
-
-class TripAfterFullState(TripStateMixin, BaseState):
-    prev_state_name = 'showfull'
-
-
-class TripAfterShortState(TripStateMixin, BaseState):
-    prev_state_name = 'showsplit'

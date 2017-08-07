@@ -1,5 +1,5 @@
 """
-Module which helps working with states.
+Mediator module for states.
 """
 from bot_telegram.states import STATES, BaseState, WhereState
 import logging

@@ -10,11 +10,7 @@ from sqlalchemy.orm.attributes import flag_modified
 
 from bot_telegram.utils.telegram_helper import Message
 from mogiminsk.defines import DATE_FORMAT
-from mogiminsk.models import User
 from .messages import BotMessage, DateBotMessage, OtherDateBotMessage
-from bot_telegram.utils.message_builder import ShowMessageBuilder
-from bot_telegram import state_lib
-from mogiminsk.utils import load_sub_modules
 
 STATES = {}     # type: Dict[str, Type[BaseState]]
 
