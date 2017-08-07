@@ -2,7 +2,7 @@ from typing import Iterable
 
 from bot_telegram.states import BaseState
 from bot_telegram.messages import BotMessage
-from bot_telegram.defines import FIRST_TRIPS_SWITCH
+from bot_telegram.defines import FULL_TRIPS_SWITCH
 from mogiminsk.models import Trip
 from mogiminsk.utils import get_db
 
@@ -24,9 +24,9 @@ class ShowState(BaseState):
     @classmethod
     def get_intro_message(cls, data):
         trip_id_list = data['trip_id_list']
-        show_first = data.get(FIRST_TRIPS_SWITCH)
+        show_shorten = (len(trip_id_list) > 4) and not data.get(FULL_TRIPS_SWITCH)
 
-        if show_first:
+        if show_shorten:
             trip_id_list = trip_id_list[:3]
 
         trips = get_trips(trip_id_list)
@@ -34,7 +34,7 @@ class ShowState(BaseState):
             [trip_to_button(trip)] for trip in trips
         ]
 
-        if show_first:
+        if show_shorten:
             buttons.append([{
                 'text': 'More',
                 'data': 'full',
@@ -48,12 +48,12 @@ class ShowState(BaseState):
 
     def consume(self, text: str):
         if self.value == 'back':
-            del self.data[FIRST_TRIPS_SWITCH]
+            del self.data[FULL_TRIPS_SWITCH]
             self.set_state('time')
             return
 
         if self.value == 'full':
-            self.data[FIRST_TRIPS_SWITCH] = False
+            self.data[FULL_TRIPS_SWITCH] = True
             return
 
         self.set_state('trip')

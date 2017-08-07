@@ -1,6 +1,6 @@
 from bot_telegram.states import BaseState
 from bot_telegram.messages import BotMessage
-from bot_telegram.defines import FIRST_TRIPS_SWITCH
+from bot_telegram.defines import FULL_TRIPS_SWITCH
 from mogiminsk.utils import get_db
 from mogiminsk.models import Trip
 
@@ -9,10 +9,10 @@ class TripState(BaseState):
     @classmethod
     def get_intro_message(cls, data):
         db = get_db()
-        trip = db.query(Trip).get(Trip.id == data['show'])
+        trip = db.query(Trip).get(data['show'])
         contacts = filter(lambda x: x.kind in (
             'velcom', 'mts', 'life'
-        ), trip.contacts)
+        ), trip.car.provider.contacts)
 
         contacts_message = '\n'.join(
             [f'{contact.kind}: {contact.contact}' for contact in contacts]
@@ -42,7 +42,7 @@ class TripState(BaseState):
 
         return BotMessage(
             text=text,
-            buttons=buttons
+            buttons=buttons,
         )
 
     def consume(self, text):

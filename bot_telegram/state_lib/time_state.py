@@ -49,11 +49,7 @@ class TimeState(BaseState):
             self.data['reset_reason'] = 'No trips found :('
             return
 
-        if len(self.data['trip_id_list']) > 4:
-            self.set_state('showsplit')
-            return
-
-        self.set_state('showfull')
+        self.set_state('show')
 
     def get_trip_id_list(self):
         format_string = f'{DATE_FORMAT} %H:%M'

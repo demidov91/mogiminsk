@@ -10,10 +10,12 @@ class BotMessage:
 
     def __init__(self,
                  text: str,
+                 parse_mode: str=None,
                  buttons: List[List[Dict]]=None,
                  text_buttons: List[List[str]]=None,
                  create_error_text=True):
         self.text = text
+        self.parse_mode = parse_mode
         self.buttons = buttons
         self.text_buttons = text_buttons
         if create_error_text:
@@ -41,6 +43,9 @@ class BotMessage:
         formatted = {
             'text': self.text,
         }
+
+        if self.parse_mode:
+            formatted['parse_mode'] = self.parse_mode
 
         if self.text_buttons:
             formatted['reply_markup'] = {
