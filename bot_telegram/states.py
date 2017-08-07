@@ -92,6 +92,7 @@ class WhereState(BaseState):
         message = super().get_intro_message(data)
 
         if data.get('reset_reason'):
+            message = message.copy()
             message.text = '{}\n{}'.format(data['reset_reason'], message.text)
 
         return message

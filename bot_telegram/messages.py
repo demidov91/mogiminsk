@@ -10,9 +10,9 @@ class BotMessage:
 
     def __init__(self,
                  text: str,
-                 parse_mode: str=None,
                  buttons: List[List[Dict]]=None,
                  text_buttons: List[List[str]]=None,
+                 parse_mode: str = None,
                  create_error_text=True):
         self.text = text
         self.parse_mode = parse_mode
@@ -28,14 +28,22 @@ class BotMessage:
     def get_error_message(self):
         return self.error_message
 
-    def copy(self, text=None, buttons=None) ->'BotMessage':
+    def copy(self, text=None, parse_mode=None, buttons=None) ->'BotMessage':
         if text is None:
             text = self.text
 
         if buttons is None:
             buttons = self.buttons
 
-        copy = BotMessage(text, buttons, create_error_text=False)
+        if parse_mode is None:
+            parse_mode = self.parse_mode
+
+        copy = BotMessage(
+            text=text,
+            parse_mode=parse_mode,
+            buttons=buttons,
+            create_error_text=False
+        )
         copy.error_message = self.error_message
         return copy
 

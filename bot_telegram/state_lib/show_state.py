@@ -48,7 +48,7 @@ class ShowState(BaseState):
 
     def consume(self, text: str):
         if self.value == 'back':
-            del self.data[FULL_TRIPS_SWITCH]
+            self.data.pop(FULL_TRIPS_SWITCH, None)
             self.set_state('time')
             return
 

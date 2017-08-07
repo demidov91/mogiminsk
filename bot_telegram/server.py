@@ -60,16 +60,22 @@ async def post_data(request_to_tg_server: dict, client):
 
     async with client.post(url, json=request_to_tg_server) as response:
         if response.status != 200:
-            logger.error('Got unexpected tg server response status: %s. Content: %s',
-                         response.status, (await response.read()))
+            logger.error('Got unexpected tg server response status: %s.\n'
+                         'Request: %s.\n'
+                         'Response: %s',
+                         response.status,
+                         request_to_tg_server,
+                         (await response.read())
+                         )
             return
 
         try:
             response_data = await response.json()
             if not response_data['ok']:
-                logger.error("tg responded with ok != True. Response data: %s", response_data)
+                logger.error("tg responded with ok != True. Request: %s.\n"
+                             "Response data: %s", request_to_tg_server, response_data)
         except:
-            logger.exception("Can't parse server response.")
+            logger.exception("Can't parse server response. Request was: %s", request_to_tg_server)
 
 
 def init(argv):
