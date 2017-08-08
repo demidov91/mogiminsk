@@ -43,3 +43,18 @@ class TestLocal:
             assert run_count == 2
 
         asyncio.get_event_loop().run_until_complete(asyncio.gather(f1(), f2()))
+
+    def test_subsequent(self):
+        storage = local()
+
+        async def f1():
+            storage.some_data = 42
+
+        async def f2():
+            assert storage.some_data == 42
+
+        async def f_common():
+            await f1()
+            await f2()
+
+        asyncio.get_event_loop().run_until_complete(f_common())
