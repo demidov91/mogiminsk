@@ -5,7 +5,7 @@ from aiohttp import ClientSession
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.engine.url import URL
-from tasklocals import local
+from tasklocal import local
 
 from mogiminsk.settings import DB_CONNECTION
 from mogiminsk.models import Base

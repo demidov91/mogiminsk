@@ -6,4 +6,5 @@ __pycache__/*
 *.pem
 
 mogiminsk_parsing
+.cache
 mogiminsk/local_settings.py
