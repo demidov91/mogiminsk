@@ -1,10 +1,13 @@
+from typing import TypeVar, Type
+import logging
+
 from mogiminsk.settings import TELEGRAM_TOKEN
 from mogiminsk.models import User
 from sqlalchemy.orm import Session
-from typing import TypeVar, Type
-from urllib.parse import parse_qsl
+
 
 C = TypeVar('C')
+logger = logging.getLogger(__name__)
 
 
 class OptionalObjectFactoryMixin:
@@ -81,6 +84,29 @@ class Update(OptionalObjectFactoryMixin):
 
 def get_api_url(method: str):
     return f'https://api.telegram.org/bot{TELEGRAM_TOKEN}/{method}'
+
+
+async def post_data(request_to_tg_server: dict, client):
+    url = get_api_url(request_to_tg_server.pop('method'))
+
+    async with client.post(url, json=request_to_tg_server) as response:
+        if response.status != 200:
+            logger.error('Got unexpected tg server response status: %s.\n'
+                         'Request: %s.\n'
+                         'Response: %s',
+                         response.status,
+                         request_to_tg_server,
+                         (await response.read())
+                         )
+            return
+
+        try:
+            response_data = await response.json()
+            if not response_data['ok']:
+                logger.error("tg responded with ok != True. Request: %s.\n"
+                             "Response data: %s", request_to_tg_server, response_data)
+        except:
+            logger.exception("Can't parse server response. Request was: %s", request_to_tg_server)
 
 
 def get_db_user(db: Session, remote_user: TelegramUser) -> User:

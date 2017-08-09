@@ -4,11 +4,12 @@ import sys
 
 from aiohttp import web
 
-from bot_telegram.middleware import error_handler_middleware, session_initializer_middleware
 from bot_telegram.utils.states_helper import get_state, ERROR_MESSAGE
-from bot_telegram.utils.telegram_helper import Update, get_api_url, get_or_create_user
+from bot_telegram.utils.telegram_helper import Update, get_or_create_user, post_data
 from bot_telegram import state_lib
 from mogiminsk.utils import init_client, destroy_client, init_db, close_db, load_sub_modules
+from mogiminsk.middleware import block_ip, initilize_session, suppress_error
+from mogiminsk.settings import TELEGRAM_API_KEY
 
 logger = logging.getLogger(__name__)
 
@@ -55,33 +56,12 @@ async def telegram_webhook(request):
 
     return web.Response()
 
-async def post_data(request_to_tg_server: dict, client):
-    url = get_api_url(request_to_tg_server.pop('method'))
-
-    async with client.post(url, json=request_to_tg_server) as response:
-        if response.status != 200:
-            logger.error('Got unexpected tg server response status: %s.\n'
-                         'Request: %s.\n'
-                         'Response: %s',
-                         response.status,
-                         request_to_tg_server,
-                         (await response.read())
-                         )
-            return
-
-        try:
-            response_data = await response.json()
-            if not response_data['ok']:
-                logger.error("tg responded with ok != True. Request: %s.\n"
-                             "Response data: %s", request_to_tg_server, response_data)
-        except:
-            logger.exception("Can't parse server response. Request was: %s", request_to_tg_server)
-
 
 def init(argv):
     app = web.Application(middlewares=[
-        session_initializer_middleware,
-        error_handler_middleware,
+        suppress_error.middleware,
+        block_ip.KeyShield(TELEGRAM_API_KEY).middleware,
+        initilize_session.middleware,
     ])
     app.router.add_post("/mogiminsk/tg/", telegram_webhook)
     app.on_startup.append(init_db)
@@ -93,4 +73,5 @@ def init(argv):
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
     web.run_app(init(sys.argv), host='127.0.0.1', port=8090)

@@ -8,7 +8,8 @@ from sqlalchemy.engine.url import URL
 from tasklocal import local
 
 from mogiminsk.settings import DB_CONNECTION
-from mogiminsk.models import Base
+from mogiminsk.models import Base as MainBase
+from mogiminsk.middleware.block_ip_models import Base as BlockedIpBase
 
 
 _LOCAL = local()
@@ -23,7 +24,8 @@ def destroy_client(app):
 
 
 def init_db(app):
-    Base.metadata.create_all(Session.kw['bind'])
+    MainBase.metadata.create_all(bind=Session.kw['bind'])
+    BlockedIpBase.metadata.create_all(bind=Session.kw['bind'])
 
 
 def close_db(app):
