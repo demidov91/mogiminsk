@@ -86,8 +86,12 @@ class TripFetcher:
         trips_long_list = tuple(
             get_db().query(Trip).filter(
                 Trip.direction == self.direction).filter(
-                    Trip.start_datetime.in_(big_time_range)).filter(
-                        or_(Trip.remaining_seats > 0, Trip.remaining_seats.is_(None)))
+                    Trip.start_datetime.between(*big_time_range)).filter(
+                        or_(
+                            Trip.remaining_seats > 0, Trip.remaining_seats.is_(None)
+                        )).filter(
+                            Trip.is_removed.is_(False)
+            )
         )
 
         trips_short_list = tuple(filter(
