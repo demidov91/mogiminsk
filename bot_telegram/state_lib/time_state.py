@@ -7,6 +7,7 @@ from bot_telegram.messages import BotMessage
 from bot_telegram.states import BaseState
 from mogiminsk.models import Trip
 from mogiminsk.defines import DATE_FORMAT
+from mogiminsk.utils import get_db
 
 
 class TimeState(BaseState):
@@ -61,25 +62,17 @@ class TimeState(BaseState):
         else:
             direction = Trip.MINSK_MOG_DIRECTION
 
-        return TripFetcher(start_datetime, direction, self.request['db']).produce()
+        return TripFetcher(start_datetime, direction).produce()
 
 
-class BaseTripFetcher:
-    def __init__(self, db):
-        self.db = db
-
-    def produce(self):
-        raise NotImplementedError
-
-
-class TripFetcher(BaseTripFetcher):
+class TripFetcher:
     success = True
 
     big_start_datetime_range = datetime.timedelta(hours=1), datetime.timedelta(hours=1)
     small_start_datetime_range = datetime.timedelta(minutes=10), datetime.timedelta(minutes=30)
 
-    def __init__(self, dt: datetime.datetime, direction: str, db):
-        super().__init__(db)
+    def __init__(self, dt: datetime.datetime, direction: str):
+        super().__init__()
         self.dt = dt
         self.direction = direction
 
@@ -91,7 +84,7 @@ class TripFetcher(BaseTripFetcher):
 
         # Really we need only id list here.
         trips_long_list = tuple(
-            self.db.query(Trip).filter(
+            get_db().query(Trip).filter(
                 Trip.direction == self.direction).filter(
                     Trip.start_datetime.in_(big_time_range)).filter(
                         or_(Trip.remaining_seats > 0, Trip.remaining_seats.is_(None)))
@@ -116,7 +109,7 @@ class TripFetcher(BaseTripFetcher):
         return tuple(x.id for x in trips)
 
     def no_trips(self):
-        return ExtendedTripFetcher(self.dt, self.direction, self.db).produce()
+        return ExtendedTripFetcher(self.dt, self.direction).produce()
 
 
 class ExtendedTripFetcher(TripFetcher):

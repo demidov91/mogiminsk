@@ -7,11 +7,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def get_state(update, request) -> BaseState:
-    state_name = request['user'].telegram_context.get('state')
+def get_state(value, user) -> BaseState:
+    state_name = user.telegram_context.get('state')
 
     if state_name in STATES:
-        return STATES[request['user'].telegram_context['state']](update, request)
+        return STATES[user.telegram_context['state']](value, user)
 
     raise ValueError(f'Unknown state {state_name}')
 

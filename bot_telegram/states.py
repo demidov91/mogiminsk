@@ -28,12 +28,11 @@ class BaseState:
         super(BaseState, cls).__init_subclass__()
         STATES[cls.get_name()] = cls
 
-    def __init__(self, update, request):
-        self.update = update
-        self.data = request['user'].telegram_context
-        self.value = update.get_data()
+    def __init__(self, value, user):
+        self.data = user.telegram_context
+        self.value = value
         self.data[self.get_name()] = self.value
-        self.request = request
+        self.user = user
 
     @classmethod
     def get_intro_message(cls, data):
@@ -61,8 +60,8 @@ class BaseState:
         return message
 
     def save_data(self):
-        self.request['user'].telegram_context = self.data
-        flag_modified(self.request['user'], 'telegram_context')
+        self.user.telegram_context = self.data
+        flag_modified(self.user, 'telegram_context')
 
 
 class InitialState(BaseState):

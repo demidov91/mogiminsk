@@ -1,6 +1,6 @@
 import factory
 from factory.alchemy import SQLAlchemyModelFactory
-from .models import Provider, Car, Trip
+from .models import Provider, Car, Trip, User
 from .utils import threaded_session
 
 
@@ -33,3 +33,14 @@ class TripFactory(SQLAlchemyModelFactory):
     id = factory.Sequence(lambda x: x)
     car = factory.SubFactory(CarFactory)
     direction = Trip.MOG_MINSK_DIRECTION
+
+
+class UserFactory(SQLAlchemyModelFactory):
+    class Meta:
+        model = User
+        sqlalchemy_session = threaded_session
+
+    telegram_id = factory.Sequence(lambda x: x)
+
+    # ... or you can use Meta.force_flush=True
+    telegram_context = {}

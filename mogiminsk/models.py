@@ -24,7 +24,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     phone = Column(String(12), nullable=True, unique=True)
     language = Column(String(5), nullable=True)
-    telegram_context = Column(JSON, default='{}')
+    telegram_context = Column(JSON, default={})
     telegram_id = Column(Integer, nullable=False, unique=True)
     telegram_state = Column(String(31), nullable=True)
 
