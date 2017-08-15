@@ -7,7 +7,7 @@ from aiohttp import web
 from bot_telegram.utils.states_helper import get_state, ERROR_MESSAGE
 from bot_telegram.utils.telegram_helper import Update, get_or_create_user, post_data
 from bot_telegram import state_lib
-from mogiminsk.utils import init_client, destroy_client, init_db, close_db, load_sub_modules
+from mogiminsk.utils import init_client, destroy_client, load_sub_modules
 from mogiminsk.middleware import block_ip, initilize_session, suppress_error
 from mogiminsk.settings import TELEGRAM_API_KEY
 
@@ -64,10 +64,8 @@ def init(argv):
         initilize_session.middleware,
     ])
     app.router.add_post("/mogiminsk/tg/", telegram_webhook)
-    app.on_startup.append(init_db)
     app.on_startup.append(init_client)
     app.on_cleanup.append(destroy_client)
-    app.on_cleanup.append(close_db)
     load_sub_modules(state_lib)
     return app
 

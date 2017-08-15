@@ -23,13 +23,9 @@ def destroy_client(app):
     app['client'].close()
 
 
-def init_db(app):
+def create_db():
     MainBase.metadata.create_all(bind=Session.kw['bind'])
     BlockedIpBase.metadata.create_all(bind=Session.kw['bind'])
-
-
-def close_db(app):
-    pass
 
 
 def get_db_engine(config):
