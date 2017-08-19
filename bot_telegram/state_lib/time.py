@@ -4,7 +4,7 @@ import re
 from sqlalchemy import or_
 
 from bot_telegram.messages import BotMessage
-from bot_telegram.states import BaseState
+from bot_telegram.state_lib.base import BaseState
 from mogiminsk.models import Trip
 from mogiminsk.defines import DATE_FORMAT
 from mogiminsk.utils import get_db

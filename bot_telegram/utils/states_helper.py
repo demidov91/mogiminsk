@@ -1,10 +1,18 @@
 """
 Mediator module for states.
 """
-from bot_telegram.states import STATES, BaseState, WhereState
 import logging
 
+from bot_telegram import state_lib
+from bot_telegram.state_lib.base import STATES, BaseState
+from bot_telegram.state_lib.where import WhereState
+from mogiminsk.utils import load_sub_modules
+
+
 logger = logging.getLogger(__name__)
+
+
+load_sub_modules(state_lib)
 
 
 def get_state(value, user) -> BaseState:

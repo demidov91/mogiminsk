@@ -1,6 +1,6 @@
 import pytest
 
-from bot_telegram.state_lib.time_state import TimeState
+from bot_telegram.state_lib.time import TimeState
 from mogiminsk.factories import UserFactory
 
 

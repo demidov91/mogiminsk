@@ -1,6 +1,5 @@
-from bot_telegram.states import BaseState
+from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import BotMessage
-from bot_telegram.defines import FULL_TRIPS_SWITCH
 from mogiminsk.utils import get_db
 from mogiminsk.models import Trip
 
