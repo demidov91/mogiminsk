@@ -23,10 +23,13 @@ class User(Base):
     __tablename__ = 'mogiminsk_user'
     id = Column(Integer, primary_key=True)
     phone = Column(String(12), nullable=True, unique=True)
+    first_name = Column(String(31), nullable=True)
     language = Column(String(5), nullable=True)
     telegram_context = Column(JSON, default={})
     telegram_id = Column(Integer, nullable=False, unique=True)
     telegram_state = Column(String(31), nullable=True)
+
+    purchases = relationship('Purchase', back_populates='user')
 
 
 class Provider(Base):
@@ -96,5 +99,36 @@ class Trip(Base):
     cost = Column(DECIMAL(9, 2), nullable=True)
     is_removed = Column(Boolean, nullable=False, default=False)
 
+    purchases = relationship('Purchase', back_populates='trip')
+
     def __str__(self):
         return f'{self.start_datetime} {self.direction} trip by {self.car}'
+
+
+class Purchase(Base):
+    __tablename__ = 'mogiminsk_purchase'
+
+    id = Column(Integer, primary_key=True)
+
+    trip_id = Column(Integer, ForeignKey(Trip.id), nullable=False)
+    trip = relationship('Trip', back_populates='purchases')
+
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    user = relationship('User', back_populates='purchases')
+
+    start_station_identifier = Column(String(255), nullable=True)
+    start_station_name = Column(String(255), nullable=True)
+
+    def __str__(self):
+        if not self.id:
+            return 'Draft purchase.'
+
+        return 'Purchase for {provider}, {direction}, {start_datetime}.' \
+               ' {username} ({phone}).'.format(**{
+                'provider': self.trip.car.provider.name,
+                'direction': self.trip.direction,
+                'start_datetime': self.trip.start_datetime,
+                'username': self.user.first_name,
+                'phone': self.user.phone,
+            })
+

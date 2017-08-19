@@ -47,38 +47,7 @@ class BotMessage:
         copy.error_message = self.error_message
         return copy
 
-    def to_telegram_data(self):
-        formatted = {
-            'text': self.text,
-        }
 
-        if self.parse_mode:
-            formatted['parse_mode'] = self.parse_mode
-
-        if self.text_buttons:
-            formatted['reply_markup'] = {
-                'keyboard': self.text_buttons,
-                'resize_keyboard': True,
-                'one_time_keyboard': True,
-            }
-
-        elif self.buttons:
-            formatted['reply_markup'] = {
-                'inline_keyboard': [
-                    [
-                        self.to_telegram_inline_button(x) for x in line
-                    ] for line in self.buttons
-                ],
-            }
-
-        return formatted
-
-    @classmethod
-    def to_telegram_inline_button(cls, button):
-        return {
-            'text': button['text'],
-            'callback_data': button['data'],
-        }
 
 
 class DateBotMessage(BotMessage):

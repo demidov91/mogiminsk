@@ -6,7 +6,7 @@ from aiohttp import web
 
 from bot_telegram.utils.states_helper import get_state, ERROR_MESSAGE
 from bot_telegram.utils.telegram_helper import Update, get_or_create_user, post_data
-from bot_telegram import state_lib
+from bot_telegram.utils.messages_helper import to_telegram_message
 from mogiminsk.utils import init_client, destroy_client
 from mogiminsk.middleware import (
     block_ip,
@@ -36,7 +36,7 @@ async def telegram_webhook(request):
         bot_message = ERROR_MESSAGE
         request['user'].telegram_context = {'state': 'where'}
 
-    response_data = bot_message.to_telegram_data()
+    response_data = to_telegram_message(bot_message)
 
     if update.callback_query and bot_message.buttons:
         response_data.update({

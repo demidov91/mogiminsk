@@ -1,14 +1,14 @@
 from bot_telegram.state_lib.base import BaseState
+from bot_telegram.state_lib.utils import purchase_state_or_other
 from bot_telegram.messages import BotMessage
 from mogiminsk.utils import get_db
 from mogiminsk.models import Trip
+from mogiminsk_interaction.utils import has_connector
 
 
 class TripState(BaseState):
     @classmethod
-    def get_intro_message(cls, data):
-        db = get_db()
-        trip = db.query(Trip).get(data['show'])
+    def get_text(cls, trip: Trip):
         contacts = filter(lambda x: x.kind in (
             'velcom', 'mts', 'life'
         ), trip.car.provider.contacts)
@@ -29,7 +29,26 @@ class TripState(BaseState):
         else:
             text += ':\n' + contacts_message
 
-        buttons = [
+        return text
+
+    @classmethod
+    def get_buttons(cls, trip):
+        if has_connector(trip.car.provider.identifier):
+            return [
+                [{
+                    'text': 'Back',
+                    'data': 'back',
+                }, {
+                    'text': 'Purchase',
+                    'data': 'purchase',
+                }],
+                [{
+                    'text': 'Got it',
+                    'data': 'finish',
+                }]
+            ]
+
+        return [
             [{
                 'text': 'Back',
                 'data': 'back',
@@ -39,9 +58,13 @@ class TripState(BaseState):
             }]
         ]
 
+    @classmethod
+    def get_intro_message(cls, data):
+        db = get_db()
+        trip = db.query(Trip).get(data['show'])
         return BotMessage(
-            text=text,
-            buttons=buttons,
+            text=cls.get_text(trip),
+            buttons=cls.get_buttons(trip),
         )
 
     def consume(self, text):
@@ -53,3 +76,9 @@ class TripState(BaseState):
             self.set_state('where')
             self.data['reset_reason'] = 'This is a beta-version, trip was not booked.'
             return
+
+        if self.value == 'purchase':
+            self.set_state(purchase_state_or_other(self.user))
+            return
+
+        self.message_was_not_recognized = True
