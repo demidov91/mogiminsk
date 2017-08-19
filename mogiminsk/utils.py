@@ -29,7 +29,7 @@ def create_db():
 
 
 def get_db_engine(config):
-    return create_engine(URL(**config), echo=True)
+    return create_engine(URL(**config))
 
 
 def configure_session():
