@@ -17,13 +17,12 @@ class WhereState(BaseState):
         }]]
     )
 
-    @classmethod
-    def get_intro_message(cls, data):
-        message = super().get_intro_message(data)
+    def get_intro_message(self):
+        message = super().get_intro_message()
 
-        if data.get('reset_reason'):
+        if self.data.get('reset_reason'):
             message = message.copy()
-            message.text = '{}\n{}'.format(data.pop('reset_reason'), message.text)
+            message.text = '{}\n{}'.format(self.data.pop('reset_reason'), message.text)
 
         return message
 

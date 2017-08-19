@@ -21,10 +21,9 @@ def trip_to_button(trip: Trip) -> dict:
 
 
 class ShowState(BaseState):
-    @classmethod
-    def get_intro_message(cls, data):
-        trip_id_list = data['trip_id_list']
-        show_shorten = (len(trip_id_list) > 4) and not data.get(FULL_TRIPS_SWITCH)
+    def get_intro_message(self):
+        trip_id_list = self.data['trip_id_list']
+        show_shorten = (len(trip_id_list) > 4) and not self.data.get(FULL_TRIPS_SWITCH)
 
         if show_shorten:
             trip_id_list = trip_id_list[:3]

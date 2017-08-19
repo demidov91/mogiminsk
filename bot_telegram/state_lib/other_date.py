@@ -4,10 +4,9 @@ from .date import DateState
 
 
 class OtherDateState(DateState):
-    @classmethod
-    def get_intro_message(cls, data):
+    def get_intro_message(self):
         return OtherDateBotMessage()
 
-    def process(self, text: str):
-        super(OtherDateState, self).process(text)
+    def process(self):
+        super(OtherDateState, self).process()
         self.data[DateState.get_name()] = self.data[self.get_name()]

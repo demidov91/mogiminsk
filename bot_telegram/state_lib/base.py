@@ -27,9 +27,8 @@ class BaseState:
         self.data = user.telegram_context
         self.user = user
 
-    @classmethod
-    def get_intro_message(cls, data):
-        return cls._intro_message
+    def get_intro_message(self):
+        return self._intro_message
 
     def get_state(self) -> str:
         return self.data['state']
@@ -57,8 +56,8 @@ class BaseState:
 
     def produce(self) ->BotMessage:
         self.save_data()
-        next_state_class = STATES[self.get_state()]
-        message = next_state_class.get_intro_message(self.data)
+        next_state = STATES[self.get_state()](self.user)
+        message = next_state.get_intro_message(self.data)
         if self.message_was_not_recognized:
             return message.get_error_message()
 
@@ -77,6 +76,14 @@ class BaseState:
                 return history.pop()
 
         return 'where'
+
+    def back_to(self, state):
+        history = self.data.get('history', [])
+        last_popped = None
+        while history and last_popped != state:
+            last_popped = history.pop()
+
+        return last_popped or 'where'
 
     def append_history(self, state):
         history = self.data.get('history', [])

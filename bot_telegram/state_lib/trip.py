@@ -7,8 +7,8 @@ from mogiminsk_interaction.utils import has_connector
 
 
 class TripState(BaseState):
-    @classmethod
-    def get_text(cls, trip: Trip):
+    @staticmethod
+    def get_text(trip: Trip):
         contacts = filter(lambda x: x.kind in (
             'velcom', 'mts', 'life'
         ), trip.car.provider.contacts)
@@ -31,8 +31,8 @@ class TripState(BaseState):
 
         return text
 
-    @classmethod
-    def get_buttons(cls, trip):
+    @staticmethod
+    def get_buttons(trip):
         if has_connector(trip.car.provider.identifier):
             return [
                 [{
@@ -58,13 +58,12 @@ class TripState(BaseState):
             }]
         ]
 
-    @classmethod
-    def get_intro_message(cls, data):
+    def get_intro_message(self):
         db = get_db()
-        trip = db.query(Trip).get(data['show'])
+        trip = db.query(Trip).get(self.data['show'])
         return BotMessage(
-            text=cls.get_text(trip),
-            buttons=cls.get_buttons(trip),
+            text=self.get_text(trip),
+            buttons=self.get_buttons(trip),
         )
 
     def process(self):
