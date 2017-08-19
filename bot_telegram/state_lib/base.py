@@ -11,6 +11,9 @@ class BaseState:
     _intro_message = None    # type: BotMessage
     message_was_not_recognized = False
     is_callback_state = True
+    value = None
+    text = None
+    contact = None
 
     @classmethod
     def get_name(cls):
@@ -20,10 +23,8 @@ class BaseState:
         super(BaseState, cls).__init_subclass__()
         STATES[cls.get_name()] = cls
 
-    def __init__(self, value, user):
+    def __init__(self, user):
         self.data = user.telegram_context
-        self.value = value
-        self.data[self.get_name()] = self.value
         self.user = user
 
     @classmethod
@@ -36,7 +37,19 @@ class BaseState:
     def set_state(self, state_name: str):
         self.data['state'] = state_name
 
-    def consume(self, text: str):
+    def consume(self, common_message):
+        self.value = common_message.data
+        self.data[self.get_name()] = self.value
+        self.text = common_message.text
+        self.contact = common_message.contact
+
+        if self.value == 'back':
+            self.set_state(self.pop_history())
+            return
+
+        self.process()
+
+    def process(self):
         """
         Updates user state and sets *is_unrecognized* value.
         """
@@ -52,5 +65,20 @@ class BaseState:
         return message
 
     def save_data(self):
+        self.append_history(self.data.get_state())
         self.user.telegram_context = self.data
         flag_modified(self.user, 'telegram_context')
+
+    def pop_history(self):
+        history = self.data.get('history')
+        if history:
+            history.pop()
+            if history:
+                return history.pop()
+
+        return 'where'
+
+    def append_history(self, state):
+        history = self.data.get('history', [])
+        history.append(state)
+        self.data['history'] = history

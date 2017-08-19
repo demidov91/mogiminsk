@@ -21,12 +21,8 @@ class TimeState(BaseState):
     time_pattern = re.compile('(?P<hours>\d{1,2}?):?(?P<minutes>\d{2})?\s*$')
     is_callback_state = False
 
-    def consume(self, text: str):
-        if self.value == 'back':
-            self.set_state('date')
-            return
-
-        match = self.time_pattern.search(text)
+    def process(self):
+        match = self.time_pattern.search(self.text)
         if match is None:
             self.message_was_not_recognized = True
             return

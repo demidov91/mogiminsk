@@ -27,7 +27,7 @@ class WhereState(BaseState):
 
         return message
 
-    def consume(self, text: str):
+    def process(self):
         if self.value in ('mogilev', 'minsk'):
             self.set_state('date')
 

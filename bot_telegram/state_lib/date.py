@@ -3,6 +3,7 @@ import datetime
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import DateBotMessage
 from mogiminsk.defines import DATE_FORMAT
+from messager.input_data import Message
 
 
 class DateState(BaseState):
@@ -13,11 +14,7 @@ class DateState(BaseState):
     def get_intro_message(cls, data):
         return DateBotMessage()
 
-    def consume(self, text: str):
-        if self.value == 'back':
-            self.set_state('where')
-            return
-
+    def process(self):
         if self.value == 'other':
             self.set_state('otherdate')
             return

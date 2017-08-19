@@ -67,11 +67,7 @@ class TripState(BaseState):
             buttons=cls.get_buttons(trip),
         )
 
-    def consume(self, text):
-        if self.value == 'back':
-            self.set_state('show')
-            return
-
+    def process(self):
         if self.value == 'finish':
             self.set_state('where')
             self.data['reset_reason'] = 'This is a beta-version, trip was not booked.'

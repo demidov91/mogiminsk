@@ -3,6 +3,7 @@ import logging
 
 from mogiminsk.settings import TELEGRAM_TOKEN
 from mogiminsk.models import User
+from messager.input_data import Message as CommonMessage, Contact as CommonContact
 from sqlalchemy.orm import Session
 
 
@@ -31,6 +32,7 @@ class Message(OptionalObjectFactoryMixin):
         self.user = TelegramUser.create(data.get('from'))
         self.text = data.get('text')
         self.chat = Chat(data['chat'])
+        self.contact = Contact.create(data.get('contact'))
 
 
 class Chat(OptionalObjectFactoryMixin):
@@ -44,6 +46,12 @@ class CallbackQuery(OptionalObjectFactoryMixin):
         self.user = TelegramUser.create(data['from'])
         self.message = Message.create(data.get('message'))
         self.data = data.get('data')
+
+
+class Contact(OptionalObjectFactoryMixin):
+    def __init__(self, data):
+        self.phone = data['phone_number']
+        self.user_id = data.get('user_id')
 
 
 class Update(OptionalObjectFactoryMixin):
@@ -80,6 +88,24 @@ class Update(OptionalObjectFactoryMixin):
     def get_chat(self):
         message = self.get_message()
         return message and message.chat
+
+    def get_contact(self):
+        msg = self.get_message()
+        if not msg:
+            return
+
+        return msg.contact
+
+    def get_common_message(self):
+        data = self.get_data()
+        text = self.get_text()
+        contact = self.get_contact()
+        if contact is not None:
+            contact = CommonContact(
+                phone=contact.phone, identifier=contact.user_id
+            )
+
+        return CommonMessage(data=data, text=text, contact=CommonContact)
 
 
 def get_api_url(method: str):

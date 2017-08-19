@@ -46,12 +46,7 @@ class ShowState(BaseState):
         }])
         return BotMessage(text='Choose trip:', buttons=buttons)
 
-    def consume(self, text: str):
-        if self.value == 'back':
-            self.data.pop(FULL_TRIPS_SWITCH, None)
-            self.set_state('time')
-            return
-
+    def process(self):
         if self.value == 'full':
             self.data[FULL_TRIPS_SWITCH] = True
             return

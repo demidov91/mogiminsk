@@ -26,10 +26,10 @@ async def telegram_webhook(request):
     if not (update.message or update.callback_query):
         raise ValueError('Got unexpected message type: {}'.format(update))
 
-    state = get_state(update.get_data(), request['user'])
+    state = get_state(request['user'])
 
     try:
-        state.consume(update.get_text())
+        state.consume(update.get_common_message())
         bot_message = state.produce()
     except Exception as e:
         logger.exception(e)

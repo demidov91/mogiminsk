@@ -8,6 +8,6 @@ class OtherDateState(DateState):
     def get_intro_message(cls, data):
         return OtherDateBotMessage()
 
-    def consume(self, text: str):
-        super(OtherDateState, self).consume(text)
+    def process(self, text: str):
+        super(OtherDateState, self).process(text)
         self.data[DateState.get_name()] = self.data[self.get_name()]

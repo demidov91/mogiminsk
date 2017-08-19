@@ -15,11 +15,11 @@ logger = logging.getLogger(__name__)
 load_sub_modules(state_lib)
 
 
-def get_state(value, user) -> BaseState:
+def get_state(user) -> BaseState:
     state_name = user.telegram_context.get('state')
 
     if state_name in STATES:
-        return STATES[user.telegram_context['state']](value, user)
+        return STATES[user.telegram_context['state']](user)
 
     raise ValueError(f'Unknown state {state_name}')
 

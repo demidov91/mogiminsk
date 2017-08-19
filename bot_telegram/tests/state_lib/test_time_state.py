@@ -2,6 +2,7 @@ import pytest
 
 from bot_telegram.state_lib.time import TimeState
 from mogiminsk.factories import UserFactory
+from messager.input_data import Message
 
 
 class TestTimeState:
@@ -15,23 +16,27 @@ class TestTimeState:
         mocker.patch.object(TimeState, 'get_trip_id_list')
         TimeState.get_trip_id_list.return_value = [1]
 
-        tested = TimeState(None, UserFactory())
-        tested.consume(text)
+        tested = TimeState(UserFactory())
+        tested.text = text
+        tested.process()
         assert tested.data['time'] == expected
         assert tested.data['state'] == 'show'
         assert len(tested.data['trip_id_list']) == 1
         TimeState.get_trip_id_list.assert_called_once()
 
     def test_consume__back(self):
-        tested = TimeState('back', UserFactory())
-        tested.consume('Back')
+        tested = TimeState(UserFactory(telegram_context={
+            'history': ['initial', 'where', 'date', 'time'],
+        }))
+        tested.consume(Message(data='back'))
         assert tested.data['state'] == 'date'
 
     @pytest.mark.parametrize('text', (
         'back', '94', 'Hi!'
     ))
     def test_consume__not_correct(self, text):
-        tested = TimeState(None, UserFactory(telegram_context={'state': 'time'}))
-        tested.consume(text)
+        tested = TimeState(UserFactory(telegram_context={'state': 'time'}))
+        tested.text = text
+        tested.process()
         assert tested.data['state'] == 'time'
         assert tested.message_was_not_recognized
