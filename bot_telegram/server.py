@@ -8,7 +8,12 @@ from bot_telegram.utils.states_helper import get_state, ERROR_MESSAGE
 from bot_telegram.utils.telegram_helper import Update, get_or_create_user, post_data
 from bot_telegram import state_lib
 from mogiminsk.utils import init_client, destroy_client, load_sub_modules
-from mogiminsk.middleware import block_ip, initilize_session, suppress_error
+from mogiminsk.middleware import (
+    block_ip,
+    initilize_session,
+    suppress_error,
+    clear_tasklocal,
+)
 from mogiminsk.settings import TELEGRAM_API_KEY
 
 logger = logging.getLogger(__name__)
@@ -60,6 +65,7 @@ async def telegram_webhook(request):
 def init(argv):
     app = web.Application(middlewares=[
         suppress_error.middleware,
+        clear_tasklocal,
         block_ip.KeyShield(TELEGRAM_API_KEY).middleware,
         initilize_session.middleware,
     ])

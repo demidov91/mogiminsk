@@ -52,6 +52,10 @@ def set_db(db):
     _LOCAL.db = db
 
 
+def clear_local_data():
+    _LOCAL.clear()
+
+
 Session = sessionmaker()
 threaded_session = scoped_session(Session)
 configure_session()

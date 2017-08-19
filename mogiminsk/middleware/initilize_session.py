@@ -1,5 +1,3 @@
-from aiohttp import web
-
 from mogiminsk.utils import Session, set_db
 
 

@@ -58,3 +58,15 @@ class TestLocal:
             await f2()
 
         asyncio.get_event_loop().run_until_complete(f_common())
+
+    def test_clear(self):
+        storage = local()
+        async def f():
+            storage.field = 'value'
+            assert hasattr(storage, 'field')
+            storage.clear()
+            assert not hasattr(storage, 'field')
+
+        asyncio.get_event_loop().run_until_complete(f())
+
+
