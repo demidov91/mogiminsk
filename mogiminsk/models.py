@@ -40,6 +40,7 @@ class Provider(Base):
 
     cars = relationship('Car', back_populates='provider')
     contacts = relationship('ProviderContact', back_populates='provider')
+    stations = relationship('Station', back_populates='provider')
 
 
 class ProviderContact(Base):
@@ -105,6 +106,20 @@ class Trip(Base):
         return f'{self.start_datetime} {self.direction} trip by {self.car}'
 
 
+class Station(Base):
+    __tablename__ = 'mogiminsk_station'
+
+    id = Column(Integer, primary_key=True)
+
+    provider_id = Column(Integer, ForeignKey(Provider.id), nullable=False)
+    provider = relationship('Provider', back_populates='stations')
+
+    direction = Column(String(31), nullable=False)
+    is_removed = Column(Boolean, nullable=False, default=False)
+
+    purchases = relationship('Purchase', back_populates='station')
+
+
 class Purchase(Base):
     __tablename__ = 'mogiminsk_purchase'
 
@@ -116,8 +131,11 @@ class Purchase(Base):
     user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     user = relationship('User', back_populates='purchases')
 
-    start_station_identifier = Column(String(255), nullable=True)
-    start_station_name = Column(String(255), nullable=True)
+    station_id = Column(Integer, ForeignKey(Station.id), nullable=True)
+    station = relationship('Station', back_populates='purchases')
+
+    station_name = Column(String(255), nullable=True)
+    notes = Column(String(255), nullable=True)
 
     def __str__(self):
         if not self.id:
@@ -131,4 +149,3 @@ class Purchase(Base):
                 'username': self.user.first_name,
                 'phone': self.user.phone,
             })
-
