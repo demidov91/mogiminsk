@@ -114,6 +114,7 @@ class Station(Base):
     provider_id = Column(Integer, ForeignKey(Provider.id), nullable=False)
     provider = relationship('Provider', back_populates='stations')
 
+    name = Column(String(127), nullable=False)
     direction = Column(String(31), nullable=False)
     is_removed = Column(Boolean, nullable=False, default=False)
 
