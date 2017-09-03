@@ -4,7 +4,7 @@ from bot_telegram.state_lib.utils import purchase_state_or_other
 
 
 class PhoneState(BaseState):
-    _intro_message = BotMessage(None, text_buttons=[[{
+    _intro_message = BotMessage(text_buttons=[[{
         'type': 'phone',
     }]])
 

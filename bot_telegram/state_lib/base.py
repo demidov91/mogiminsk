@@ -57,14 +57,14 @@ class BaseState:
     def produce(self) ->BotMessage:
         self.save_data()
         next_state = STATES[self.get_state()](self.user)
-        message = next_state.get_intro_message(self.data)
+        message = next_state.get_intro_message()
         if self.message_was_not_recognized:
             return message.get_error_message()
 
         return message
 
     def save_data(self):
-        self.append_history(self.data.get_state())
+        self.append_history(self.get_state())
         self.user.telegram_context = self.data
         flag_modified(self.user, 'telegram_context')
 

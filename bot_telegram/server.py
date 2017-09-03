@@ -65,7 +65,7 @@ async def telegram_webhook(request):
 def init(argv):
     app = web.Application(middlewares=[
         suppress_error.middleware,
-        clear_tasklocal,
+        clear_tasklocal.middleware,
         block_ip.KeyShield(TELEGRAM_API_KEY).middleware,
         initilize_session.middleware,
     ])

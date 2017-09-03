@@ -9,7 +9,7 @@ class BotMessage:
     error_message = None    # type: BotMessage
 
     def __init__(self,
-                 text: str,
+                 text: str='',
                  buttons: List[List[Dict]]=None,
                  text_buttons: List[List[str]]=None,
                  parse_mode: str = None,
