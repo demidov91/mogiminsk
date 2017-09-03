@@ -15,12 +15,12 @@ logger = logging.getLogger(__name__)
 class StationState(BaseState):
     def get_intro_message(self):
         db = get_db()
-        trip = db.query(Trip).get(self.data['trip'])
-        stations = tuple(get_db().query(Station, Provider).filter(
+        trip = db.query(Trip).get(self.data['show'])
+        stations = tuple(get_db().query(Station).join(Provider).filter(
             and_(
                 Provider.id == trip.car.provider_id,
                 Station.direction == trip.direction,
-                not Station.is_removed
+                Station.is_removed == False
             )
         ))
 
@@ -30,8 +30,9 @@ class StationState(BaseState):
                              f'and direction {trip.direction}')
 
         buttons = [
-            [{'text': x.name, 'data': x.id}] for x in stations
+            [{'text': x.name, 'data': str(x.id)}] for x in stations
         ]
+        buttons.append([{'text': 'Back', 'data': 'back'}])
 
         return BotMessage('Choose start station:', buttons=buttons)
 
@@ -45,5 +46,5 @@ class StationState(BaseState):
             self.message_was_not_recognized = True
             return
 
-        self.set_state(purchase_state_or_other(self.user))
+        self.set_state(purchase_state_or_other(self.user, self.data))
 

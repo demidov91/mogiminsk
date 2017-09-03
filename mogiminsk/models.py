@@ -1,12 +1,8 @@
-import sys
-
 from sqlalchemy import Column, Integer, String, ForeignKey, \
-    JSON, SmallInteger, DateTime, UniqueConstraint, Interval, Boolean, DECIMAL
+    JSON, SmallInteger, DateTime, UniqueConstraint, Boolean, DECIMAL
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.functions import func
-
-from mogiminsk.settings import DB_CONNECTION
 
 
 class TimeTrackingBase:
@@ -135,7 +131,7 @@ class Purchase(Base):
     station_id = Column(Integer, ForeignKey(Station.id), nullable=True)
     station = relationship('Station', back_populates='purchases')
 
-    station_name = Column(String(255), nullable=True)
+    seats = Column(SmallInteger, nullable=False, default=1)
     notes = Column(String(255), nullable=True)
 
     def __str__(self):

@@ -18,4 +18,4 @@ class PhoneState(BaseState):
             return
 
         self.user.phone = self.contact.phone
-        self.set_state(purchase_state_or_other(self.user))
+        self.set_state(purchase_state_or_other(self.user, self.data))

@@ -18,4 +18,4 @@ class FirstNameState(BaseState):
             return
 
         self.user.first_name = self.text
-        self.set_state(purchase_state_or_other(self.user))
+        self.set_state(purchase_state_or_other(self.user, self.data))

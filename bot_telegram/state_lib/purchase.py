@@ -10,13 +10,14 @@ class PurchaseState(BaseState):
                f'Direction: {trip.direction}' \
                f'Time: {trip.start_datetime}\n' \
                f'Phone: {self.user.phone}\n' \
-               f'(tap on the buttons bellow to change)'
+               f'(Tap on the buttons bellow to change)'
 
     def get_buttons(self):
-        notes = self.data.get('notes', 'Notes')
+        notes = self.data.get('notes')
+        notes = f'Notes: {notes}' if notes else 'Notes'
 
         return [
-            [{'text': f'Name: {self.user.first_name}', 'data': 'first_name'}],
+            [{'text': f'Name: {self.user.first_name}', 'data': 'firstname'}],
             [{'text': f'Pick up: {self.data["station_name"]}', 'data': 'station'}],
             [{'text': f'{self.data["seat"]} seat(s)', 'data': 'seat'}],
             [{'text': f'{notes}', 'data': 'notes'}],
@@ -35,8 +36,11 @@ class PurchaseState(BaseState):
             buttons=self.get_buttons()
         )
 
-    def produce(self):
-        if self.value in ('first_name', 'station', 'seat'):
+    def process_back(self):
+        self.set_state(self.back_to('trip'))
+
+    def process(self):
+        if self.value in ('firstname', 'station', 'seat', 'notes'):
             self.set_state(self.value)
             return
 

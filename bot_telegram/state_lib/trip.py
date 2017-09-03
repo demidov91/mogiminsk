@@ -73,7 +73,7 @@ class TripState(BaseState):
             return
 
         if self.value == 'purchase':
-            self.set_state(purchase_state_or_other(self.user))
+            self.set_state(purchase_state_or_other(self.user, self.data))
             return
 
         self.message_was_not_recognized = True

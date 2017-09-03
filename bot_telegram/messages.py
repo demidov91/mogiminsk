@@ -48,8 +48,6 @@ class BotMessage:
         return copy
 
 
-
-
 class DateBotMessage(BotMessage):
     def __init__(self):
         today = datetime.date.today()

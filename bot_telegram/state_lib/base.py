@@ -43,10 +43,13 @@ class BaseState:
         self.contact = common_message.contact
 
         if self.value == 'back':
-            self.set_state(self.pop_history())
+            self.process_back()
             return
 
         self.process()
+
+    def process_back(self):
+        self.set_state(self.pop_history())
 
     def process(self):
         """
