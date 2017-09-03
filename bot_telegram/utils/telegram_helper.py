@@ -105,7 +105,7 @@ class Update(OptionalObjectFactoryMixin):
                 phone=contact.phone, identifier=contact.user_id
             )
 
-        return CommonMessage(data=data, text=text, contact=CommonContact)
+        return CommonMessage(data=data, text=text, contact=contact)
 
 
 def get_api_url(method: str):
