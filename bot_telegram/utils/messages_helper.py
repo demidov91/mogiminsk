@@ -1,27 +1,7 @@
 from bot_telegram.messages import BotMessage
 
 
-def to_telegram_message(message: BotMessage):
-    formatted = {
-        'text': message.text,
-    }
 
-    if message.parse_mode:
-        formatted['parse_mode'] = message.parse_mode
-
-    if message.text_buttons:
-        formatted['reply_markup'] = {
-            'keyboard': TextButtonFormatter.format_list(message.text_buttons),
-            'resize_keyboard': True,
-            'one_time_keyboard': True,
-        }
-
-    elif message.buttons:
-        formatted['reply_markup'] = {
-            'inline_keyboard': InlineButtonFormatter.format_list(message.buttons),
-        }
-
-    return formatted
 
 
 class ButtonFormatter:

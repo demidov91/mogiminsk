@@ -1,4 +1,4 @@
-from typing import Dict, Type
+from typing import Dict, Type, Sequence
 
 from sqlalchemy.orm.attributes import flag_modified
 
@@ -8,6 +8,13 @@ STATES = {}     # type: Dict[str, Type[BaseState]]
 
 
 class BaseState:
+    """
+    Reserved *data* keys:
+        **state** - current state name.
+        **history** - navigation history. Stored a list of state names.
+        **messages** - messages to show a user. Should be shown once before main message.
+    """
+
     _intro_message = None    # type: BotMessage
     message_was_not_recognized = False
     is_callback_state = True
@@ -57,14 +64,14 @@ class BaseState:
         """
         raise NotImplementedError()
 
-    def produce(self) ->BotMessage:
+    def produce(self) ->Sequence[BotMessage]:
         self.save_data()
         next_state = STATES[self.get_state()](self.user)
         message = next_state.get_intro_message()
         if self.message_was_not_recognized:
-            return message.get_error_message()
+            self.add_message('Unexpected response.')
 
-        return message
+        return message.to_sequence(self.pop_messages())
 
     def save_data(self):
         self.append_history(self.get_state())
@@ -92,3 +99,14 @@ class BaseState:
         history = self.data.get('history', [])
         history.append(state)
         self.data['history'] = history
+
+    def add_message(self, text):
+        messages = self.data.get('messages', [])
+        messages.append(text)
+        self.data['messages'] = messages
+
+    def pop_messages(self):
+        messages = self.data.pop('messages', ())
+        self.data['messages'] = ()
+        return messages
+

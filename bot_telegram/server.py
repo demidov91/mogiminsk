@@ -4,9 +4,8 @@ import sys
 
 from aiohttp import web
 
-from bot_telegram.utils.states_helper import get_state, ERROR_MESSAGE
-from bot_telegram.utils.telegram_helper import Update, get_or_create_user, post_data
-from bot_telegram.utils.messages_helper import to_telegram_message
+from bot_telegram.utils.states_helper import get_state, get_error_message
+from bot_telegram.utils.telegram_helper import Update, get_or_create_user, send_messages
 from mogiminsk.utils import init_client, destroy_client
 from mogiminsk.middleware import (
     block_ip,
@@ -30,28 +29,20 @@ async def telegram_webhook(request):
 
     try:
         state.consume(update.get_common_message())
-        bot_message = state.produce()
+        bot_messages = state.produce()
     except Exception as e:
         logger.exception(e)
-        bot_message = ERROR_MESSAGE
+        bot_messages = get_error_message()
         request['user'].telegram_context = {'state': 'where'}
 
-    response_data = to_telegram_message(bot_message)
-
-    if update.callback_query and bot_message.buttons:
-        response_data.update({
-            'method': 'editMessageText',
-            'chat_id': update.get_chat().id,
-            'message_id': update.get_message().id,
-        })
-
-    else:
-        response_data.update({
-            'method': 'sendMessage',
-            'chat_id': update.get_chat().id,
-        })
-
-    asyncio.ensure_future(post_data(response_data, request.app['client']))
+    asyncio.ensure_future(
+        send_messages(
+            bot_messages,
+            update.get_chat().id,
+            request.app['client'],
+            update.get_message().id if update.callback_query else None
+        )
+    )
 
     if update.callback_query:
         return web.json_response({

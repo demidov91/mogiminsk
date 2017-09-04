@@ -69,7 +69,7 @@ class TripState(BaseState):
     def process(self):
         if self.value == 'finish':
             self.set_state('where')
-            self.data['reset_reason'] = 'This is a beta-version, trip was not booked.'
+            self.add_message('This is a beta-version, trip was not booked.')
             return
 
         if self.value == 'purchase':

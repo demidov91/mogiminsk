@@ -43,7 +43,7 @@ class TimeState(BaseState):
 
         if len(self.data['trip_id_list']) == 0:
             self.set_state('where')
-            self.data['reset_reason'] = 'No trips found :('
+            self.add_message('No trips found :(')
             return
 
         self.set_state('show')

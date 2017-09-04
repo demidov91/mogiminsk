@@ -24,6 +24,6 @@ def get_state(user) -> BaseState:
     raise ValueError(f'Unknown state {state_name}')
 
 
-ERROR_MESSAGE = WhereState._intro_message.copy(
-    text='Something went wrong...\n' + WhereState._intro_message.text
-)
+def get_error_message():
+    message = WhereState._intro_message
+    return message.to_sequence(['Something went wrong...'])

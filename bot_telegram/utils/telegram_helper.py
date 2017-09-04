@@ -1,6 +1,8 @@
 from typing import TypeVar, Type
 import logging
 
+from bot_telegram.utils.messages_helper import TextButtonFormatter, InlineButtonFormatter
+from bot_telegram.messages import BotMessage
 from mogiminsk.settings import TELEGRAM_TOKEN
 from mogiminsk.models import User
 from messager.input_data import Message as CommonMessage, Contact as CommonContact
@@ -135,6 +137,29 @@ async def post_data(request_to_tg_server: dict, client):
             logger.exception("Can't parse server response. Request was: %s", request_to_tg_server)
 
 
+async def send_messages(messages, chat_id, client, update_message_id):
+    converted_messages = tuple(to_telegram_message(x) for x in messages)
+    full_messages = []
+    if update_message_id is not None:
+        converted_messages[0].update({
+            'method': 'editMessageText',
+            'chat_id': chat_id,
+            'message_id': update_message_id,
+        })
+        full_messages.append(converted_messages[0])
+        converted_messages = converted_messages[1:]
+
+    for converted_message in converted_messages:
+        converted_message.update({
+            'method': 'sendMessage',
+            'chat_id': chat_id,
+        })
+        full_messages.append(converted_message)
+
+    for msg in full_messages:
+        await post_data(msg, client)
+
+
 def get_db_user(db: Session, remote_user: TelegramUser) -> User:
     return db.query(User).filter(User.telegram_id == remote_user.id).first()
 
@@ -146,3 +171,26 @@ def get_or_create_user(db: Session, remote_user: TelegramUser):
         db.add(user)
 
     return user
+
+
+def to_telegram_message(message: BotMessage):
+    formatted = {
+        'text': message.text,
+    }
+
+    if message.parse_mode:
+        formatted['parse_mode'] = message.parse_mode
+
+    if message.text_buttons:
+        formatted['reply_markup'] = {
+            'keyboard': TextButtonFormatter.format_list(message.text_buttons),
+            'resize_keyboard': True,
+            'one_time_keyboard': True,
+        }
+
+    elif message.buttons:
+        formatted['reply_markup'] = {
+            'inline_keyboard': InlineButtonFormatter.format_list(message.buttons),
+        }
+
+    return formatted

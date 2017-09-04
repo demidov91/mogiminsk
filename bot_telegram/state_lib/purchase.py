@@ -1,7 +1,8 @@
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import BotMessage
 from mogiminsk.utils import get_db
-from mogiminsk.models import Trip, User
+from mogiminsk.models import Trip
+from mogiminsk_interaction.utils import get_connector, PurchaseResult
 
 
 class PurchaseState(BaseState):
@@ -45,6 +46,35 @@ class PurchaseState(BaseState):
             return
 
         if self.value == 'submit':
-            pass
+            trip = get_db().query(Trip).get(self.data['show'])
+            connector = get_connector(trip.car.provider.identifier)
+
+            purchase_result = connector.purchase(
+                start_datetime=self.data['time'],
+                direction=self.data['where'],
+                seat=self.data['seat'],
+                first_name=self.user.first_name,
+                station=self.data['station'],
+                notes=self.data['notes'],
+                phone=self.user.phone,
+            )
+
+            if purchase_result == PurchaseResult.SUCCESS:
+                self.add_message(connector.get_message())
+                self.set_state(self.back_to('where'))
+                return
+
+            if purchase_result == PurchaseResult.FAIL:
+                self.back_to('show')
+                self.add_message('Failed to purchase the trip. Try another provider.')
+                return
+
+            if purchase_result == PurchaseResult.NEED_REGISTRATION:
+                self.back_to('show')
+                self.add_message(
+                    "This phone number hasn't been registered yet but in-messager registration is not implemented yet. "
+                    "Call to purchase the trip."
+                )
+                return
 
         self.message_was_not_recognized = True

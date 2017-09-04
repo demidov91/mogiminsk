@@ -17,15 +17,6 @@ class WhereState(BaseState):
         }]]
     )
 
-    def get_intro_message(self):
-        message = super().get_intro_message()
-
-        if self.data.get('reset_reason'):
-            message = message.copy()
-            message.text = '{}\n{}'.format(self.data.pop('reset_reason'), message.text)
-
-        return message
-
     def process(self):
         if self.value in ('mogilev', 'minsk'):
             self.set_state('date')
