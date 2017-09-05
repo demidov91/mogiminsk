@@ -127,30 +127,34 @@ class TgSender:
         })
         return msg
 
-    async def send_messages(self, messages):
+    async def send_messages(self, messages: list, callback_message_id: int):
         converted_messages = tuple(self.convert_message(x) for x in messages)
-        current_messages = set()
+
+        if callback_message_id is not None:
+            converted_messages[0].update({
+                'method': 'editMessageText',
+                'message_id': callback_message_id,
+            })
+
+        just_sent_messages = []
         for msg in converted_messages:
             response_data = await self.post_data(msg)
             if response_data is not None and 'result' in response_data and 'message_id' in response_data['result']:
-                current_messages.add(response_data['result']['message_id'])
+                just_sent_messages.append(response_data['result']['message_id'])
 
-        current_messages.update(await self.remove_previous_messages())
-        await self.save_current_messages(current_messages)
+        await self.remove_previous_messages(dont_touch=(callback_message_id, ))
+        await self.save_current_messages(just_sent_messages)
 
-    async def remove_previous_messages(self):
-        prev_messages = tuple(int(x) for x in self.user.telegram_messages.split(',') if x)
-        for response_data in await asyncio.gather(*(
+    async def remove_previous_messages(self, dont_touch=()):
+        prev_messages = set(int(x) for x in self.user.telegram_messages.split(',') if x)
+        prev_messages -= set(dont_touch)
+        await asyncio.gather(*(
             self.post_data({
                 'method': 'deleteMessage',
                 'chat_id': self.chat_id,
                 'message_id': x
             }) for x in prev_messages)
-        ):
-            if response_data is not None:
-                logger.info(response_data)
-
-        return []
+        )
 
     async def save_current_messages(self, messages_id):
         self.db_session.query(User).update({

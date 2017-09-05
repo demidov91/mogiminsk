@@ -37,7 +37,7 @@ async def telegram_webhook(request):
 
     connector = TgSender(update.get_chat().id, request.app['client'], request['user'])
     asyncio.ensure_future(
-        connector.send_messages(bot_messages)
+        connector.send_messages(bot_messages, update.get_message().id if update.callback_query else None)
     )
 
     if update.callback_query:
