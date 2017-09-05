@@ -5,7 +5,7 @@ import sys
 from aiohttp import web
 
 from bot_telegram.utils.states_helper import get_state, get_error_message
-from bot_telegram.utils.telegram_helper import Update, get_or_create_user, send_messages
+from bot_telegram.utils.telegram_helper import Update, get_or_create_user, TgSender
 from mogiminsk.utils import init_client, destroy_client
 from mogiminsk.middleware import (
     block_ip,
@@ -35,13 +35,9 @@ async def telegram_webhook(request):
         bot_messages = get_error_message()
         request['user'].telegram_context = {'state': 'where'}
 
+    connector = TgSender(update.get_chat().id, request.app['client'], request['user'])
     asyncio.ensure_future(
-        send_messages(
-            bot_messages,
-            update.get_chat().id,
-            request.app['client'],
-            update.get_message().id if update.callback_query else None
-        )
+        connector.send_messages(bot_messages)
     )
 
     if update.callback_query:

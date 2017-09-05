@@ -1,3 +1,4 @@
+import asyncio
 from typing import TypeVar, Type
 import logging
 
@@ -5,8 +6,8 @@ from bot_telegram.utils.messages_helper import TextButtonFormatter, InlineButton
 from bot_telegram.messages import BotMessage
 from mogiminsk.settings import TELEGRAM_TOKEN
 from mogiminsk.models import User
+from mogiminsk.utils import Session
 from messager.input_data import Message as CommonMessage, Contact as CommonContact
-from sqlalchemy.orm import Session
 
 
 C = TypeVar('C')
@@ -110,54 +111,103 @@ class Update(OptionalObjectFactoryMixin):
         return CommonMessage(data=data, text=text, contact=contact)
 
 
-def get_api_url(method: str):
-    return f'https://api.telegram.org/bot{TELEGRAM_TOKEN}/{method}'
+class TgSender:
+    def __init__(self, chat_id: int, client, user: User):
+        self.db_session = Session(autocommit=True)
+        self.chat_id = chat_id
+        self.client = client
+        self.user = self.db_session.query(User).get(user.id)
+        self._loop = asyncio.get_event_loop()
 
-
-async def post_data(request_to_tg_server: dict, client):
-    url = get_api_url(request_to_tg_server.pop('method'))
-
-    async with client.post(url, json=request_to_tg_server) as response:
-        if response.status != 200:
-            logger.error('Got unexpected tg server response status: %s.\n'
-                         'Request: %s.\n'
-                         'Response: %s',
-                         response.status,
-                         request_to_tg_server,
-                         (await response.read())
-                         )
-            return
-
-        try:
-            response_data = await response.json()
-            if not response_data['ok']:
-                logger.error("tg responded with ok != True. Request: %s.\n"
-                             "Response data: %s", request_to_tg_server, response_data)
-        except:
-            logger.exception("Can't parse server response. Request was: %s", request_to_tg_server)
-
-
-async def send_messages(messages, chat_id, client, update_message_id):
-    converted_messages = tuple(to_telegram_message(x) for x in messages)
-    full_messages = []
-    if update_message_id is not None:
-        converted_messages[0].update({
-            'method': 'editMessageText',
-            'chat_id': chat_id,
-            'message_id': update_message_id,
-        })
-        full_messages.append(converted_messages[0])
-        converted_messages = converted_messages[1:]
-
-    for converted_message in converted_messages:
-        converted_message.update({
+    def convert_message(self, message):
+        msg = self.to_telegram_message(message)
+        msg.update({
             'method': 'sendMessage',
-            'chat_id': chat_id,
+            'chat_id': self.chat_id,
         })
-        full_messages.append(converted_message)
+        return msg
 
-    for msg in full_messages:
-        await post_data(msg, client)
+    async def send_messages(self, messages):
+        converted_messages = tuple(self.convert_message(x) for x in messages)
+        current_messages = set()
+        for msg in converted_messages:
+            response_data = await self.post_data(msg)
+            if response_data is not None and 'result' in response_data and 'message_id' in response_data['result']:
+                current_messages.add(response_data['result']['message_id'])
+
+        current_messages.update(await self.remove_previous_messages())
+        await self.save_current_messages(current_messages)
+
+    async def remove_previous_messages(self):
+        prev_messages = tuple(int(x) for x in self.user.telegram_messages.split(',') if x)
+        for response_data in await asyncio.gather(*(
+            self.post_data({
+                'method': 'deleteMessage',
+                'chat_id': self.chat_id,
+                'message_id': x
+            }) for x in prev_messages)
+        ):
+            if response_data is not None:
+                logger.info(response_data)
+
+        return []
+
+    async def save_current_messages(self, messages_id):
+        self.db_session.query(User).update({
+            User.telegram_messages: ','.join(str(x) for x in messages_id)
+        })
+
+    async def post_data(self, request_to_tg_server: dict):
+        url = self.get_api_url(request_to_tg_server.pop('method'))
+
+        async with self.client.post(url, json=request_to_tg_server) as response:
+            if response.status != 200:
+                logger.error('Got unexpected tg server response status: %s.\n'
+                             'Request: %s.\n'
+                             'Response: %s',
+                             response.status,
+                             request_to_tg_server,
+                             (await response.read())
+                             )
+                return
+
+            try:
+                response_data = await response.json()
+                if not response_data['ok']:
+                    logger.error("tg responded with ok != True. Request: %s.\n"
+                                 "Response data: %s", request_to_tg_server, response_data)
+            except:
+                logger.exception("Can't parse server response. Request was: %s", request_to_tg_server)
+                return
+
+            return response_data
+
+    @staticmethod
+    def get_api_url(method: str):
+        return f'https://api.telegram.org/bot{TELEGRAM_TOKEN}/{method}'
+
+    @staticmethod
+    def to_telegram_message(message: BotMessage):
+        formatted = {
+            'text': message.text,
+        }
+
+        if message.parse_mode:
+            formatted['parse_mode'] = message.parse_mode
+
+        if message.text_buttons:
+            formatted['reply_markup'] = {
+                'keyboard': TextButtonFormatter.format_list(message.text_buttons),
+                'resize_keyboard': True,
+                'one_time_keyboard': True,
+            }
+
+        elif message.buttons:
+            formatted['reply_markup'] = {
+                'inline_keyboard': InlineButtonFormatter.format_list(message.buttons),
+            }
+
+        return formatted
 
 
 def get_db_user(db: Session, remote_user: TelegramUser) -> User:
@@ -173,24 +223,4 @@ def get_or_create_user(db: Session, remote_user: TelegramUser):
     return user
 
 
-def to_telegram_message(message: BotMessage):
-    formatted = {
-        'text': message.text,
-    }
 
-    if message.parse_mode:
-        formatted['parse_mode'] = message.parse_mode
-
-    if message.text_buttons:
-        formatted['reply_markup'] = {
-            'keyboard': TextButtonFormatter.format_list(message.text_buttons),
-            'resize_keyboard': True,
-            'one_time_keyboard': True,
-        }
-
-    elif message.buttons:
-        formatted['reply_markup'] = {
-            'inline_keyboard': InlineButtonFormatter.format_list(message.buttons),
-        }
-
-    return formatted

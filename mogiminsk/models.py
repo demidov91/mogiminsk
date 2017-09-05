@@ -24,6 +24,7 @@ class User(Base):
     telegram_context = Column(JSON, default={})
     telegram_id = Column(Integer, nullable=False, unique=True)
     telegram_state = Column(String(31), nullable=True)
+    telegram_messages = Column(String(1023), nullable=False, default='')
 
     purchases = relationship('Purchase', back_populates='user')
 
