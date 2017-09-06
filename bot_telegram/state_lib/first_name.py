@@ -9,7 +9,7 @@ class FirstNameState(BaseState):
         'data': 'back',
     }]])
 
-    def process(self):
+    async def process(self):
         if self.text:
             self.text = self.text.strip()
 

@@ -43,22 +43,22 @@ class BaseState:
     def set_state(self, state_name: str):
         self.data['state'] = state_name
 
-    def consume(self, common_message):
+    async def consume(self, common_message):
         self.value = common_message.data
         self.data[self.get_name()] = self.value
         self.text = common_message.text
         self.contact = common_message.contact
 
         if self.value == 'back':
-            self.process_back()
+            await self.process_back()
             return
 
-        self.process()
+        await self.process()
 
-    def process_back(self):
+    async def process_back(self):
         self.set_state(self.pop_history())
 
-    def process(self):
+    async def process(self):
         """
         Updates user state and sets *is_unrecognized* value.
         """
@@ -91,9 +91,9 @@ class BaseState:
         history = self.data.get('history', [])
         last_popped = None
         while history and last_popped != state:
-            last_popped = history.pop()
+            history.pop()
 
-        return last_popped or 'where'
+        return last_popped if last_popped == state else 'where'
 
     def append_history(self, state):
         history = self.data.get('history', [])

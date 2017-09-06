@@ -7,6 +7,6 @@ class OtherDateState(DateState):
     def get_intro_message(self):
         return OtherDateBotMessage()
 
-    def process(self):
-        super(OtherDateState, self).process()
+    async def process(self):
+        await super(OtherDateState, self).process()
         self.data[DateState.get_name()] = self.data[self.get_name()]

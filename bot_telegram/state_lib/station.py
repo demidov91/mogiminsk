@@ -36,7 +36,7 @@ class StationState(BaseState):
 
         return BotMessage('Choose start station:', buttons=buttons)
 
-    def process(self):
+    async def process(self):
         try:
             station_id = int(self.value)
             station = get_db().query(Station).get(station_id)

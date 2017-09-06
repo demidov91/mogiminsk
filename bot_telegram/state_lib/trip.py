@@ -66,7 +66,7 @@ class TripState(BaseState):
             buttons=self.get_buttons(trip),
         )
 
-    def process(self):
+    async def process(self):
         if self.value == 'finish':
             self.set_state('where')
             self.add_message('This is a beta-version, trip was not booked.')

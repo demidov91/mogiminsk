@@ -1,3 +1,5 @@
+import asyncio
+
 import pytest
 
 from bot_telegram.state_lib.time import TimeState
@@ -28,7 +30,9 @@ class TestTimeState:
         tested = TimeState(UserFactory(telegram_context={
             'history': ['initial', 'where', 'date', 'time'],
         }))
-        tested.consume(Message(data='back'))
+        asyncio.get_event_loop().run_until_complete(
+            tested.consume(Message(data='back'))
+        )
         assert tested.data['state'] == 'date'
 
     @pytest.mark.parametrize('text', (

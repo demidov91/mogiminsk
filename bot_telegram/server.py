@@ -28,7 +28,7 @@ async def telegram_webhook(request):
     state = get_state(request['user'])
 
     try:
-        state.consume(update.get_common_message())
+        await state.consume(update.get_common_message())
         bot_messages = state.produce()
     except Exception as e:
         logger.exception(e)

@@ -6,7 +6,7 @@ from sqlalchemy import or_
 from bot_telegram.messages import BotMessage
 from bot_telegram.state_lib.base import BaseState
 from mogiminsk.models import Trip
-from mogiminsk.defines import DATE_FORMAT
+from mogiminsk.defines import DATE_FORMAT, DATE_TIME_FORMAT
 from mogiminsk.utils import get_db
 
 
@@ -21,7 +21,7 @@ class TimeState(BaseState):
     time_pattern = re.compile('(?P<hours>\d{1,2}?):?(?P<minutes>\d{2})?\s*$')
     is_callback_state = False
 
-    def process(self):
+    async def process(self):
         match = self.time_pattern.search(self.text)
         if match is None:
             self.message_was_not_recognized = True
@@ -49,9 +49,8 @@ class TimeState(BaseState):
         self.set_state('show')
 
     def get_trip_id_list(self):
-        format_string = f'{DATE_FORMAT} %H:%M'
         start_datetime_string = '{} {}'.format(self.data['date'], self.data['time'])
-        start_datetime = datetime.datetime.strptime(start_datetime_string, format_string)
+        start_datetime = datetime.datetime.strptime(start_datetime_string, DATE_TIME_FORMAT)
 
         if self.data['where'] == 'minsk':
             direction = Trip.MOG_MINSK_DIRECTION

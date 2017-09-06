@@ -28,7 +28,7 @@ def _initialize_station(user, data):
     db = get_db()
     trip = db.query(Trip).get(data['show'])
 
-    last_purchase = db.query(Purchase, Trip, Car, Provider).filter(and_(
+    last_purchase = db.query(Purchase).join(Trip, Car, Provider).filter(and_(
         Trip.direction == trip.direction,
         Purchase.user_id == user.id,
         Provider.id == trip.car.provider_id,
@@ -36,8 +36,8 @@ def _initialize_station(user, data):
     if last_purchase is None:
         return
 
-    data['station'] = last_purchase.station_id
-    data['station_name'] = last_purchase.station_name
+    data['station'] = last_purchase.station.id
+    data['station_name'] = last_purchase.station.name
 
 
 def _initialize_seat(user, data):

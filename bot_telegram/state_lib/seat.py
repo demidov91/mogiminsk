@@ -17,7 +17,7 @@ class SeatState(BaseState):
         }]
     ])
 
-    def process(self):
+    async def process(self):
         try:
             seat_number = int(self.value)
         except ValueError:

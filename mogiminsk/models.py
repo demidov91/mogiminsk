@@ -113,9 +113,15 @@ class Station(Base):
 
     name = Column(String(127), nullable=False)
     direction = Column(String(31), nullable=False)
+    identifier = Column(String(127), nullable=False)
+    order = Column(SmallInteger, nullable=True)
     is_removed = Column(Boolean, nullable=False, default=False)
 
     purchases = relationship('Purchase', back_populates='station')
+
+    __mapper_args__ = {
+        "order_by": order
+    }
 
 
 class Purchase(Base):

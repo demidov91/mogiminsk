@@ -45,7 +45,7 @@ class ShowState(BaseState):
         }])
         return BotMessage(text='Choose trip:', buttons=buttons)
 
-    def process(self):
+    async def process(self):
         if self.value == 'full':
             self.data[FULL_TRIPS_SWITCH] = True
             return

@@ -17,7 +17,7 @@ class WhereState(BaseState):
         }]]
     )
 
-    def process(self):
+    async def process(self):
         if self.value in ('mogilev', 'minsk'):
             self.set_state('date')
 

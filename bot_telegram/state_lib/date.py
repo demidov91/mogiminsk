@@ -13,7 +13,7 @@ class DateState(BaseState):
     def get_intro_message(self):
         return DateBotMessage()
 
-    def process(self):
+    async def process(self):
         if self.value == 'other':
             self.set_state('otherdate')
             return

@@ -11,7 +11,7 @@ class PhoneState(BaseState):
             'type': 'phone',
         }]])
 
-    def process(self):
+    async def process(self):
         if self.contact is None or self.contact.identifier != self.user.telegram_id:
             self.back_to('trip')
             self.message_was_not_recognized = True
