@@ -4,7 +4,10 @@ from bot_telegram.state_lib.utils import purchase_state_or_other
 
 
 class NotesState(BaseState):
-    _intro_message = BotMessage('Add some notes:')
+    _intro_message = BotMessage('Add some notes:', buttons=[[{
+        'text': 'Back',
+        'data': 'back',
+    }]])
 
     async def process(self):
         notes = (self.text or '').strip()
