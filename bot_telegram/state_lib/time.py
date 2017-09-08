@@ -59,7 +59,7 @@ class TripFetcher:
     success = True
 
     big_start_datetime_range = datetime.timedelta(hours=1), datetime.timedelta(hours=1)
-    small_start_datetime_range = datetime.timedelta(minutes=10), datetime.timedelta(minutes=30)
+    small_start_datetime_range = datetime.timedelta(minutes=15), datetime.timedelta(minutes=30)
 
     def __init__(self, dt: datetime.datetime, direction: str):
         super().__init__()
