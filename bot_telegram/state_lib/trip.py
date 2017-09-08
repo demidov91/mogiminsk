@@ -73,6 +73,9 @@ class TripState(BaseState):
             return
 
         if self.value == 'purchase':
+            self.data.pop('seat', None)
+            self.data.pop('station', None)
+            self.data.pop('notes', None)
             self.set_state(purchase_state_or_other(self.user, self.data))
             return
 

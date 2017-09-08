@@ -52,12 +52,7 @@ class TimeState(BaseState):
         start_datetime_string = '{} {}'.format(self.data['date'], self.data['time'])
         start_datetime = datetime.datetime.strptime(start_datetime_string, DATE_TIME_FORMAT)
 
-        if self.data['where'] == 'minsk':
-            direction = Trip.MOG_MINSK_DIRECTION
-        else:
-            direction = Trip.MINSK_MOG_DIRECTION
-
-        return TripFetcher(start_datetime, direction).produce()
+        return TripFetcher(start_datetime, self.data['where']).produce()
 
 
 class TripFetcher:

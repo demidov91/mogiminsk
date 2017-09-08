@@ -45,13 +45,16 @@ class BaseState:
 
     async def consume(self, common_message):
         self.value = common_message.data
-        self.data[self.get_name()] = self.value
-        self.text = common_message.text
-        self.contact = common_message.contact
 
         if self.value == 'back':
             await self.process_back()
             return
+
+        self.data[self.get_name()] = self.value
+        self.text = common_message.text
+        self.contact = common_message.contact
+
+
 
         await self.process()
 
@@ -91,13 +94,15 @@ class BaseState:
         history = self.data.get('history', [])
         last_popped = None
         while history and last_popped != state:
-            history.pop()
+            last_popped = history.pop()
 
         return last_popped if last_popped == state else 'where'
 
     def append_history(self, state):
         history = self.data.get('history', [])
-        history.append(state)
+        if not history or history[-1] != state:
+            history.append(state)
+
         self.data['history'] = history
 
     def add_message(self, text):

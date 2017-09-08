@@ -1,5 +1,6 @@
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import BotMessage
+from mogiminsk.models import Trip
 
 
 class WhereState(BaseState):
@@ -10,15 +11,15 @@ class WhereState(BaseState):
         text='Where are we going?',
         buttons=[[{
             'text': 'To Mogilev',
-            'data': 'mogilev',
+            'data': Trip.MINSK_MOG_DIRECTION,
         }, {
             'text': 'To Minsk',
-            'data': 'minsk',
+            'data': Trip.MOG_MINSK_DIRECTION,
         }]]
     )
 
     async def process(self):
-        if self.value in ('mogilev', 'minsk'):
+        if self.value in (Trip.MOG_MINSK_DIRECTION, Trip.MINSK_MOG_DIRECTION):
             self.set_state('date')
 
         else:

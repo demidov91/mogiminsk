@@ -57,7 +57,7 @@ class PurchaseState(BaseState):
             seat=int(self.data['seat']),
             first_name=self.user.first_name,
             station=station.identifier,
-            notes=self.data['notes'],
+            notes=self.data.get('notes'),
             phone=self.user.phone,
         )
 
@@ -65,7 +65,7 @@ class PurchaseState(BaseState):
         trip_id = int(self.data['show'])
         seat = int(self.data['seat'])
         station_id = int(self.data['station'])
-        notes = self.data['notes']
+        notes = self.data.get('notes')
 
         purchase = Purchase(
             trip_id=trip_id,
