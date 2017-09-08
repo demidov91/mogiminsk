@@ -130,7 +130,7 @@ class TgSender:
     async def send_messages(self, messages: list, callback_message_id: int):
         converted_messages = tuple(self.convert_message(x) for x in messages)
 
-        if callback_message_id is not None:
+        if callback_message_id is not None and not messages[0].text_buttons:
             converted_messages[0].update({
                 'method': 'editMessageText',
                 'message_id': callback_message_id,

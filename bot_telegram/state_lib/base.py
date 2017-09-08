@@ -34,6 +34,9 @@ class BaseState:
         self.data = user.telegram_context
         self.user = user
 
+    def create_state(self, state_name: str) ->'BaseState':
+        return STATES[state_name](self.user)
+
     def get_intro_message(self):
         return self._intro_message
 
@@ -53,9 +56,6 @@ class BaseState:
         self.data[self.get_name()] = self.value
         self.text = common_message.text
         self.contact = common_message.contact
-
-
-
         await self.process()
 
     async def process_back(self):
@@ -67,9 +67,13 @@ class BaseState:
         """
         raise NotImplementedError()
 
-    def produce(self) ->Sequence[BotMessage]:
+    async def initialize(self, current_state):
+        return self
+
+    async def produce(self) ->Sequence[BotMessage]:
+        next_state = await self.create_state(self.get_state()).initialize(self.get_name())
+        self.set_state(next_state.get_name())
         self.save_data()
-        next_state = STATES[self.get_state()](self.user)
         message = next_state.get_intro_message()
         if self.message_was_not_recognized:
             self.add_message('Unexpected response.')
@@ -117,4 +121,3 @@ class BaseState:
         messages = self.data.pop('messages', ())
         self.data['messages'] = ()
         return messages
-

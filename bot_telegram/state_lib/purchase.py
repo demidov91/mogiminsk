@@ -1,13 +1,66 @@
+from sqlalchemy import and_
+
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import BotMessage
 from mogiminsk.utils import get_db
-from mogiminsk.models import Trip, Purchase, Station
+from mogiminsk.models import Trip, Purchase, Station, Car, Provider
 from mogiminsk_interaction.utils import get_connector
 from mogiminsk_interaction.connectors.core import PurchaseResult
 
 
 class PurchaseState(BaseState):
     connector = None
+
+    async def initialize(self, current_state):
+        if current_state in ('trip', 'show'):
+            self.data.pop('seat', None)
+            self.data.pop('station', None)
+            self.data.pop('notes', None)
+
+        if not self.user.phone:
+            return await self.create_state('phone').initialize(current_state)
+
+        if not self.user.first_name:
+            return await self.create_state('firstname').initialize(current_state)
+
+        if 'station' not in self.data:
+            self._initialize_station()
+            if 'station' not in self.data:
+                return await self.create_state('station').initialize(current_state)
+
+        if 'seat' not in self.data:
+            self._initialize_seat()
+            if 'seat' not in self.data:
+                return await self.create_state('seat').initialize(current_state)
+
+        return await super().initialize(current_state)
+
+    def _initialize_station(self):
+        db = get_db()
+        trip = db.query(Trip).get(self.data['show'])
+
+        last_purchase = db.query(Purchase).join(Trip, Car, Provider).filter(and_(
+            Trip.direction == trip.direction,
+            Purchase.user_id == self.user.id,
+            Provider.id == trip.car.provider_id,
+        )).first()
+        if last_purchase is None:
+            return
+
+        self.data['station'] = last_purchase.station.id
+        self.data['station_name'] = last_purchase.station.name
+
+    def _initialize_seat(self):
+        db = get_db()
+
+        last_purchase = db.query(Purchase).filter(
+            Purchase.user_id == self.user.id
+        ).order_by(Purchase.created_at.desc()).first()
+
+        if last_purchase is None:
+            return
+
+        self.data['seat'] = last_purchase.seats
 
     def get_text(self, trip: Trip):
         return f'Firm: {trip.car.provider.name}\n' \

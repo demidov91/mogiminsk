@@ -1,6 +1,5 @@
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import BotMessage
-from bot_telegram.state_lib.utils import purchase_state_or_other
 
 
 class SeatState(BaseState):
@@ -28,4 +27,4 @@ class SeatState(BaseState):
             self.message_was_not_recognized = True
             return
 
-        self.set_state(purchase_state_or_other(self.user, self.data))
+        self.set_state('purchase')

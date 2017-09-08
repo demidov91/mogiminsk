@@ -2,7 +2,6 @@ import re
 from typing import Iterable, Dict, Collection
 
 from bot_telegram.state_lib.base import BaseState
-from bot_telegram.state_lib.utils import purchase_state_or_other
 from bot_telegram.messages import BotMessage
 from bot_telegram.defines import FULL_TRIPS_SWITCH
 from mogiminsk.models import Trip
@@ -78,7 +77,7 @@ class ShowState(BaseState):
         next_state = match.group('action')
 
         if next_state == 'purchase':
-            self.set_state(purchase_state_or_other(self.user, self.data))
+            self.set_state('purchase')
 
         else:
             self.set_state(next_state)

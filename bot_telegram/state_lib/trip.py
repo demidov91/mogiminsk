@@ -1,5 +1,4 @@
 from bot_telegram.state_lib.base import BaseState
-from bot_telegram.state_lib.utils import purchase_state_or_other
 from bot_telegram.messages import BotMessage
 from mogiminsk.utils import get_db
 from mogiminsk.models import Trip
@@ -73,10 +72,7 @@ class TripState(BaseState):
             return
 
         if self.value == 'purchase':
-            self.data.pop('seat', None)
-            self.data.pop('station', None)
-            self.data.pop('notes', None)
-            self.set_state(purchase_state_or_other(self.user, self.data))
+            self.set_state('purchase')
             return
 
         self.message_was_not_recognized = True

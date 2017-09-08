@@ -1,6 +1,5 @@
 from .base import BaseState
 from bot_telegram.messages import BotMessage
-from bot_telegram.state_lib.utils import purchase_state_or_other
 
 
 class FirstNameState(BaseState):
@@ -18,4 +17,4 @@ class FirstNameState(BaseState):
             return
 
         self.user.first_name = self.text
-        self.set_state(purchase_state_or_other(self.user, self.data))
+        self.set_state('purchase')
