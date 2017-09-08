@@ -11,7 +11,7 @@ class PurchaseState(BaseState):
 
     def get_text(self, trip: Trip):
         return f'Firm: {trip.car.provider.name}\n' \
-               f'Direction: {trip.direction}' \
+               f'Direction: {trip.direction}\n' \
                f'Time: {trip.start_datetime}\n' \
                f'Phone: {self.user.phone}\n' \
                f'(Tap on the buttons bellow to change)'
@@ -41,7 +41,12 @@ class PurchaseState(BaseState):
         )
 
     async def process_back(self):
-        self.set_state(self.back_to('trip'))
+        back_to = 'show'
+
+        if 'trip' in self.get_history():
+            back_to = 'trip'
+
+        self.set_state(self.back_to(back_to))
 
     async def _purchase(self):
         db = get_db()

@@ -39,7 +39,7 @@ class TripState(BaseState):
                     'text': 'Back',
                     'data': 'back',
                 }, {
-                    'text': 'Purchase',
+                    'text': 'Book it',
                     'data': 'purchase',
                 }],
                 [{

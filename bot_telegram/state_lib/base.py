@@ -91,7 +91,7 @@ class BaseState:
         return 'where'
 
     def back_to(self, state):
-        history = self.data.get('history', [])
+        history = self.get_history()
         last_popped = None
         while history and last_popped != state:
             last_popped = history.pop()
@@ -99,11 +99,14 @@ class BaseState:
         return last_popped if last_popped == state else 'where'
 
     def append_history(self, state):
-        history = self.data.get('history', [])
+        history = self.get_history()
         if not history or history[-1] != state:
             history.append(state)
 
         self.data['history'] = history
+
+    def get_history(self):
+        return self.data.get('history', [])
 
     def add_message(self, text):
         messages = self.data.get('messages', [])
