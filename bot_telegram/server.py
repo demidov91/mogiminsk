@@ -28,17 +28,17 @@ async def telegram_webhook(request):
     state = get_state(request['user'])
 
     try:
-        await state.consume(update.get_common_message())
-        bot_messages = await state.produce()
+        bot_messages = await state.consume(update.get_common_message())
     except Exception as e:
         logger.exception(e)
         bot_messages = get_error_message()
         request['user'].telegram_context = {'state': 'where'}
 
-    connector = TgSender(update.get_chat().id, request.app['client'], request['user'])
-    asyncio.ensure_future(
-        connector.send_messages(bot_messages, update.get_message().id if update.callback_query else None)
-    )
+    if bot_messages:
+        connector = TgSender(update.get_chat().id, request.app['client'], request['user'])
+        asyncio.ensure_future(
+            connector.send_messages(bot_messages, update.get_message().id if update.callback_query else None)
+        )
 
     if update.callback_query:
         return web.json_response({

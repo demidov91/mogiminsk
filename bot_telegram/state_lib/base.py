@@ -21,6 +21,7 @@ class BaseState:
     value = None
     text = None
     contact = None
+    ignorable_values = '-',
 
     @classmethod
     def get_name(cls):
@@ -51,12 +52,17 @@ class BaseState:
 
         if self.value == 'back':
             await self.process_back()
-            return
 
-        self.data[self.get_name()] = self.value
-        self.text = common_message.text
-        self.contact = common_message.contact
-        await self.process()
+        elif self.value in self.ignorable_values:
+            return []
+
+        else:
+            self.data[self.get_name()] = self.value
+            self.text = common_message.text
+            self.contact = common_message.contact
+            await self.process()
+
+        return await self.produce()
 
     async def process_back(self):
         self.set_state(self.pop_history())
@@ -67,7 +73,11 @@ class BaseState:
         """
         raise NotImplementedError()
 
-    async def initialize(self, current_state):
+    async def initialize(self, current_state) ->'BaseState':
+        """
+        Prepare context for the state.
+        Base class returns itself but you can implement redirection logic.
+        """
         return self
 
     async def produce(self) ->Sequence[BotMessage]:

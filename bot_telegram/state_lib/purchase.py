@@ -80,7 +80,7 @@ class PurchaseState(BaseState):
             [{'text': f'{notes}', 'data': 'notes'}],
             [
                 {'text': 'Back', 'data': 'back'},
-                {'text': 'Purchase!', 'data': 'submit'},
+                {'text': 'Book it!', 'data': 'submit'},
             ],
         ]
 
