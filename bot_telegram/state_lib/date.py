@@ -18,6 +18,9 @@ class DateState(BaseState):
             self.set_state('otherdate')
             return
 
+        if self.value == '-':
+            return
+
         try:
             datetime.datetime.strptime(self.value, DATE_FORMAT)
         except ValueError:

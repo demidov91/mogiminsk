@@ -55,15 +55,33 @@ class DateBotMessage(BotMessage):
 
 
 class OtherDateBotMessage(BotMessage):
+    def _date_to_button(self, date: datetime.date):
+        return {
+            'text': str(date.day),
+            'data': date.strftime(DATE_FORMAT),
+        }
+
     def __init__(self):
         today = datetime.date.today()
-        first_line = [today + datetime.timedelta(days=x) for x in range(7)]
-        second_line = [today + datetime.timedelta(days=x) for x in range(7, 14)]
+        weekday = today.weekday()
+
+        first_line = [{
+            'text': b'\xE2\x9D\x8C'.decode('utf-8'),
+            'data': '-',
+        } for _ in range(weekday)]
+
+        first_line.extend(
+            self._date_to_button(today + datetime.timedelta(days=x))
+            for x in range(7 - weekday)
+        )
+        second_line = [
+            self._date_to_button(today + datetime.timedelta(days=x))
+            for x in range(7 - weekday, 14 - weekday)
+        ]
 
         buttons = [
-            [{'text': str(x.day), 'data': x.strftime(DATE_FORMAT)} for x in first_line],
-            [{'text': str(x.day), 'data': x.strftime(DATE_FORMAT)} for x in second_line],
-
+            first_line,
+            second_line,
             [{'text': 'Back', 'data': 'back', }],
         ]
 
