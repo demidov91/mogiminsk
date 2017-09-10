@@ -65,7 +65,7 @@ class BaseState:
         return await self.produce()
 
     async def process_back(self):
-        self.set_state(self.pop_history())
+        self.pop_history()
 
     async def process(self):
         """
@@ -100,9 +100,10 @@ class BaseState:
         if history:
             history.pop()
             if history:
-                return history.pop()
+                self.set_state(history.pop())
+                return
 
-        return 'where'
+        return self.set_state('where')
 
     def back_to(self, state):
         history = self.get_history()
@@ -110,7 +111,7 @@ class BaseState:
         while history and last_popped != state:
             last_popped = history.pop()
 
-        return last_popped if last_popped == state else 'where'
+        self.set_state(last_popped if last_popped == state else 'where')
 
     def append_history(self, state):
         history = self.get_history()

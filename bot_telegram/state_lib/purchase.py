@@ -99,7 +99,7 @@ class PurchaseState(BaseState):
         if 'trip' in self.get_history():
             back_to = 'trip'
 
-        self.set_state(self.back_to(back_to))
+        self.back_to(back_to)
 
     async def _purchase(self):
         db = get_db()
@@ -144,17 +144,17 @@ class PurchaseState(BaseState):
             purchase_result = await self._purchase()
             if purchase_result == PurchaseResult.SUCCESS:
                 self.add_message(self.connector.get_message())
-                self.set_state(self.back_to('where'))
+                self.back_to('where')
                 self._store_purchase_event()
                 return
 
             if purchase_result == PurchaseResult.FAIL:
-                self.back_to('show')
+                self.set_state('show')
                 self.add_message('Failed to purchase the trip. Try another provider.')
                 return
 
             if purchase_result == PurchaseResult.NEED_REGISTRATION:
-                self.back_to('show')
+                self.set_state('trip')
                 self.add_message(
                     "Sorry. Can't purchase your trip at the moment."
                     "Call to purchase the trip."
