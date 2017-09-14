@@ -10,6 +10,8 @@ class DateState(BaseState):
     """
     Store date of the trip.
     """
+    back = 'where'
+
     def get_intro_message(self):
         return DateBotMessage()
 

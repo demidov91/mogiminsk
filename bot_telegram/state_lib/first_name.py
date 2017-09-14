@@ -3,6 +3,12 @@ from bot_telegram.messages import BotMessage
 
 
 class FirstNameState(BaseState):
+    async def get_back_state(self):
+        if self.user.first_name:
+            return 'purchase'
+
+        return 'show'
+
     _intro_message = BotMessage(text="What's your name?", buttons=[[{
         'text': 'Back',
         'data': 'back',

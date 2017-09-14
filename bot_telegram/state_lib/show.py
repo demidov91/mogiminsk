@@ -39,6 +39,7 @@ def trip_to_line(trip: Trip) -> Collection[Dict]:
 
 class ShowState(BaseState):
     action_template = re.compile('(?P<action>(trip|purchase))_(?P<id>\d+)')
+    back = 'time'
 
     def get_intro_message(self):
         trip_id_list = self.data['trip_id_list']

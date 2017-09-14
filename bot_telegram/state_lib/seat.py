@@ -16,6 +16,12 @@ class SeatState(BaseState):
         }]
     ])
 
+    async def get_back_state(self):
+        if self.data.get('seat'):
+            return 'purchase'
+
+        return 'show'
+
     async def process(self):
         try:
             seat_number = int(self.value)

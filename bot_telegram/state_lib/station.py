@@ -35,6 +35,12 @@ class StationState(BaseState):
 
         return BotMessage('Choose start station:', buttons=buttons)
 
+    async def get_back_state(self):
+        if self.data.get('station'):
+            return 'purchase'
+
+        return 'show'
+
     async def process(self):
         try:
             station_id = int(self.value)

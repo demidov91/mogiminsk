@@ -11,7 +11,6 @@ class BaseState:
     """
     Reserved *data* keys:
         **state** - current state name.
-        **history** - navigation history. Stored a list of state names.
         **messages** - messages to show a user. Should be shown once before main message.
     """
 
@@ -22,6 +21,7 @@ class BaseState:
     text = None
     contact = None
     ignorable_values = '-',
+    back = None
 
     @classmethod
     def get_name(cls):
@@ -47,11 +47,14 @@ class BaseState:
     def set_state(self, state_name: str):
         self.data['state'] = state_name
 
+    async def get_back_state(self):
+        return self.back
+
     async def consume(self, common_message):
         self.value = common_message.data
 
         if self.value == 'back':
-            await self.process_back()
+            self.set_state(await self.get_back_state())
 
         elif self.value in self.ignorable_values:
             return []
@@ -63,9 +66,6 @@ class BaseState:
             await self.process()
 
         return await self.produce()
-
-    async def process_back(self):
-        self.pop_history()
 
     async def process(self):
         """
@@ -91,37 +91,8 @@ class BaseState:
         return message.to_sequence(self.pop_messages())
 
     def save_data(self):
-        self.append_history(self.get_state())
         self.user.telegram_context = self.data
         flag_modified(self.user, 'telegram_context')
-
-    def pop_history(self):
-        history = self.data.get('history')
-        if history:
-            history.pop()
-            if history:
-                self.set_state(history.pop())
-                return
-
-        return self.set_state('where')
-
-    def back_to(self, state):
-        history = self.get_history()
-        last_popped = None
-        while history and last_popped != state:
-            last_popped = history.pop()
-
-        self.set_state(last_popped if last_popped == state else 'where')
-
-    def append_history(self, state):
-        history = self.get_history()
-        if not history or history[-1] != state:
-            history.append(state)
-
-        self.data['history'] = history
-
-    def get_history(self):
-        return self.data.get('history', [])
 
     def add_message(self, text):
         messages = self.data.get('messages', [])

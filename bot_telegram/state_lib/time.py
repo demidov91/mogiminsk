@@ -11,6 +11,8 @@ from mogiminsk.utils import get_db
 
 
 class TimeState(BaseState):
+    back = 'date'
+
     _intro_message = BotMessage(
         text='Enter time. For example: 7, 1125 or 16:40.',
         buttons=[

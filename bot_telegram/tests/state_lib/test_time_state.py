@@ -2,6 +2,8 @@ import asyncio
 
 import pytest
 
+# This import initializes state lib.
+from bot_telegram.utils import states_helper
 from bot_telegram.state_lib.time import TimeState
 from mogiminsk.factories import UserFactory
 from messager.input_data import Message
@@ -20,16 +22,16 @@ class TestTimeState:
 
         tested = TimeState(UserFactory())
         tested.text = text
-        tested.process()
+        asyncio.get_event_loop().run_until_complete(
+            tested.process()
+        )
         assert tested.data['time'] == expected
         assert tested.data['state'] == 'show'
         assert len(tested.data['trip_id_list']) == 1
         TimeState.get_trip_id_list.assert_called_once()
 
     def test_consume__back(self):
-        tested = TimeState(UserFactory(telegram_context={
-            'history': ['initial', 'where', 'date', 'time'],
-        }))
+        tested = TimeState(UserFactory())
         asyncio.get_event_loop().run_until_complete(
             tested.consume(Message(data='back'))
         )
@@ -41,6 +43,8 @@ class TestTimeState:
     def test_consume__not_correct(self, text):
         tested = TimeState(UserFactory(telegram_context={'state': 'time'}))
         tested.text = text
-        tested.process()
+        asyncio.get_event_loop().run_until_complete(
+            tested.process()
+        )
         assert tested.data['state'] == 'time'
         assert tested.message_was_not_recognized

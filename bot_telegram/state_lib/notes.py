@@ -3,6 +3,8 @@ from bot_telegram.messages import BotMessage
 
 
 class NotesState(BaseState):
+    back = 'purchase'
+
     _intro_message = BotMessage('Add some notes:', buttons=[[{
         'text': 'Back',
         'data': 'back',

@@ -4,6 +4,8 @@ from .date import DateState
 
 
 class OtherDateState(DateState):
+    back = 'date'
+
     def get_intro_message(self):
         return OtherDateBotMessage()
 

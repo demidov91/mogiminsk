@@ -6,6 +6,8 @@ from mogiminsk_interaction.utils import has_connector
 
 
 class TripState(BaseState):
+    back = 'show'
+
     @staticmethod
     def get_text(trip: Trip):
         contacts = filter(lambda x: x.kind in (

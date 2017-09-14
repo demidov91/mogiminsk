@@ -15,11 +15,11 @@ class PhoneState(BaseState):
 
     async def process(self):
         if self.text and self.text.lower() == 'back':
-            self.back_to('show')
+            self.set_state('show')
             return
 
         if self.contact is None or self.contact.identifier != self.user.telegram_id:
-            self.back_to('show')
+            self.set_state('show')
             self.message_was_not_recognized = True
             return
 

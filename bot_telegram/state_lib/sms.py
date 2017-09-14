@@ -5,6 +5,7 @@ from bot_telegram.utils.helper import set_sms_code
 
 class SmsState(BaseState):
     sms_storage = 'sms_codes'
+    back = 'purchase'
 
     def get_intro_message(self):
         return BotMessage(
@@ -24,4 +25,4 @@ class SmsState(BaseState):
             return
 
         set_sms_code(self.data, self.text)
-        self.pop_history()
+        self.set_state('purchase')

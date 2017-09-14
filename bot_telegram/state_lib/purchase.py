@@ -10,6 +10,7 @@ from mogiminsk_interaction.connectors.core import PurchaseResult
 
 class PurchaseState(BaseState):
     connector = None
+    back = 'show'
 
     async def initialize(self, current_state):
         if current_state in ('trip', 'show'):
@@ -93,14 +94,6 @@ class PurchaseState(BaseState):
             buttons=self.get_buttons()
         )
 
-    async def process_back(self):
-        back_to = 'show'
-
-        if 'trip' in self.get_history():
-            back_to = 'trip'
-
-        self.back_to(back_to)
-
     async def _purchase(self):
         db = get_db()
 
@@ -144,7 +137,7 @@ class PurchaseState(BaseState):
             purchase_result = await self._purchase()
             if purchase_result == PurchaseResult.SUCCESS:
                 self.add_message(self.connector.get_message())
-                self.back_to('where')
+                self.set_state('where')
                 self._store_purchase_event()
                 return
 
