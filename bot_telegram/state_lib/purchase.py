@@ -1,10 +1,10 @@
 from sqlalchemy import and_
 
 from bot_telegram.state_lib.base import BaseState
+from bot_telegram.utils.helper import purchase, store_purchase_event
 from bot_telegram.messages import BotMessage
 from mogiminsk.utils import get_db
-from mogiminsk.models import Trip, Purchase, Station, Car, Provider
-from mogiminsk_interaction.utils import get_connector
+from mogiminsk.models import Trip, Purchase, Car, Provider
 from mogiminsk_interaction.connectors.core import PurchaseResult
 
 
@@ -94,51 +94,18 @@ class PurchaseState(BaseState):
             buttons=self.get_buttons()
         )
 
-    async def _purchase(self):
-        db = get_db()
-
-        trip = db.query(Trip).get(self.data['show'])
-        station = db.query(Station).get(self.data['station'])
-
-        self.connector = get_connector(trip.car.provider.identifier)
-
-        return await self.connector.purchase(
-            start_datetime=trip.start_datetime,
-            direction=self.data['where'],
-            seat=int(self.data['seat']),
-            first_name=self.user.first_name,
-            station=station.identifier,
-            notes=self.data.get('notes'),
-            phone=self.user.phone,
-        )
-
-    def _store_purchase_event(self):
-        trip_id = int(self.data['show'])
-        seat = int(self.data['seat'])
-        station_id = int(self.data['station'])
-        notes = self.data.get('notes')
-
-        purchase = Purchase(
-            trip_id=trip_id,
-            seats=seat,
-            station_id=station_id,
-            notes=notes,
-            user=self.user
-        )
-
-        get_db().add(purchase)
-
     async def process(self):
         if self.value in ('firstname', 'station', 'seat', 'notes'):
             self.set_state(self.value)
             return
 
         if self.value == 'submit':
-            purchase_result = await self._purchase()
+            connector = await purchase(self.user, self.data)
+            purchase_result = connector.get_result()
             if purchase_result == PurchaseResult.SUCCESS:
-                self.add_message(self.connector.get_message())
+                self.add_message(connector.get_message())
                 self.set_state('where')
-                self._store_purchase_event()
+                await store_purchase_event(self.user, self.data)
                 return
 
             if purchase_result == PurchaseResult.FAIL:
