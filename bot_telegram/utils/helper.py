@@ -8,23 +8,35 @@ from mogiminsk_interaction.utils import get_connector
 from mogiminsk_interaction.connectors.core import BaseConnector
 
 
-def _get_current_trip(context, db=None):
-    db = db or get_db()
-    return db.query(Trip).get(context['trip'])
+class SmsStorage:
+    def __init__(self, context):
+        self.context = context
 
+    def _get_sms_key(trip: Trip=None, car=None, provider=None, provider_identifier=None) -> str:
+        if provider_identifier:
+            identifier = provider_identifier
 
-def _get_sms_key(trip: Trip) -> str:
-    return f'sms_{trip.car.provider.identifier}'
+        elif provider:
+            identifier = provider.identifier
 
+        elif car:
+            identifier = car.provider.identifier
 
-def get_sms_code(context):
-    trip = _get_current_trip(context)
-    return context.get(_get_sms_key(trip))
+        elif trip:
+            identifier = trip.car.provider.identifier
 
+        else:
+            raise ValueError()
 
-def set_sms_code(context, code):
-    trip = _get_current_trip(context)
-    context[_get_sms_key(trip)] = code
+        return f'sms_{identifier}'
+
+    def get_sms_code(self, trip):
+        return self.context.get(self._get_sms_key(trip=trip))
+
+    def set_sms_code(self, code, trip=None, car=None, provider=None, provider_identifier=None):
+        self.context[self._get_sms_key(
+            trip=trip, car=car, provider=provider, provider_identifier=provider_identifier
+        )] = code
 
 
 async def purchase(user, context: dict, sms_code: str=None) ->BaseConnector:
@@ -51,13 +63,21 @@ async def purchase(user, context: dict, sms_code: str=None) ->BaseConnector:
 
 async def cancel_purchase(user, context, sms_code=None) ->BaseConnector:
     db = get_db()
-    purchase = db.query(Purchase).get(context['cancel'])
+    trip = db.query(Purchase).get(context['purchase_cancel']).trip
 
-    connector = get_connector(purchase.trip.car.provider.identifier)
+    sms_storage = SmsStorage(context)
 
-    remote_purchases = connector.get_purchases(user)
-    remote_purchase = connector.choose_purchase(remote_purchases, purchase.trip.start_datetime, purchase.trip.car)
-    connector.cancel_remote_purchase(remote_purchase)
+    if sms_code:
+        sms_storage.set_sms_code(sms_code, trip=trip)
+
+    else:
+        sms_code = sms_storage.get_sms_code(trip=trip)
+
+    connector = get_connector(trip.car.provider.identifier)
+    connector.sms_code = sms_code
+    connector.cancel_purchase(
+        user.phone, trip.start_datetime, trip.direction, trip.car.name
+    )
 
     return connector
 

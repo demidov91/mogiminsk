@@ -1,0 +1,2 @@
+class SmsRequiredError(ValueError):
+    pass
