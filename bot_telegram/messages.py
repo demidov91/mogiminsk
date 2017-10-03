@@ -1,3 +1,4 @@
+from copy import deepcopy
 import datetime
 from typing import List, Dict, Sequence, Collection
 from mogiminsk.defines import DATE_FORMAT
@@ -27,7 +28,7 @@ class BotMessage:
         copy = BotMessage(
             text=text,
             parse_mode=parse_mode,
-            buttons=buttons,
+            buttons=deepcopy(buttons),
         )
         return copy
 

@@ -4,15 +4,16 @@ Helper module to use FROM state classes.
 
 from mogiminsk.utils import get_db
 from mogiminsk.models import Trip, Station, Purchase
+from mogiminsk.services.user import UserService
 from mogiminsk_interaction.utils import get_connector
-from mogiminsk_interaction.connectors.core import BaseConnector
+from mogiminsk_interaction.connectors.core import BaseConnector, CancellationResult
 
 
 class SmsStorage:
     def __init__(self, context):
         self.context = context
 
-    def _get_sms_key(trip: Trip=None, car=None, provider=None, provider_identifier=None) -> str:
+    def _get_sms_key(self, trip: Trip=None, car=None, provider=None, provider_identifier=None) -> str:
         if provider_identifier:
             identifier = provider_identifier
 
@@ -58,6 +59,7 @@ async def purchase(user, context: dict, sms_code: str=None) ->BaseConnector:
         sms_code=sms_code,
     )
 
+    connector.close()
     return connector
 
 
@@ -65,7 +67,7 @@ async def cancel_purchase(user, context, sms_code=None) ->BaseConnector:
     db = get_db()
     trip = db.query(Purchase).get(context['purchase_cancel']).trip
 
-    sms_storage = SmsStorage(context)
+    sms_storage = SmsStorage(user.external)
 
     if sms_code:
         sms_storage.set_sms_code(sms_code, trip=trip)
@@ -75,11 +77,44 @@ async def cancel_purchase(user, context, sms_code=None) ->BaseConnector:
 
     connector = get_connector(trip.car.provider.identifier)
     connector.sms_code = sms_code
-    connector.cancel_purchase(
+    await connector.cancel_purchase(
         user.phone, trip.start_datetime, trip.direction, trip.car.name
     )
 
+    if connector.result == CancellationResult.NEED_SMS:
+        sms_storage.set_sms_code(None, trip=trip)
+
+    connector.close()
+
     return connector
+
+
+async def generic_cancellation(state, sms_code=None):
+    connnector = await cancel_purchase(state.user, state.data, sms_code)
+    result = connnector.get_result()
+    user_service = UserService(state.user)
+
+    if result == CancellationResult.SUCCESS:
+        user_service.delete_purchase(state.data['purchase_cancel'])
+        state.set_state('purchaselist')
+        state.add_message(connnector.get_message() or 'Purchase was CANCELLED!')
+        return
+
+    if result == CancellationResult.NEED_SMS:
+        state.set_state('cancelpurchasewithsms')
+        return
+
+    if result == CancellationResult.DOES_NOT_EXIST:
+        state.add_message("Looks like the purchasement was already cancelled. "
+                         "Call the company if you don't think so.")
+        user_service.delete_purchase(state.data['purchase_cancel'])
+        state.set_state('purchaselist')
+        return
+
+    state.add_message(
+        connnector.get_message() or
+        'Failed to cancel. Please, call the company to cancel.'
+    )
 
 
 async def store_purchase_event(user, context):

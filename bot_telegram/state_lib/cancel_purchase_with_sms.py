@@ -1,7 +1,6 @@
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import BotMessage
-from bot_telegram.utils.helper import cancel_purchase
-from mogiminsk_interaction.connectors.core import PurchaseResult
+from bot_telegram.utils.helper import generic_cancellation
 
 
 class CancelPurchaseWithSmsState(BaseState):
@@ -24,7 +23,4 @@ class CancelPurchaseWithSmsState(BaseState):
             self.message_was_not_recognized = True
             return
 
-        connector = await cancel_purchase(self.user, self.data, sms_code=self.text)
-        result = connector.get_result()
-
-        
+        await generic_cancellation(self, sms_code=self.text)

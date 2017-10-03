@@ -83,16 +83,21 @@ class BaseState:
     async def produce(self) ->Sequence[BotMessage]:
         next_state = await self.create_state(self.get_state()).initialize(self.get_name())
         self.set_state(next_state.get_name())
-        self.save_data()
         message = next_state.get_intro_message()
         if self.message_was_not_recognized:
             self.add_message('Unexpected response.')
 
-        return message.to_sequence(self.pop_messages())
+        extra_messages = self.pop_messages()
+        self.save_data()
+        return message.to_sequence(extra_messages)
 
     def save_data(self):
+        """
+        Flag JSON fields as modified.
+        """
         self.user.telegram_context = self.data
         flag_modified(self.user, 'telegram_context')
+        flag_modified(self.user, 'external')
 
     def add_message(self, text):
         messages = self.data.get('messages', [])
