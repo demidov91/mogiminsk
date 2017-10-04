@@ -114,11 +114,7 @@ class PurchaseState(BaseState):
                 return
 
             if purchase_result == PurchaseResult.NEED_REGISTRATION:
-                self.set_state('trip')
-                self.add_message(
-                    "Sorry. Can't purchase your trip at the moment."
-                    "Call to purchase the trip."
-                )
+                self.set_state('finishpurchasewithsms')
                 return
 
         self.message_was_not_recognized = True
