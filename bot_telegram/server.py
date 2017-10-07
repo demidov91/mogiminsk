@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 async def telegram_webhook(request):
     data = await request.json()
+    logger.info(f'Request:\n{data}')
     update = Update.create(data)
     request['user'] = get_or_create_user(request['db'], update.get_user())
     if not (update.message or update.callback_query):

@@ -1,4 +1,5 @@
 import asyncio
+import re
 from typing import TypeVar, Type
 import logging
 
@@ -52,8 +53,12 @@ class CallbackQuery(OptionalObjectFactoryMixin):
 
 
 class Contact(OptionalObjectFactoryMixin):
+    # Phone number without leading '+'
+    phone_pattern = re.compile('(?P<number>\d+)')
+
     def __init__(self, data):
-        self.phone = data['phone_number']
+        number_match = self.phone_pattern.search(data['phone_number'])        
+        self.phone = number_match.group('number')
         self.user_id = data.get('user_id')
 
 
@@ -163,6 +168,7 @@ class TgSender:
 
     async def post_data(self, request_to_tg_server: dict):
         url = self.get_api_url(request_to_tg_server.pop('method'))
+        logger.info(f'Following message will be sent to {url}:\n{request_to_tg_server}')
 
         async with self.client.post(url, json=request_to_tg_server) as response:
             if response.status != 200:
