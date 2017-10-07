@@ -1,5 +1,5 @@
 import asyncio
-import logging
+import logging.config
 import sys
 
 from aiohttp import web
@@ -13,7 +13,7 @@ from mogiminsk.middleware import (
     suppress_error,
     clear_tasklocal,
 )
-from mogiminsk.settings import TELEGRAM_API_KEY
+from mogiminsk.settings import TELEGRAM_API_KEY, LOGGING
 
 logger = logging.getLogger(__name__)
 
@@ -64,5 +64,5 @@ def init(argv):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
+    logging.config.dictConfig(LOGGING)
     web.run_app(init(sys.argv), host='127.0.0.1', port=8090)

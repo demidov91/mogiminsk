@@ -1,10 +1,12 @@
 aiohttp==2.2.3
 async-timeout==1.2.1
+certifi==2017.7.27.1
 chardet==3.0.4
 cssselect==1.0.1
 factory-boy==2.8.1
 Faker==0.7.18
 freezegun==0.3.9
+Logentries==0.17
 lxml==3.8.0
 multidict==3.1.0
 psycopg2==2.7.1
