@@ -168,7 +168,7 @@ class TgSender:
 
     async def post_data(self, request_to_tg_server: dict):
         url = self.get_api_url(request_to_tg_server.pop('method'))
-        logger.info(f'Following message will be sent to {url}:\n{request_to_tg_server}')
+        logger.info(f'Response ({url}):\n{request_to_tg_server}')
 
         async with self.client.post(url, json=request_to_tg_server) as response:
             if response.status != 200:
