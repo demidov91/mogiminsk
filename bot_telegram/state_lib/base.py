@@ -1,9 +1,12 @@
+import logging
 from typing import Dict, Type, Sequence
 
 from sqlalchemy.orm.attributes import flag_modified
 
 from bot_telegram.messages import BotMessage
 
+
+logger = logging.getLogger(__name__)
 STATES = {}     # type: Dict[str, Type[BaseState]]
 
 
@@ -85,6 +88,8 @@ class BaseState:
         self.set_state(next_state.get_name())
         message = next_state.get_intro_message()
         if self.message_was_not_recognized:
+            logger.warning('Unexpected user response on state %s: text=%s, value=%s',
+                           self.get_name(), self.text, self.value)
             self.add_message('Unexpected response.')
 
         extra_messages = self.pop_messages()

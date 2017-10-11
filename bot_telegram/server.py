@@ -4,7 +4,7 @@ import sys
 
 from aiohttp import web
 
-from bot_telegram.utils.states_helper import get_state, get_error_message
+from bot_telegram.utils.states_helper import get_state
 from bot_telegram.utils.telegram_helper import Update, get_or_create_user, TgSender
 from mogiminsk.utils import init_client, destroy_client
 from mogiminsk.middleware import (
@@ -32,8 +32,9 @@ async def telegram_webhook(request):
         bot_messages = await state.consume(update.get_common_message())
     except Exception as e:
         logger.exception(e)
-        bot_messages = get_error_message()
         request['user'].telegram_context = {'state': 'where'}
+        bot_messages = \
+            get_state(request['user']).get_intro_message().to_sequence(['Something went wrong...'])
 
     if bot_messages:
         request['db'].commit()

@@ -22,8 +22,3 @@ def get_state(user) -> BaseState:
         return STATES[user.telegram_context['state']](user)
 
     raise ValueError(f'Unknown state {state_name}')
-
-
-def get_error_message():
-    message = WhereState._intro_message
-    return message.to_sequence(['Something went wrong...'])
