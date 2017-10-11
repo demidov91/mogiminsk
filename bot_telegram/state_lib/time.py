@@ -64,15 +64,23 @@ class TripFetcher:
     small_start_datetime_range = datetime.timedelta(minutes=15), datetime.timedelta(minutes=30)
 
     def __init__(self, dt: datetime.datetime, direction: str):
-        super().__init__()
         self.dt = dt
         self.direction = direction
 
     def produce(self):
-        big_time_range = self.dt - self.big_start_datetime_range[0],\
-                         self.dt + self.big_start_datetime_range[1]
-        small_time_range = self.dt - self.small_start_datetime_range[0],\
-                           self.dt + self.small_start_datetime_range[1]
+        current_time = datetime.datetime.now()
+
+        big_time_range = [
+            max(self.dt - self.big_start_datetime_range[0], current_time),
+            max(self.dt + self.big_start_datetime_range[1], current_time)
+        ]
+        small_time_range = [
+            max(self.dt - self.small_start_datetime_range[0], current_time),
+            max(self.dt + self.small_start_datetime_range[1], current_time)
+        ]
+
+        if big_time_range[1] == current_time:
+            return self.no_trips()
 
         # Really we need only id list here.
         trips_long_list = tuple(

@@ -20,8 +20,16 @@ class BaseService:
 
     @classmethod
     def query(cls):
-        return get_db().qyery(cls.model)
+        return get_db().query(cls.model)
 
     @classmethod
     def delete(cls, **kwargs):
         cls.query().filter(**kwargs).delete()
+
+    @classmethod
+    def get(cls, id):
+        return cls.query().get(id)
+
+    @classmethod
+    def id_list(cls, ids):
+        return cls.query().filter(cls.model.id.in_(ids))

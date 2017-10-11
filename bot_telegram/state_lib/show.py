@@ -5,12 +5,8 @@ from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import BotMessage
 from bot_telegram.defines import FULL_TRIPS_SWITCH
 from mogiminsk.models import Trip
-from mogiminsk.utils import get_db
+from mogiminsk.services.trip import TripService
 from mogiminsk_interaction.utils import has_connector
-
-
-def get_trips(trip_id_list: Iterable[int]) -> Iterable[Trip]:
-    return get_db().query(Trip).filter(Trip.id.in_(trip_id_list))
 
 
 def trip_to_line(trip: Trip) -> Collection[Dict]:
@@ -48,7 +44,7 @@ class ShowState(BaseState):
         if show_shorten:
             trip_id_list = trip_id_list[:3]
 
-        trips = get_trips(trip_id_list)
+        trips = TripService.id_list(trip_id_list).order_by(Trip.start_datetime)
         buttons = [
             trip_to_line(trip) for trip in trips
         ]
