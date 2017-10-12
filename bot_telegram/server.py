@@ -52,7 +52,7 @@ async def telegram_webhook(request):
     return web.Response()
 
 
-def init(argv):
+def init():
     app = web.Application(middlewares=[
         suppress_error.middleware,
         clear_tasklocal.middleware,
@@ -66,5 +66,29 @@ def init(argv):
 
 
 if __name__ == '__main__':
+    from aiohttp import web
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--path')
+    parser.add_argument('--port')    
+
+    args = parser.parse_args()
+    port = args.port
+
+    if port:
+        port = int(port)
+
+    elif not args.path:
+        port = 8090
+    print((port, args.path))
     logging.config.dictConfig(LOGGING)
-    web.run_app(init(sys.argv), host='127.0.0.1', port=8090)
+
+    if port:
+        web.run_app(init(), host='0.0.0.0', port=port)
+
+    else:
+        web.run_app(init(), path=args.path, port=None)
+
+    
+

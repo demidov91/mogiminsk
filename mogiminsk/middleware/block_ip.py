@@ -41,7 +41,16 @@ class KeyShield:
             if peername is None:
                 raise ValueError("Can't determine IP")
 
-            host, port = peername
+            host = port = None
+            if peername:
+                host, port = peername
+           
+            if host in ('127.0.0.1', None) and request.headers.get('X-FORWARDED-FOR') not in ('127.0.0.1', None):
+                host = request.headers['X-FORWARDED-FOR']
+                port = None
+
+            logger.debug('Remote IP: %s', host)
+
             if host in self.blocked_ip:
                 logger.info(f'One more request from {host}')
                 return HTTPForbidden()
