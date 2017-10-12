@@ -4,6 +4,7 @@ import sys
 
 from aiohttp import web
 
+from aiohttp_translation import activate
 from bot_telegram.utils.states_helper import get_state
 from bot_telegram.utils.telegram_helper import Update, get_or_create_user, TgSender
 from mogiminsk.utils import init_client, destroy_client
@@ -13,7 +14,7 @@ from mogiminsk.middleware import (
     suppress_error,
     clear_tasklocal,
 )
-from mogiminsk.settings import TELEGRAM_API_KEY, LOGGING
+from mogiminsk.settings import TELEGRAM_API_KEY, LOGGING, LANGUAGE
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +24,7 @@ async def telegram_webhook(request):
     logger.info(f'Request:\n{data}')
     update = Update.create(data)
     request['user'] = get_or_create_user(request['db'], update.get_user())
+    activate(request['user'].language or LANGUAGE)
     if not (update.message or update.callback_query):
         raise ValueError('Got unexpected message type: {}'.format(update))
 
