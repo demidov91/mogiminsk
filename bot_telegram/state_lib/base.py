@@ -3,6 +3,7 @@ from typing import Dict, Type, Sequence
 
 from sqlalchemy.orm.attributes import flag_modified
 
+from aiohttp_translation import gettext as _
 from bot_telegram.messages import BotMessage
 
 
@@ -90,7 +91,7 @@ class BaseState:
         if self.message_was_not_recognized:
             logger.warning('Unexpected user response on state %s: text=%s, value=%s',
                            self.get_name(), self.text, self.value)
-            self.add_message('Unexpected response.')
+            self.add_message(_('Unexpected response.'))
 
         extra_messages = self.pop_messages()
         self.save_data()

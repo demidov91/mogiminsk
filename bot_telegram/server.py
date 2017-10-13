@@ -1,10 +1,10 @@
+import argparse
 import asyncio
 import logging.config
-import sys
 
 from aiohttp import web
 
-from aiohttp_translation import activate
+from aiohttp_translation import activate, gettext as _
 from bot_telegram.utils.states_helper import get_state
 from bot_telegram.utils.telegram_helper import Update, get_or_create_user, TgSender
 from mogiminsk.utils import init_client, destroy_client
@@ -36,13 +36,17 @@ async def telegram_webhook(request):
         logger.exception(e)
         request['user'].telegram_context = {'state': 'where'}
         bot_messages = \
-            get_state(request['user']).get_intro_message().to_sequence(['Something went wrong...'])
+            get_state(request['user']).get_intro_message().to_sequence([
+                _('Something went wrong...')
+            ])
 
     if bot_messages:
         request['db'].commit()
         connector = TgSender(update.get_chat().id, request.app['client'], request['user'])
         asyncio.ensure_future(
-            connector.send_messages(bot_messages, update.get_message().id if update.callback_query else None)
+            connector.send_messages(
+                bot_messages, update.get_message().id if update.callback_query else None
+            )
         )
 
     if update.callback_query:
@@ -68,9 +72,6 @@ def init():
 
 
 if __name__ == '__main__':
-    from aiohttp import web
-    import argparse
-
     parser = argparse.ArgumentParser()
     parser.add_argument('--path')
     parser.add_argument('--port')    
@@ -83,7 +84,7 @@ if __name__ == '__main__':
 
     elif not args.path:
         port = 8090
-    print((port, args.path))
+
     logging.config.dictConfig(LOGGING)
 
     if port:
