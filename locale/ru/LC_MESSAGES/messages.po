@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-14 10:17+0300\n"
+"POT-Creation-Date: 2017-10-14 12:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,47 @@ msgstr "Что-то пошло не так..."
 msgid "Unexpected response."
 msgstr "Непредвиденный ответ"
 
+#: bot_telegram/state_lib/station.py:28 bot_telegram/state_lib/time.py:20
+#: bot_telegram/state_lib/trip.py:44 bot_telegram/state_lib/trip.py:58
+msgid "Back"
+msgstr "Назад"
+
+#: bot_telegram/state_lib/station.py:30
+msgid "Choose start station:"
+msgstr "Место посадки:"
+
+#: bot_telegram/state_lib/time.py:18
+msgid "Enter time. For example: 7, 1125 or 16:40."
+msgstr "Выберите время. Например, 7, 1125 или 16:40"
+
+#: bot_telegram/state_lib/time.py:49
+msgid "No trips found :("
+msgstr "Поездки не найдены :("
+
+#: bot_telegram/state_lib/trip.py:18
+msgid "MTS"
+msgstr "МТС"
+
+#: bot_telegram/state_lib/trip.py:32
+msgid "Unfortunately I have no contacts for this trip :("
+msgstr "К сожалению, у меня нет контактной информации :("
+
+#: bot_telegram/state_lib/trip.py:47
+msgid "Book it"
+msgstr "Заказать"
+
+#: bot_telegram/state_lib/trip.py:51 bot_telegram/state_lib/trip.py:61
+msgid "Got it"
+msgstr "В начало"
+
+#: bot_telegram/state_lib/trip.py:77
+#, python-format
+msgid ""
+"I hope you've called dispatcher. Trips with %s icons can't be booked from "
+"bot. Choose trip with %s symbol to book in-app."
+msgstr "Надеюсь, вы позвонили диспетчеру. Поездки с иконкой %s не могут быть заказаны ботом."
+" Выбирайте  варианты обозначеные %s для заказа из приложения."
+
 #: bot_telegram/state_lib/where.py:13
 msgid "Where are we going?"
 msgstr "Куда едем?"
@@ -40,7 +81,15 @@ msgstr "В Минск"
 msgid "My trips"
 msgstr "Мои поездки"
 
-#: tests/test_aiohttp_translation.py:12 tests/test_aiohttp_translation.py:21
-#: tests/test_aiohttp_translation.py:30 tests/test_aiohttp_translation.py:39
+#: mogiminsk/services/trip.py:21
+msgid "Mogilev - Minsk"
+msgstr "Могилёв - Минск"
+
+#: mogiminsk/services/trip.py:24
+msgid "Minsk - Mogilev"
+msgstr "Минск - Могилёв"
+
+#: tests/test_aiohttp_translation.py:13 tests/test_aiohttp_translation.py:22
+#: tests/test_aiohttp_translation.py:27 tests/test_aiohttp_translation.py:43
 msgid "Test message"
 msgstr "Сие есть сущая тестовая строка"

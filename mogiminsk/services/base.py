@@ -2,14 +2,15 @@ from typing import TypeVar, Type
 
 from mogiminsk.utils import get_db
 
-C = TypeVar
+M = TypeVar('M')
+S = TypeVar('S', bound='BaseService')
 
 
 class BaseService:
-    model = None    # type: Type[C]
+    model = None    # type: Type[M]
     _db = None
 
-    def __init__(self, instance: C):
+    def __init__(self: S, instance: M):
         self.instance = instance
 
     def db(self):
@@ -27,8 +28,12 @@ class BaseService:
         cls.query().filter(**kwargs).delete()
 
     @classmethod
-    def get(cls, id):
+    def get(cls: Type[S], id) ->M:
         return cls.query().get(id)
+
+    @classmethod
+    def get_service(cls: Type[S], id) ->S:
+        return cls(cls.get(id))
 
     @classmethod
     def id_list(cls, ids):

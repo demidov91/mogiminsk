@@ -3,10 +3,11 @@ import re
 
 from sqlalchemy import or_
 
+from aiohttp_translation import gettext_lazy as _
 from bot_telegram.messages import BotMessage
 from bot_telegram.state_lib.base import BaseState
 from mogiminsk.models import Trip
-from mogiminsk.defines import DATE_FORMAT, DATE_TIME_FORMAT
+from mogiminsk.defines import DATE_TIME_FORMAT
 from mogiminsk.utils import get_db
 
 
@@ -14,9 +15,9 @@ class TimeState(BaseState):
     back = 'date'
 
     _intro_message = BotMessage(
-        text='Enter time. For example: 7, 1125 or 16:40.',
+        text=_('Enter time. For example: 7, 1125 or 16:40.'),
         buttons=[
-            [{'data': 'back', 'text': 'Back'}]
+            [{'data': 'back', 'text': _('Back')}]
         ],
     )
 
@@ -45,7 +46,7 @@ class TimeState(BaseState):
 
         if len(self.data['trip_id_list']) == 0:
             self.set_state('where')
-            self.add_message('No trips found :(')
+            self.add_message(_('No trips found :('))
             return
 
         self.set_state('show')

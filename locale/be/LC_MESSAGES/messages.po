@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-14 10:17+0300\n"
+"POT-Creation-Date: 2017-10-14 12:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,6 +23,46 @@ msgstr ""
 
 #: bot_telegram/state_lib/base.py:94
 msgid "Unexpected response."
+msgstr ""
+
+#: bot_telegram/state_lib/station.py:28 bot_telegram/state_lib/time.py:20
+#: bot_telegram/state_lib/trip.py:44 bot_telegram/state_lib/trip.py:58
+msgid "Back"
+msgstr ""
+
+#: bot_telegram/state_lib/station.py:30
+msgid "Choose start station:"
+msgstr ""
+
+#: bot_telegram/state_lib/time.py:18
+msgid "Enter time. For example: 7, 1125 or 16:40."
+msgstr ""
+
+#: bot_telegram/state_lib/time.py:49
+msgid "No trips found :("
+msgstr ""
+
+#: bot_telegram/state_lib/trip.py:18
+msgid "MTS"
+msgstr ""
+
+#: bot_telegram/state_lib/trip.py:32
+msgid "Unfortunately I have no contacts for this trip :("
+msgstr ""
+
+#: bot_telegram/state_lib/trip.py:47
+msgid "Book it"
+msgstr ""
+
+#: bot_telegram/state_lib/trip.py:51 bot_telegram/state_lib/trip.py:61
+msgid "Got it"
+msgstr ""
+
+#: bot_telegram/state_lib/trip.py:77
+#, python-format
+msgid ""
+"I hope you've called dispatcher. Trips with %s icons can't be booked from "
+"bot. Choose trip with %s symbol to book in-app."
 msgstr ""
 
 #: bot_telegram/state_lib/where.py:13
@@ -41,7 +81,15 @@ msgstr ""
 msgid "My trips"
 msgstr ""
 
-#: tests/test_aiohttp_translation.py:12 tests/test_aiohttp_translation.py:21
-#: tests/test_aiohttp_translation.py:30 tests/test_aiohttp_translation.py:39
+#: mogiminsk/services/trip.py:21
+msgid "Mogilev - Minsk"
+msgstr ""
+
+#: mogiminsk/services/trip.py:24
+msgid "Minsk - Mogilev"
+msgstr ""
+
+#: tests/test_aiohttp_translation.py:13 tests/test_aiohttp_translation.py:22
+#: tests/test_aiohttp_translation.py:27 tests/test_aiohttp_translation.py:43
 msgid "Test message"
 msgstr "Шмат тэстаў не бывае"
