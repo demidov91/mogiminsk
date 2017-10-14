@@ -1,7 +1,7 @@
 """
 Helper module to use FROM state classes.
 """
-
+from aiohttp_translation import gettext_lazy as _
 from mogiminsk.utils import get_db
 from mogiminsk.models import Trip, Station, Purchase
 from mogiminsk.services.user import UserService
@@ -97,7 +97,7 @@ async def generic_cancellation(state, sms_code=None):
     if result == CancellationResult.SUCCESS:
         user_service.delete_purchase(state.data['purchase_cancel'])
         state.set_state('purchaselist')
-        state.add_message(connnector.get_message() or 'Purchase was CANCELLED!')
+        state.add_message(connnector.get_message() or _('Purchase was CANCELLED!'))
         return
 
     if result == CancellationResult.NEED_SMS:
@@ -105,15 +105,17 @@ async def generic_cancellation(state, sms_code=None):
         return
 
     if result == CancellationResult.DOES_NOT_EXIST:
-        state.add_message("Looks like the purchasement was already cancelled. "
-                         "Call the company if you don't think so.")
+        state.add_message(_(
+            "Looks like the purchasement was already cancelled. "
+            "Call the company if you don't think so."
+        ))
         user_service.delete_purchase(state.data['purchase_cancel'])
         state.set_state('purchaselist')
         return
 
     state.add_message(
         connnector.get_message() or
-        'Failed to cancel. Please, call the company to cancel.'
+        _('Failed to cancel. Please, call the company to cancel.')
     )
 
 

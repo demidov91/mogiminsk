@@ -18,11 +18,19 @@ def activate(language):
     setattr(_local, ACTIVE_LANG_FIELD, language)
 
 
+def get_active():
+    return getattr(_local, ACTIVE_LANG_FIELD, default_language)
+
+
 def get_translation(language_code: str):
     if language_code not in _translations:
-        _translations[language_code] = native_gettext.translation(
-            'messages', localedir=os.path.join(BASE_DIR, 'locale'), languages=[language_code]
-        )
+        if language_code == 'en':
+            _translations[language_code] = native_gettext.NullTranslations()
+
+        else:
+            _translations[language_code] = native_gettext.translation(
+                'messages', localedir=os.path.join(BASE_DIR, 'locale'), languages=[language_code]
+            )
 
     return _translations[language_code]
 

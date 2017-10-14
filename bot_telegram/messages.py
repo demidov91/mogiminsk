@@ -2,7 +2,9 @@ from copy import deepcopy
 import datetime
 from typing import List, Dict, Sequence
 
-from aiohttp_translation import gettext_lazy as _
+from babel.dates import format_date
+
+from aiohttp_translation import gettext_lazy as _, get_active
 from mogiminsk.defines import DATE_FORMAT
 
 
@@ -45,16 +47,25 @@ class DateBotMessage(BotMessage):
         today = datetime.date.today()
         tomorrow = today + datetime.timedelta(days=1)
         buttons = (
-            (today.strftime('Today, %a'), today.strftime(DATE_FORMAT)),
-            (tomorrow.strftime('Tomorrow, %a'), tomorrow.strftime(DATE_FORMAT)),
-            ('Other', 'other'),
+            (
+                _('Today, %s') % format_date(today, 'E', locale=get_active()),
+                today.strftime(DATE_FORMAT)
+            ),
+            (
+                _('Tomorrow, %s') % format_date(tomorrow, 'E', locale=get_active()),
+                tomorrow.strftime(DATE_FORMAT)
+            ),
+            (
+                _('Other'),
+                'other'
+            ),
         )
         buttons = [
             [{'text': x[0], 'data': x[1]} for x in buttons],
-            [{'text': 'Back', 'data': 'back',}],
+            [{'text': _('Back'), 'data': 'back',}],
         ]
 
-        super(DateBotMessage, self).__init__('Choose the date', buttons)
+        super(DateBotMessage, self).__init__(_('Choose the date'), buttons)
 
 
 class OtherDateBotMessage(BotMessage):
@@ -85,7 +96,7 @@ class OtherDateBotMessage(BotMessage):
         buttons = [
             first_line,
             second_line,
-            [{'text': 'Back', 'data': 'back', }],
+            [{'text': _('Back'), 'data': 'back', }],
         ]
 
         super(OtherDateBotMessage, self).__init__(_('Choose the date'), buttons)

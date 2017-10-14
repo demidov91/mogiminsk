@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-14 18:09+0300\n"
+"POT-Creation-Date: 2017-10-14 23:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.1\n"
 
-#: bot_telegram/messages.py:91
+#: bot_telegram/messages.py:51
+#, python-format
+msgid "Today, %s"
+msgstr ""
+
+#: bot_telegram/messages.py:55
+#, python-format
+msgid "Tomorrow, %s"
+msgstr ""
+
+#: bot_telegram/messages.py:59
+msgid "Other"
+msgstr ""
+
+#: bot_telegram/messages.py:65
+#: bot_telegram/state_lib/cancel_purchase_with_sms.py:13
+#: bot_telegram/state_lib/finish_purchase_with_sms.py:14
+#: bot_telegram/state_lib/first_name.py:14 bot_telegram/state_lib/notes.py:10
+#: bot_telegram/state_lib/phone.py:13 bot_telegram/state_lib/purchase.py:94
+#: bot_telegram/state_lib/purchase_list.py:20
+#: bot_telegram/state_lib/purchase_list.py:36 bot_telegram/state_lib/seat.py:15
+#: bot_telegram/state_lib/show.py:63 bot_telegram/state_lib/station.py:28
+#: bot_telegram/state_lib/time.py:20 bot_telegram/state_lib/trip.py:44
+#: bot_telegram/state_lib/trip.py:58
+msgid "Back"
+msgstr ""
+
+#: bot_telegram/messages.py:68 bot_telegram/messages.py:102
 msgid "Choose the date"
 msgstr ""
 
@@ -33,18 +60,6 @@ msgstr ""
 #: bot_telegram/state_lib/finish_purchase_with_sms.py:13
 #, python-format
 msgid "SMS was sent to +%s. Enter it."
-msgstr ""
-
-#: bot_telegram/state_lib/cancel_purchase_with_sms.py:13
-#: bot_telegram/state_lib/finish_purchase_with_sms.py:14
-#: bot_telegram/state_lib/first_name.py:14 bot_telegram/state_lib/notes.py:10
-#: bot_telegram/state_lib/phone.py:13 bot_telegram/state_lib/purchase.py:94
-#: bot_telegram/state_lib/purchase_list.py:20
-#: bot_telegram/state_lib/purchase_list.py:36 bot_telegram/state_lib/seat.py:15
-#: bot_telegram/state_lib/show.py:63 bot_telegram/state_lib/station.py:28
-#: bot_telegram/state_lib/time.py:20 bot_telegram/state_lib/trip.py:44
-#: bot_telegram/state_lib/trip.py:58
-msgid "Back"
 msgstr ""
 
 #: bot_telegram/state_lib/finish_purchase_with_sms.py:39
@@ -177,12 +192,35 @@ msgstr ""
 msgid "My trips"
 msgstr ""
 
+#: bot_telegram/utils/helper.py:100
+msgid "Purchase was CANCELLED!"
+msgstr ""
+
+#: bot_telegram/utils/helper.py:108
+msgid ""
+"Looks like the purchasement was already cancelled. Call the company if you "
+"don't think so."
+msgstr ""
+
+#: bot_telegram/utils/helper.py:118
+msgid "Failed to cancel. Please, call the company to cancel."
+msgstr ""
+
 #: mogiminsk/services/trip.py:21
 msgid "Mogilev - Minsk"
 msgstr ""
 
 #: mogiminsk/services/trip.py:24
 msgid "Minsk - Mogilev"
+msgstr ""
+
+#: mogiminsk_interaction/connectors/fortima.py:146
+#: mogiminsk_interaction/connectors/fortima.py:152
+msgid "Trip is booked! You'll be notified with SMS shortly."
+msgstr ""
+
+#: mogiminsk_interaction/connectors/fortima.py:163
+msgid "Trip is booked! Operator will call you before departure."
 msgstr ""
 
 #: tests/test_aiohttp_translation.py:13 tests/test_aiohttp_translation.py:22
