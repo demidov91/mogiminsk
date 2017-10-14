@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-14 12:57+0300\n"
+"POT-Creation-Date: 2017-10-14 18:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.1\n"
 
+#: bot_telegram/messages.py:91
+msgid "Choose the date"
+msgstr "Выбирете дату:"
+
 #: bot_telegram/server.py:40
 msgid "Something went wrong..."
 msgstr "Что-то пошло не так..."
@@ -24,10 +28,108 @@ msgstr "Что-то пошло не так..."
 msgid "Unexpected response."
 msgstr "Непредвиденный ответ"
 
-#: bot_telegram/state_lib/station.py:28 bot_telegram/state_lib/time.py:20
-#: bot_telegram/state_lib/trip.py:44 bot_telegram/state_lib/trip.py:58
+#: bot_telegram/state_lib/cancel_purchase_with_sms.py:12
+#: bot_telegram/state_lib/finish_purchase_with_sms.py:13
+#, python-format
+msgid "SMS was sent to +%s. Enter it."
+msgstr "SMS с кодом было отправлено на +%s. Введите его, пожалуйста"
+
+#: bot_telegram/state_lib/cancel_purchase_with_sms.py:13
+#: bot_telegram/state_lib/finish_purchase_with_sms.py:14
+#: bot_telegram/state_lib/first_name.py:14 bot_telegram/state_lib/notes.py:10
+#: bot_telegram/state_lib/phone.py:13 bot_telegram/state_lib/purchase.py:94
+#: bot_telegram/state_lib/purchase_list.py:20
+#: bot_telegram/state_lib/purchase_list.py:36 bot_telegram/state_lib/seat.py:15
+#: bot_telegram/state_lib/show.py:63 bot_telegram/state_lib/station.py:28
+#: bot_telegram/state_lib/time.py:20 bot_telegram/state_lib/trip.py:44
+#: bot_telegram/state_lib/trip.py:58
 msgid "Back"
 msgstr "Назад"
+
+#: bot_telegram/state_lib/finish_purchase_with_sms.py:39
+#: bot_telegram/state_lib/purchase.py:124
+msgid "Failed to purchase the trip. Try another provider."
+msgstr "Не удалось заказать поездку. Попробуйте другого перевозчика."
+
+#: bot_telegram/state_lib/first_name.py:13
+msgid "What's your name?"
+msgstr "Как Вас зовут?"
+
+#: bot_telegram/state_lib/phone.py:8
+msgid "Tap the button below to share your phone number."
+msgstr "Нажмите на кнопку ниже, чтобы отправить свой номер."
+
+#: bot_telegram/state_lib/phone.py:10
+msgid "Share phone number"
+msgstr "Отправить номер теоефона"
+
+#: bot_telegram/state_lib/purchase.py:71
+#, python-format
+msgid ""
+"Firm: %(provider)s\n"
+"Direction: %(direction)s\n"
+"Time: %(time)s\n"
+"Phone: %(phone)s\n"
+"(Tap on the buttons bellow to change)"
+msgstr ""
+"Фирма: %(provider)s\n"
+"Направление: %(direction)s\n"
+"Время: %(time)s\n"
+"Телефон: %(phone)s\n"
+"(Нажмите на кнопку ниже, чтобы изменить)"
+
+
+#: bot_telegram/state_lib/purchase.py:86
+#, python-format
+msgid "Notes: %s"
+msgstr "Замечания: %s"
+
+#: bot_telegram/state_lib/purchase.py:86
+msgid "Notes"
+msgstr "Замечания"
+
+#: bot_telegram/state_lib/purchase.py:89
+#, python-format
+msgid "Name: %s"
+msgstr "Имя: %s"
+
+#: bot_telegram/state_lib/purchase.py:90
+#, python-format
+msgid "Pick up: %s"
+msgstr "Посадка: %s"
+
+#: bot_telegram/state_lib/purchase.py:91
+#, python-format
+msgid "%s seat(s)"
+msgstr "Места: %s"
+
+#: bot_telegram/state_lib/purchase.py:95
+msgid "Book it!"
+msgstr "Заказать!"
+
+#: bot_telegram/state_lib/purchase_list.py:19
+msgid "You have no pending trips"
+msgstr "У Вас нет активных заказов"
+
+#: bot_telegram/state_lib/purchase_list.py:38
+msgid "Your purchases"
+msgstr "Ваши заказы"
+
+#: bot_telegram/state_lib/purchase_list.py:38
+msgid "Your purchase"
+msgstr "Ваш заказ"
+
+#: bot_telegram/state_lib/seat.py:9
+msgid "How many seats?"
+msgstr "Сколько мест?"
+
+#: bot_telegram/state_lib/show.py:58
+msgid "More"
+msgstr "... и ещё"
+
+#: bot_telegram/state_lib/show.py:66
+msgid "Choose trip:"
+msgstr "Выберите поездку:"
 
 #: bot_telegram/state_lib/station.py:30
 msgid "Choose start station:"
@@ -62,8 +164,9 @@ msgstr "В начало"
 msgid ""
 "I hope you've called dispatcher. Trips with %s icons can't be booked from "
 "bot. Choose trip with %s symbol to book in-app."
-msgstr "Надеюсь, вы позвонили диспетчеру. Поездки с иконкой %s не могут быть заказаны ботом."
-" Выбирайте  варианты обозначеные %s для заказа из приложения."
+msgstr ""
+"Надеюсь, вы позвонили диспетчеру. Поездки с иконкой %s не могут быть "
+"заказаны ботом. Выбирайте  варианты обозначеные %s для заказа из приложения."
 
 #: bot_telegram/state_lib/where.py:13
 msgid "Where are we going?"

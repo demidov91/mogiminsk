@@ -38,3 +38,7 @@ class BaseService:
     @classmethod
     def id_list(cls, ids):
         return cls.query().filter(cls.model.id.in_(ids))
+
+    @property
+    def id(self):
+        return self.instance.id

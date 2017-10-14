@@ -1,3 +1,4 @@
+from aiohttp_translation import gettext_lazy as _
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import BotMessage
 from bot_telegram.utils.helper import generic_cancellation
@@ -8,8 +9,8 @@ class CancelPurchaseWithSmsState(BaseState):
 
     def get_intro_message(self):
         return BotMessage(
-            text=f'SMS was sent to +{self.user.phone}. Enter it.',
-            buttons=[[{'text': 'Back', 'data': 'back',}]],
+            text=_('SMS was sent to +%s. Enter it.') % self.user.phone,
+            buttons=[[{'text': _('Back'), 'data': 'back',}]],
         )
 
     async def process(self):

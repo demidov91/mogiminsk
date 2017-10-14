@@ -1,10 +1,12 @@
 from sqlalchemy import and_
 
+from aiohttp_translation import gettext_lazy as _
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.utils.helper import purchase, store_purchase_event
 from bot_telegram.messages import BotMessage
 from mogiminsk.utils import get_db
 from mogiminsk.models import Trip, Purchase, Car, Provider
+from mogiminsk.services.trip import TripService
 from mogiminsk_interaction.connectors.core import PurchaseResult
 
 
@@ -64,24 +66,33 @@ class PurchaseState(BaseState):
         self.data['seat'] = last_purchase.seats
 
     def get_text(self, trip: Trip):
-        return f'Firm: {trip.car.provider.name}\n' \
-               f'Direction: {trip.direction}\n' \
-               f'Time: {trip.start_datetime}\n' \
-               f'Phone: {self.user.phone}\n' \
-               f'(Tap on the buttons bellow to change)'
+        trip_service = TripService(trip)
+
+        return _(
+            'Firm: %(provider)s\n'
+            'Direction: %(direction)s\n'
+            'Time: %(time)s\n'
+            'Phone: %(phone)s\n'
+            '(Tap on the buttons bellow to change)'
+        ) % {
+            'provider': trip_service.provider_name(),
+            'direction': trip_service.direction_name(),
+            'time': trip_service.instance.start_datetime,
+            'phone': self.user.phone,
+        }
 
     def get_buttons(self):
         notes = self.data.get('notes')
-        notes = f'Notes: {notes}' if notes else 'Notes'
+        notes = _('Notes: %s') % notes if notes else _('Notes')
 
         return [
-            [{'text': f'Name: {self.user.first_name}', 'data': 'firstname'}],
-            [{'text': f'Pick up: {self.data["station_name"]}', 'data': 'station'}],
-            [{'text': f'{self.data["seat"]} seat(s)', 'data': 'seat'}],
-            [{'text': f'{notes}', 'data': 'notes'}],
+            [{'text': _('Name: %s') % self.user.first_name, 'data': 'firstname'}],
+            [{'text': _('Pick up: %s') % self.data["station_name"], 'data': 'station'}],
+            [{'text': _('%s seat(s)') % self.data["seat"], 'data': 'seat'}],
+            [{'text': notes, 'data': 'notes'}],
             [
-                {'text': 'Back', 'data': 'back'},
-                {'text': 'Book it!', 'data': 'submit'},
+                {'text': _('Back'), 'data': 'back'},
+                {'text': _('Book it!'), 'data': 'submit'},
             ],
         ]
 
@@ -110,7 +121,7 @@ class PurchaseState(BaseState):
 
             if purchase_result == PurchaseResult.FAIL:
                 self.set_state('show')
-                self.add_message('Failed to purchase the trip. Try another provider.')
+                self.add_message(_('Failed to purchase the trip. Try another provider.'))
                 return
 
             if purchase_result == PurchaseResult.NEED_REGISTRATION:

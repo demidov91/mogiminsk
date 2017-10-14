@@ -1,15 +1,16 @@
+from aiohttp_translation import gettext_lazy as _
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import BotMessage
 
 
 class PhoneState(BaseState):
     _intro_message = BotMessage(
-        text='Tap the button below to share your phone number.',
+        text=_('Tap the button below to share your phone number.'),
         text_buttons=[[{
-            'text': 'Share phone number',
+            'text': _('Share phone number'),
             'type': 'phone',
         }, {
-            'text': 'Back',
+            'text': _('Back'),
             'type': 'text',
         }]])
 

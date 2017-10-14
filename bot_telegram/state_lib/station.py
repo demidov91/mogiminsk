@@ -17,7 +17,7 @@ class StationState(BaseState):
 
         stations = trip_service.get_stations()
 
-        if len(stations) == 0:
+        if stations.count() == 0:
             raise ValueError(f'There are no stations available in db for '
                              f'provider {trip_service.provider_name()}'
                              f'and direction {trip_service.direction_name()}')

@@ -1,5 +1,6 @@
 import re
 
+from aiohttp_translation import gettext_lazy as _
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.utils.helper import generic_cancellation
 from bot_telegram.messages import BotMessage
@@ -15,7 +16,8 @@ class PurchaseListState(BaseState):
         purchases = tuple(UserService(self.user).future_purchases())
         if not purchases:
             return BotMessage(
-                'You have no pending trips', buttons=[[{'text': 'Back', 'data': 'back'}]]
+                _('You have no pending trips'),
+                buttons=[[{'text': _('Back'), 'data': 'back'}]]
             )
 
         buttons = []
@@ -31,9 +33,9 @@ class PurchaseListState(BaseState):
                 }
             ])
 
-        buttons.append([{'text': 'Back', 'data': 'back'}])
+        buttons.append([{'text': _('Back'), 'data': 'back'}])
 
-        text = 'Your purchase' if len(purchases) > 1 else 'Your purchase'
+        text = _('Your purchases') if len(purchases) > 1 else _('Your purchase')
 
         return BotMessage(text, buttons)
 

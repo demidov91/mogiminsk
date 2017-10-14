@@ -1,3 +1,4 @@
+from aiohttp_translation import gettext_lazy as _
 from .base import BaseState
 from bot_telegram.messages import BotMessage
 
@@ -9,8 +10,8 @@ class FirstNameState(BaseState):
 
         return 'show'
 
-    _intro_message = BotMessage(text="What's your name?", buttons=[[{
-        'text': 'Back',
+    _intro_message = BotMessage(text=_("What's your name?"), buttons=[[{
+        'text': _('Back'),
         'data': 'back',
     }]])
 

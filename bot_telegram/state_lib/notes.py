@@ -1,3 +1,4 @@
+from aiohttp_translation import gettext_lazy as _
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import BotMessage
 
@@ -6,7 +7,7 @@ class NotesState(BaseState):
     back = 'purchase'
 
     _intro_message = BotMessage('Add some notes:', buttons=[[{
-        'text': 'Back',
+        'text': _('Back'),
         'data': 'back',
     }]])
 

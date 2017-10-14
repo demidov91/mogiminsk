@@ -1,3 +1,4 @@
+from aiohttp_translation import gettext_lazy as _
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import BotMessage
 
@@ -5,13 +6,13 @@ from bot_telegram.messages import BotMessage
 class SeatState(BaseState):
     choices = tuple(range(1, 5))
 
-    _intro_message = BotMessage('How many seats?', buttons=[
+    _intro_message = BotMessage(_('How many seats?'), buttons=[
         [{
             'text': str(x),
             'data': str(x),
         } for x in choices],
         [{
-            'text': 'Back',
+            'text': _('Back'),
             'data': 'back',
         }]
     ])

@@ -1,4 +1,3 @@
-from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import OtherDateBotMessage
 from .date import DateState
 

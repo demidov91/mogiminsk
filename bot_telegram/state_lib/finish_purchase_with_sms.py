@@ -1,3 +1,4 @@
+from aiohttp_translation import gettext_lazy as _
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import BotMessage
 from bot_telegram.utils.helper import purchase, store_purchase_event
@@ -9,8 +10,8 @@ class FinishPurchaseWithSmsState(BaseState):
 
     def get_intro_message(self):
         return BotMessage(
-            text=f'SMS was sent to +{self.user.phone}. Enter it.',
-            buttons=[[{'text': 'Back', 'data': 'back',}]],
+            text=_('SMS was sent to +%s. Enter it.') % self.user.phone,
+            buttons=[[{'text': _('Back'), 'data': 'back',}]],
         )
 
     async def process(self):
@@ -34,4 +35,6 @@ class FinishPurchaseWithSmsState(BaseState):
             return
 
         self.set_state('show')
-        self.add_message(connector.get_message() or 'Failed to purchase the trip. Try another provider.')
+        self.add_message(
+            connector.get_message() or _('Failed to purchase the trip. Try another provider.')
+        )

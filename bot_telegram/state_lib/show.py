@@ -1,3 +1,4 @@
+from aiohttp_translation import gettext_lazy as _
 import re
 from typing import Iterable, Dict, Collection
 
@@ -10,20 +11,23 @@ from mogiminsk_interaction.utils import has_connector
 
 
 def trip_to_line(trip: Trip) -> Collection[Dict]:
+    trip_service = TripService(trip)
+
     if trip.remaining_seats:
         description = '{}, {} ({})'.format(
-            trip.start_datetime.strftime('%H:%M'),
-            trip.car.provider.name,
-            trip.remaining_seats
+            trip_service.instance.start_datetime.strftime('%H:%M'),
+            trip_service.provider_name(),
+            trip_service.instance.remaining_seats
         )
 
     else:
         description = '{}, {}'.format(
-            trip.start_datetime.strftime('%H:%M'), trip.car.provider.name
+            trip_service.instance.start_datetime.strftime('%H:%M'),
+            trip_service.provider_name()
         )
 
-    is_bookable = has_connector(trip.car.provider.identifier)
-    action = f'purchase_{trip.id}' if is_bookable else f'trip_{trip.id}'
+    is_bookable = has_connector(trip_service.provider().identifier)
+    action = f'purchase_{trip_service.id}' if is_bookable else f'trip_{trip_service.id}'
     action_text = b'\xF0\x9F\x9A\x90'.decode('utf-8') \
         if is_bookable else b'\xF0\x9F\x93\x9E'.decode('utf-8')
 
@@ -51,15 +55,15 @@ class ShowState(BaseState):
 
         if show_shorten:
             buttons.append([{
-                'text': 'More',
+                'text': _('More'),
                 'data': 'full',
             }])
 
         buttons.append([{
-            'text': 'Back',
+            'text': _('Back'),
             'data': 'back',
         }])
-        return BotMessage(text='Choose trip:', buttons=buttons)
+        return BotMessage(text=_('Choose trip:'), buttons=buttons)
 
     async def process(self):
         if self.value == 'full':

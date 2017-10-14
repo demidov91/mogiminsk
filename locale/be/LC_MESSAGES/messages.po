@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-14 12:57+0300\n"
+"POT-Creation-Date: 2017-10-14 18:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.1\n"
 
+#: bot_telegram/messages.py:91
+msgid "Choose the date"
+msgstr ""
+
 #: bot_telegram/server.py:40
 msgid "Something went wrong..."
 msgstr ""
@@ -25,9 +29,101 @@ msgstr ""
 msgid "Unexpected response."
 msgstr ""
 
-#: bot_telegram/state_lib/station.py:28 bot_telegram/state_lib/time.py:20
-#: bot_telegram/state_lib/trip.py:44 bot_telegram/state_lib/trip.py:58
+#: bot_telegram/state_lib/cancel_purchase_with_sms.py:12
+#: bot_telegram/state_lib/finish_purchase_with_sms.py:13
+#, python-format
+msgid "SMS was sent to +%s. Enter it."
+msgstr ""
+
+#: bot_telegram/state_lib/cancel_purchase_with_sms.py:13
+#: bot_telegram/state_lib/finish_purchase_with_sms.py:14
+#: bot_telegram/state_lib/first_name.py:14 bot_telegram/state_lib/notes.py:10
+#: bot_telegram/state_lib/phone.py:13 bot_telegram/state_lib/purchase.py:94
+#: bot_telegram/state_lib/purchase_list.py:20
+#: bot_telegram/state_lib/purchase_list.py:36 bot_telegram/state_lib/seat.py:15
+#: bot_telegram/state_lib/show.py:63 bot_telegram/state_lib/station.py:28
+#: bot_telegram/state_lib/time.py:20 bot_telegram/state_lib/trip.py:44
+#: bot_telegram/state_lib/trip.py:58
 msgid "Back"
+msgstr ""
+
+#: bot_telegram/state_lib/finish_purchase_with_sms.py:39
+#: bot_telegram/state_lib/purchase.py:124
+msgid "Failed to purchase the trip. Try another provider."
+msgstr ""
+
+#: bot_telegram/state_lib/first_name.py:13
+msgid "What's your name?"
+msgstr ""
+
+#: bot_telegram/state_lib/phone.py:8
+msgid "Tap the button below to share your phone number."
+msgstr ""
+
+#: bot_telegram/state_lib/phone.py:10
+msgid "Share phone number"
+msgstr ""
+
+#: bot_telegram/state_lib/purchase.py:71
+#, python-format
+msgid ""
+"Firm: %(provider)s\n"
+"Direction: %(direction)s\n"
+"Time: %(time)s\n"
+"Phone: %(phone)s\n"
+"(Tap on the buttons bellow to change)"
+msgstr ""
+
+#: bot_telegram/state_lib/purchase.py:86
+#, python-format
+msgid "Notes: %s"
+msgstr ""
+
+#: bot_telegram/state_lib/purchase.py:86
+msgid "Notes"
+msgstr ""
+
+#: bot_telegram/state_lib/purchase.py:89
+#, python-format
+msgid "Name: %s"
+msgstr ""
+
+#: bot_telegram/state_lib/purchase.py:90
+#, python-format
+msgid "Pick up: %s"
+msgstr ""
+
+#: bot_telegram/state_lib/purchase.py:91
+#, python-format
+msgid "%s seat(s)"
+msgstr ""
+
+#: bot_telegram/state_lib/purchase.py:95
+msgid "Book it!"
+msgstr ""
+
+#: bot_telegram/state_lib/purchase_list.py:19
+msgid "You have no pending trips"
+msgstr ""
+
+#: bot_telegram/state_lib/purchase_list.py:38
+msgid "Your purchases"
+msgstr ""
+
+#: bot_telegram/state_lib/purchase_list.py:38
+msgid "Your purchase"
+msgstr ""
+
+#: bot_telegram/state_lib/seat.py:9
+msgid "How many seats?"
+msgstr ""
+
+#: bot_telegram/state_lib/show.py:58
+msgid "More"
+msgstr ""
+
+#: bot_telegram/state_lib/show.py:66
+msgid "Choose trip:"
 msgstr ""
 
 #: bot_telegram/state_lib/station.py:30

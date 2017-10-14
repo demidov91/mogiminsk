@@ -1,6 +1,8 @@
 from copy import deepcopy
 import datetime
-from typing import List, Dict, Sequence, Collection
+from typing import List, Dict, Sequence
+
+from aiohttp_translation import gettext_lazy as _
 from mogiminsk.defines import DATE_FORMAT
 
 
@@ -86,4 +88,4 @@ class OtherDateBotMessage(BotMessage):
             [{'text': 'Back', 'data': 'back', }],
         ]
 
-        super(OtherDateBotMessage, self).__init__('Choose the date', buttons)
+        super(OtherDateBotMessage, self).__init__(_('Choose the date'), buttons)

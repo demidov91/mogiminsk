@@ -44,6 +44,9 @@ def load_sub_modules(module):
     Loads all package submodules.
     """
     for loader, name, is_pkg in pkgutil.walk_packages(module.__path__):
+        if '.' in name:
+            continue
+
         import_module(f'{module.__name__}.{name}')
 
 
