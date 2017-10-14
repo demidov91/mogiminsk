@@ -19,7 +19,7 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'WARNING',
+            'level': 'DEBUG',
             'formatter': 'standard',
             'class': 'logging.StreamHandler',
         },
