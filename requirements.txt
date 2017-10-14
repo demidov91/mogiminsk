@@ -1,5 +1,6 @@
 aiohttp==2.2.3
 async-timeout==1.2.1
+Babel==2.5.1
 certifi==2017.7.27.1
 chardet==3.0.4
 cssselect==1.0.1
@@ -9,11 +10,15 @@ freezegun==0.3.9
 Logentries==0.17
 lxml==3.8.0
 multidict==3.1.0
+psutil==5.3.1
 psycopg2==2.7.1
 py==1.4.34
 pytest==3.1.3
 pytest-mock==1.6.2
 python-dateutil==2.6.1
+pytz==2017.2
+raven==6.2.1
 six==1.10.0
+speaklater==1.3
 SQLAlchemy==1.1.11
 yarl==0.11.0
