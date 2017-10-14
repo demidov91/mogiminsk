@@ -3,9 +3,10 @@ import re
 from typing import TypeVar, Type
 import logging
 
+from aiohttp_translation import activate
 from bot_telegram.utils.messages_helper import TextButtonFormatter, InlineButtonFormatter
 from bot_telegram.messages import BotMessage
-from mogiminsk.settings import TELEGRAM_TOKEN
+from mogiminsk.settings import TELEGRAM_TOKEN, LANGUAGE
 from mogiminsk.models import User
 from mogiminsk.utils import Session
 from messager.input_data import Message as CommonMessage, Contact as CommonContact
@@ -133,6 +134,7 @@ class TgSender:
         return msg
 
     async def send_messages(self, messages: list, callback_message_id: int):
+        activate(self.user.language or LANGUAGE)
         converted_messages = tuple(self.convert_message(x) for x in messages)
 
         if callback_message_id is not None and not messages[0].text_buttons:

@@ -1,3 +1,4 @@
+from aiohttp_translation import gettext_lazy as _
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import BotMessage
 from mogiminsk.models import Trip
@@ -9,17 +10,17 @@ class WhereState(BaseState):
     Store where we are going and ask WHEN?
     """
     _intro_message = BotMessage(
-        text='Where are we going?',
+        text=_('Where are we going?'),
         buttons=[
             [{
-                'text': 'To Mogilev',
+                'text': _('To Mogilev'),
                 'data': Trip.MINSK_MOG_DIRECTION,
             }, {
-                'text': 'To Minsk',
+                'text': _('To Minsk'),
                 'data': Trip.MOG_MINSK_DIRECTION,
             }],
             [
-                {'text': 'My trips', 'data': 'purchase_list'}
+                {'text': _('My trips'), 'data': 'purchase_list'}
             ]
 
         ]

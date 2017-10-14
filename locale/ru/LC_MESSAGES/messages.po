@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-13 23:57+0300\n"
+"POT-Creation-Date: 2017-10-14 10:17+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,23 @@ msgstr "Что-то пошло не так..."
 msgid "Unexpected response."
 msgstr "Непредвиденный ответ"
 
-#: tests/test_aiohttp_translation.py:10
+#: bot_telegram/state_lib/where.py:13
+msgid "Where are we going?"
+msgstr "Куда едем?"
+
+#: bot_telegram/state_lib/where.py:16
+msgid "To Mogilev"
+msgstr "В Могилёв"
+
+#: bot_telegram/state_lib/where.py:19
+msgid "To Minsk"
+msgstr "В Минск"
+
+#: bot_telegram/state_lib/where.py:23
+msgid "My trips"
+msgstr "Мои поездки"
+
+#: tests/test_aiohttp_translation.py:12 tests/test_aiohttp_translation.py:21
+#: tests/test_aiohttp_translation.py:30 tests/test_aiohttp_translation.py:39
 msgid "Test message"
 msgstr "Сие есть сущая тестовая строка"

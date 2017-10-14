@@ -1,3 +1,5 @@
+from functools import partial
+import json
 import pkgutil
 from importlib import import_module
 
@@ -7,6 +9,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.engine.url import URL
 from tasklocal import local
 
+from aiohttp_translation import LazyAwareJsonEncoder
 from mogiminsk.settings import DB_CONNECTION
 from mogiminsk.models import Base as MainBase
 from mogiminsk.middleware.block_ip_models import Base as BlockedIpBase
@@ -16,7 +19,7 @@ _LOCAL = local()
 
 
 def init_client(app):
-    app['client'] = ClientSession()
+    app['client'] = ClientSession(json_serialize=partial(json.dumps, cls=LazyAwareJsonEncoder))
 
 
 def destroy_client(app):
