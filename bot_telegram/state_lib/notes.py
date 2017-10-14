@@ -6,7 +6,7 @@ from bot_telegram.messages import BotMessage
 class NotesState(BaseState):
     back = 'purchase'
 
-    _intro_message = BotMessage('Add some notes:', buttons=[[{
+    _intro_message = BotMessage(_('Add some notes:'), buttons=[[{
         'text': _('Back'),
         'data': 'back',
     }]])

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-14 23:53+0300\n"
+"POT-Creation-Date: 2017-10-15 01:24+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,10 +30,10 @@ msgstr "Завтра, %s"
 msgid "Other"
 msgstr "Другое"
 
-#: bot_telegram/messages.py:65
+#: bot_telegram/messages.py:65 bot_telegram/messages.py:99
 #: bot_telegram/state_lib/cancel_purchase_with_sms.py:13
 #: bot_telegram/state_lib/finish_purchase_with_sms.py:14
-#: bot_telegram/state_lib/first_name.py:14 bot_telegram/state_lib/notes.py:10
+#: bot_telegram/state_lib/first_name.py:14 bot_telegram/state_lib/notes.py:11
 #: bot_telegram/state_lib/phone.py:13 bot_telegram/state_lib/purchase.py:94
 #: bot_telegram/state_lib/purchase_list.py:20
 #: bot_telegram/state_lib/purchase_list.py:36 bot_telegram/state_lib/seat.py:15
@@ -69,6 +69,10 @@ msgstr "Не удалось заказать поездку. Попробуйт�
 #: bot_telegram/state_lib/first_name.py:13
 msgid "What's your name?"
 msgstr "Как Вас зовут?"
+
+#: bot_telegram/state_lib/notes.py:10
+msgid "Add some notes:"
+msgstr "Добавьте замечание:"
 
 #: bot_telegram/state_lib/phone.py:8
 msgid "Tap the button below to share your phone number."
@@ -206,7 +210,9 @@ msgstr "Заказ ОТМЕНЁН!"
 msgid ""
 "Looks like the purchasement was already cancelled. Call the company if you "
 "don't think so."
-msgstr "Похоже, что заказ уже был отменён. Позвоните диспетчеру, если Вы так не думаете."
+msgstr ""
+"Похоже, что заказ уже был отменён. Позвоните диспетчеру, если Вы так не "
+"думаете."
 
 #: bot_telegram/utils/helper.py:118
 msgid "Failed to cancel. Please, call the company to cancel."
@@ -220,12 +226,12 @@ msgstr "Могилёв - Минск"
 msgid "Minsk - Mogilev"
 msgstr "Минск - Могилёв"
 
-#: mogiminsk_interaction/connectors/fortima.py:146
-#: mogiminsk_interaction/connectors/fortima.py:152
+#: mogiminsk_interaction/connectors/fortima.py:161
+#: mogiminsk_interaction/connectors/fortima.py:167
 msgid "Trip is booked! You'll be notified with SMS shortly."
 msgstr "Поездка заказана! Скоро придёт SMS."
 
-#: mogiminsk_interaction/connectors/fortima.py:163
+#: mogiminsk_interaction/connectors/fortima.py:178
 msgid "Trip is booked! Operator will call you before departure."
 msgstr "Поездка заказана! Диспетчер позвонит Вам перед отправлением."
 
