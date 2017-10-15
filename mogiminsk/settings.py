@@ -16,7 +16,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'standard': {
-            'format': '%(asctime)s [%(processName)s] [%(levelname)s] %(name)s: %(message)s'
+            'format': '%(asctime)s [%(process)d] [%(levelname)s] %(name)s: %(message)s'
         },
     },
     'handlers': {
@@ -30,7 +30,7 @@ LOGGING = {
             'class': 'logentries.LogentriesHandler',
             'token': LOGENTRIES_TOKEN,
             'format': logging.Formatter(
-                '%(asctime)s : %(processName)s %(levelname)s, %(message)s',
+                '%(asctime)s : [%(process)d] %(levelname)s, %(message)s',
                 '%a %b %d %H:%M:%S %Z %Y'
             ),
         }
