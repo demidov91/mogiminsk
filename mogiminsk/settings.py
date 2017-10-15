@@ -1,3 +1,5 @@
+import logging
+
 TELEGRAM_TOKEN = ''
 DB_CONNECTION = {}
 LOGENTRIES_TOKEN = ''
@@ -14,7 +16,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'standard': {
-            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+            'format': '%(asctime)s [%(processName)s] [%(levelname)s] %(name)s: %(message)s'
         },
     },
     'handlers': {
@@ -27,6 +29,10 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logentries.LogentriesHandler',
             'token': LOGENTRIES_TOKEN,
+            'format': logging.Formatter(
+                '%(asctime)s : %(processName)s %(levelname)s, %(message)s',
+                '%a %b %d %H:%M:%S %Z %Y'
+            ),
         }
     },
     'loggers': {
