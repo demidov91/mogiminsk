@@ -9,7 +9,7 @@ class WhereState(BaseState):
     """
     Store where we are going and ask WHEN?
     """
-    _intro_message = BotMessage(
+    with_trips_intro_message = BotMessage(
         text=_('Where are we going?'),
         buttons=[
             [{
@@ -21,17 +21,34 @@ class WhereState(BaseState):
             }],
             [
                 {'text': _('My trips'), 'data': 'purchase_list'}
+            ],
+            [
+                {'text': _('Feedback'), 'data': 'feedback',}
             ]
+        ]
+    )
 
+    no_trips_intro_message = BotMessage(
+        text=_('Where are we going?'),
+        buttons=[
+            [{
+                'text': _('To Mogilev'),
+                'data': Trip.MINSK_MOG_DIRECTION,
+            }, {
+                'text': _('To Minsk'),
+                'data': Trip.MOG_MINSK_DIRECTION,
+            }],
+            [
+                {'text': _('Feedback'), 'data': 'feedback',}
+            ]
         ]
     )
 
     def get_intro_message(self):
-        message = super().get_intro_message().copy()
         if not UserService(self.user).future_purchases().count():
-            message.buttons = message.buttons[:-1]
+            return self.no_trips_intro_message
 
-        return message
+        return self.with_trips_intro_message
 
     async def process(self):
         if self.value in (Trip.MOG_MINSK_DIRECTION, Trip.MINSK_MOG_DIRECTION):
@@ -40,6 +57,10 @@ class WhereState(BaseState):
 
         if self.value == 'purchase_list':
             self.set_state('purchaselist')
+            return
+
+        if self.data == 'feedback':
+            self.set_state('feedback')
             return
 
         self.message_was_not_recognized = True

@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, \
-    JSON, SmallInteger, DateTime, UniqueConstraint, Boolean, DECIMAL
+    JSON, SmallInteger, DateTime, UniqueConstraint, Boolean, DECIMAL, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.functions import func
@@ -28,6 +28,7 @@ class User(Base):
     external = Column(JSON, default={})
 
     purchases = relationship('Purchase', back_populates='user', lazy='dynamic')
+    conversation = relationship('Conversation', back_populates='user', lazy='dynamic')
 
 
 class Provider(Base):
@@ -154,3 +155,18 @@ class Purchase(Base):
                 'username': self.user.first_name,
                 'phone': self.user.phone,
             })
+
+
+class Conversation(Base):
+    __tablename__ = 'mogiminsk_conversation'
+
+    id = Column(Integer, primary_key=True)
+
+    text = Column(Text, nullable=True)
+    is_user_message = Column(Boolean, nullable=False)
+
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False, index=True)
+    user = relationship('User', back_populates='conversation')
+
+    def __str__(self):
+        return self.text

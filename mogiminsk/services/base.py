@@ -24,6 +24,10 @@ class BaseService:
         return get_db().query(cls.model)
 
     @classmethod
+    def filter_by(cls, **kwargs):
+        return cls.query().filter_by(**kwargs)
+
+    @classmethod
     def delete(cls, **kwargs):
         cls.query().filter(**kwargs).delete()
 
@@ -38,6 +42,12 @@ class BaseService:
     @classmethod
     def id_list(cls, ids):
         return cls.query().filter(cls.model.id.in_(ids))
+
+    @classmethod
+    def add(cls, **kwargs):
+        instance = cls.model(**kwargs)
+        get_db().add(instance)
+        return instance
 
     @property
     def id(self):
