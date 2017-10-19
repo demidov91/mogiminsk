@@ -59,7 +59,7 @@ class WhereState(BaseState):
             self.set_state('purchaselist')
             return
 
-        if self.data == 'feedback':
+        if self.value == 'feedback':
             self.set_state('feedback')
             return
 

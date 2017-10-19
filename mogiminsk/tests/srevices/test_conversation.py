@@ -1,5 +1,3 @@
-import asyncio
-
 from mogiminsk.testutils import DbTest
 from mogiminsk.factories import UserFactory
 from mogiminsk.services import ConversationService

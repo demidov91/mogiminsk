@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-15 01:24+0300\n"
+"POT-Creation-Date: 2017-10-19 10:00+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,8 +32,9 @@ msgstr "Другое"
 
 #: bot_telegram/messages.py:65 bot_telegram/messages.py:99
 #: bot_telegram/state_lib/cancel_purchase_with_sms.py:13
+#: bot_telegram/state_lib/feedback.py:20 bot_telegram/state_lib/feedback.py:27
 #: bot_telegram/state_lib/finish_purchase_with_sms.py:14
-#: bot_telegram/state_lib/first_name.py:14 bot_telegram/state_lib/notes.py:11
+#: bot_telegram/state_lib/first_name.py:14 bot_telegram/state_lib/notes.py:10
 #: bot_telegram/state_lib/phone.py:13 bot_telegram/state_lib/purchase.py:94
 #: bot_telegram/state_lib/purchase_list.py:20
 #: bot_telegram/state_lib/purchase_list.py:36 bot_telegram/state_lib/seat.py:15
@@ -61,6 +62,25 @@ msgstr "Непредвиденный ответ"
 msgid "SMS was sent to +%s. Enter it."
 msgstr "SMS с кодом было отправлено на +%s. Введите его, пожалуйста"
 
+#: bot_telegram/state_lib/feedback.py:16
+msgid ""
+"Send me some feedback. What would you improve, what went wrong while using "
+"the bot?\nIt will help me become better."
+msgstr ""
+"Что бы Вы хотели улучшить, что не понравилось при использовании бота?\n"
+"Ваше мнение поможет мне стать лучше."
+
+#: bot_telegram/state_lib/feedback.py:25
+msgid "Add anything or press \"Back\" to return to booking trips."
+msgstr "Ещё что-то?\nНажмите 'Назад', чтобы вернуться к заказу поездок."
+
+#: bot_telegram/state_lib/feedback.py:42
+#, python-format
+msgid ""
+"Excuse me, I can't recognize your message :( Please, contact me directly at "
+"%s to tell what you wanted."
+msgstr "Прошу прощения, я не смог прочеть Ваш отзыв :( Пожалуйста, свяжитесь напрямую с %s. Спасибо!"
+
 #: bot_telegram/state_lib/finish_purchase_with_sms.py:39
 #: bot_telegram/state_lib/purchase.py:124
 msgid "Failed to purchase the trip. Try another provider."
@@ -70,7 +90,7 @@ msgstr "Не удалось заказать поездку. Попробуйт�
 msgid "What's your name?"
 msgstr "Как Вас зовут?"
 
-#: bot_telegram/state_lib/notes.py:10
+#: bot_telegram/state_lib/notes.py:9
 msgid "Add some notes:"
 msgstr "Добавьте замечание:"
 
@@ -186,21 +206,25 @@ msgstr ""
 "Надеюсь, вы позвонили диспетчеру. Поездки с иконкой %s не могут быть "
 "заказаны ботом. Выбирайте  варианты обозначеные %s для заказа из приложения."
 
-#: bot_telegram/state_lib/where.py:13
+#: bot_telegram/state_lib/where.py:13 bot_telegram/state_lib/where.py:32
 msgid "Where are we going?"
 msgstr "Куда едем?"
 
-#: bot_telegram/state_lib/where.py:16
+#: bot_telegram/state_lib/where.py:16 bot_telegram/state_lib/where.py:35
 msgid "To Mogilev"
 msgstr "В Могилёв"
 
-#: bot_telegram/state_lib/where.py:19
+#: bot_telegram/state_lib/where.py:19 bot_telegram/state_lib/where.py:38
 msgid "To Minsk"
 msgstr "В Минск"
 
 #: bot_telegram/state_lib/where.py:23
 msgid "My trips"
 msgstr "Мои поездки"
+
+#: bot_telegram/state_lib/where.py:26 bot_telegram/state_lib/where.py:42
+msgid "Feedback"
+msgstr "Обратная связь"
 
 #: bot_telegram/utils/helper.py:100
 msgid "Purchase was CANCELLED!"
@@ -226,12 +250,12 @@ msgstr "Могилёв - Минск"
 msgid "Minsk - Mogilev"
 msgstr "Минск - Могилёв"
 
-#: mogiminsk_interaction/connectors/fortima.py:161
-#: mogiminsk_interaction/connectors/fortima.py:167
+#: mogiminsk_interaction/connectors/fortima.py:157
+#: mogiminsk_interaction/connectors/fortima.py:163
 msgid "Trip is booked! You'll be notified with SMS shortly."
 msgstr "Поездка заказана! Скоро придёт SMS."
 
-#: mogiminsk_interaction/connectors/fortima.py:178
+#: mogiminsk_interaction/connectors/fortima.py:174
 msgid "Trip is booked! Operator will call you before departure."
 msgstr "Поездка заказана! Диспетчер позвонит Вам перед отправлением."
 

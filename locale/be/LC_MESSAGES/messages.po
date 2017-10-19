@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-15 01:24+0300\n"
+"POT-Creation-Date: 2017-10-19 10:00+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,8 +33,9 @@ msgstr ""
 
 #: bot_telegram/messages.py:65 bot_telegram/messages.py:99
 #: bot_telegram/state_lib/cancel_purchase_with_sms.py:13
+#: bot_telegram/state_lib/feedback.py:20 bot_telegram/state_lib/feedback.py:27
 #: bot_telegram/state_lib/finish_purchase_with_sms.py:14
-#: bot_telegram/state_lib/first_name.py:14 bot_telegram/state_lib/notes.py:11
+#: bot_telegram/state_lib/first_name.py:14 bot_telegram/state_lib/notes.py:10
 #: bot_telegram/state_lib/phone.py:13 bot_telegram/state_lib/purchase.py:94
 #: bot_telegram/state_lib/purchase_list.py:20
 #: bot_telegram/state_lib/purchase_list.py:36 bot_telegram/state_lib/seat.py:15
@@ -62,6 +63,23 @@ msgstr ""
 msgid "SMS was sent to +%s. Enter it."
 msgstr ""
 
+#: bot_telegram/state_lib/feedback.py:16
+msgid ""
+"Send me some feedback. What would you improve, what went wrong while using "
+"the bot? It will help me become better."
+msgstr ""
+
+#: bot_telegram/state_lib/feedback.py:25
+msgid "Add anything or press \"Back\" to return to booking trips."
+msgstr ""
+
+#: bot_telegram/state_lib/feedback.py:42
+#, python-format
+msgid ""
+"Excuse me, I can't recognize your message :( Please, contact me directly at "
+"%s to tell what you wanted."
+msgstr ""
+
 #: bot_telegram/state_lib/finish_purchase_with_sms.py:39
 #: bot_telegram/state_lib/purchase.py:124
 msgid "Failed to purchase the trip. Try another provider."
@@ -71,7 +89,7 @@ msgstr ""
 msgid "What's your name?"
 msgstr ""
 
-#: bot_telegram/state_lib/notes.py:10
+#: bot_telegram/state_lib/notes.py:9
 msgid "Add some notes:"
 msgstr ""
 
@@ -180,20 +198,24 @@ msgid ""
 "bot. Choose trip with %s symbol to book in-app."
 msgstr ""
 
-#: bot_telegram/state_lib/where.py:13
+#: bot_telegram/state_lib/where.py:13 bot_telegram/state_lib/where.py:32
 msgid "Where are we going?"
 msgstr ""
 
-#: bot_telegram/state_lib/where.py:16
+#: bot_telegram/state_lib/where.py:16 bot_telegram/state_lib/where.py:35
 msgid "To Mogilev"
 msgstr ""
 
-#: bot_telegram/state_lib/where.py:19
+#: bot_telegram/state_lib/where.py:19 bot_telegram/state_lib/where.py:38
 msgid "To Minsk"
 msgstr ""
 
 #: bot_telegram/state_lib/where.py:23
 msgid "My trips"
+msgstr ""
+
+#: bot_telegram/state_lib/where.py:26 bot_telegram/state_lib/where.py:42
+msgid "Feedback"
 msgstr ""
 
 #: bot_telegram/utils/helper.py:100
@@ -218,12 +240,12 @@ msgstr ""
 msgid "Minsk - Mogilev"
 msgstr ""
 
-#: mogiminsk_interaction/connectors/fortima.py:161
-#: mogiminsk_interaction/connectors/fortima.py:167
+#: mogiminsk_interaction/connectors/fortima.py:157
+#: mogiminsk_interaction/connectors/fortima.py:163
 msgid "Trip is booked! You'll be notified with SMS shortly."
 msgstr ""
 
-#: mogiminsk_interaction/connectors/fortima.py:178
+#: mogiminsk_interaction/connectors/fortima.py:174
 msgid "Trip is booked! Operator will call you before departure."
 msgstr ""
 
