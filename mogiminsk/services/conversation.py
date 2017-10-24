@@ -6,9 +6,25 @@ class ConversationService(BaseService):
     model = Conversation
 
     @classmethod
-    def add_user_message(cls, user: User, text: str) ->Conversation:
-        return cls.add(user=user, text=text, is_user_message=True)
+    def add_user_message(cls, user: User, text: str, messenger: str) ->Conversation:
+        if messenger == Conversation.MESSENGER_TELEGRAM:
+            context = user.telegram_context
+
+        else:
+            raise ValueError(messenger)
+
+        return cls.add(
+            user=user,
+            text=text,
+            messenger=messenger,
+            context=context,
+            is_user_message=True
+        )
 
     @classmethod
-    def add_bot_message(cls, user: User, text: str) ->Conversation:
-        return cls.add(user=user, text=text, is_user_message=False)
+    def add_bot_message(cls, user: User, text: str, messenger:str) ->Conversation:
+        return cls.add(user=user, text=text, messenger=messenger, is_user_message=False)
+
+    @classmethod
+    def not_seen(cls):
+        return cls.query().filter(Conversation.seen == False)

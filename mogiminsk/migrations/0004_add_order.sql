@@ -1,1 +1,0 @@
-ALTER TABLE mogiminsk_station ADD COLUMN "order" smallint NULL;

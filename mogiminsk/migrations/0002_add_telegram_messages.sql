@@ -1,1 +1,0 @@
-ALTER TABLE mogiminsk_user ADD COLUMN telegram_messages varchar(1023) NOT NULL DEFAULT '';

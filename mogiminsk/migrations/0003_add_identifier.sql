@@ -1,1 +1,0 @@
-ALTER TABLE mogiminsk_station ADD COLUMN identifier varchar(127) NOT NULL DEFAULT '';

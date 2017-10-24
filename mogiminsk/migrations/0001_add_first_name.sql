@@ -1,1 +1,0 @@
-ALTER TABLE mogiminsk_user ADD COLUMN first_name varchar(31) NULL;

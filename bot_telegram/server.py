@@ -85,8 +85,6 @@ if __name__ == '__main__':
     elif not args.path:
         port = 8090
 
-    logging.config.dictConfig(LOGGING)
-
     if port:
         web.run_app(init(), host='0.0.0.0', port=port)
 

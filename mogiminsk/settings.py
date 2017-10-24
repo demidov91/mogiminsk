@@ -1,9 +1,15 @@
-import logging
+import logging.config
 
 TELEGRAM_TOKEN = ''
 DB_CONNECTION = {}
 LOGENTRIES_TOKEN = ''
 LANGUAGE = 'ru'
+
+EMAIL_FEEDBACK_SUBJECT = 'Mogiminsk feedback'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_FROM = 'dmitryDemidov91@gmail.com'
+EMAIL_TO = 'demidov91@mail.ru',
 
 try:
     from mogiminsk.local_settings import *
@@ -43,3 +49,5 @@ LOGGING = {
         },
     }
 }
+
+logging.config.dictConfig(LOGGING)

@@ -4,6 +4,7 @@ from aiohttp_translation import gettext_lazy as _
 from .base import BaseState
 from bot_telegram.messages import BotMessage
 from mogiminsk.services import ConversationService
+from mogiminsk.models import Conversation
 
 
 logger = logging.getLogger(__name__)
@@ -50,7 +51,10 @@ class FeedbackState(BaseState):
             ) % '@dzimdziam')
 
         else:
-            ConversationService.add_user_message(self.user, self.text)
+            ConversationService.add_user_message(
+                self.user,
+                self.text, Conversation.MESSENGER_TELEGRAM
+            )
 
         self.data['feedback__continue'] = True
 

@@ -1,4 +1,5 @@
 from functools import partial
+import logging
 import json
 import pkgutil
 from importlib import import_module
@@ -15,6 +16,7 @@ from mogiminsk.models import Base as MainBase
 from mogiminsk.middleware.block_ip_models import Base as BlockedIpBase
 
 
+logger = logging.getLogger(__name__)
 _LOCAL = local()
 
 
@@ -51,7 +53,11 @@ def load_sub_modules(module):
 
 
 def get_db():
-    return _LOCAL.db
+    try:
+        return _LOCAL.db
+    except AttributeError:
+        logger.warning('Using threaded db session.')
+        return threaded_session()
 
 
 def set_db(db):

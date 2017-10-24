@@ -159,11 +159,19 @@ class Purchase(Base):
 
 class Conversation(Base):
     __tablename__ = 'mogiminsk_conversation'
+    __mapper_args__ = {
+        'order_by': 'created_at',
+    }
+
+    MESSENGER_TELEGRAM = 'telegram'
 
     id = Column(Integer, primary_key=True)
 
     text = Column(Text, nullable=True)
     is_user_message = Column(Boolean, nullable=False)
+    seen = Column(Boolean, nullable=False, default=False)
+    messenger = Column(String(31), nullable=False)
+    context = Column(JSON, default={})
 
     user_id = Column(Integer, ForeignKey(User.id), nullable=False, index=True)
     user = relationship('User', back_populates='conversation')
