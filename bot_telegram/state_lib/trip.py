@@ -15,7 +15,7 @@ class TripState(BaseState):
         trip_service = TripService(trip)
 
         contacts = filter(lambda x: x.kind in (
-            'Velcom', _('MTS'), 'Life'
+            'velcom', 'mts', 'life'
         ), trip_service.provider().contacts)
 
         contacts_message = '\n'.join(
