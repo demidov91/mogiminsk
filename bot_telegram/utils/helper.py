@@ -2,9 +2,8 @@
 Helper module to use FROM state classes.
 """
 from aiohttp_translation import gettext_lazy as _
-from mogiminsk.utils import get_db
-from mogiminsk.models import Trip, Station, Purchase
-from mogiminsk.services.user import UserService
+from mogiminsk.models import Trip
+from mogiminsk.services import UserService, PurchaseService, TripService, StationService
 from mogiminsk_interaction.utils import get_connector
 from mogiminsk_interaction.connectors.core import BaseConnector, CancellationResult
 
@@ -40,11 +39,19 @@ class SmsStorage:
         )] = code
 
 
-async def purchase(user, context: dict, sms_code: str=None) ->BaseConnector:
-    db = get_db()
+class CancelableStateMixin:
+    WRONG_SMS_KEY = 'cancelpurchasewithsms_wrong'
 
-    trip = db.query(Trip).get(context['show'])
-    station = db.query(Station).get(context['station'])
+    def set_wrong_sms(self, is_wrong=True):
+        self.data[self.WRONG_SMS_KEY] = is_wrong
+
+    def is_wrong_sms(self) ->bool:
+        return self.data.get(self.WRONG_SMS_KEY)
+
+
+async def purchase(user, context: dict, sms_code: str=None) ->BaseConnector:
+    trip = TripService.get(context['show'])
+    station = StationService.get(context['station'])
 
     connector = get_connector(trip.car.provider.identifier)
 
@@ -64,8 +71,7 @@ async def purchase(user, context: dict, sms_code: str=None) ->BaseConnector:
 
 
 async def cancel_purchase(user, context, sms_code=None) ->BaseConnector:
-    db = get_db()
-    trip = db.query(Purchase).get(context['purchase_cancel']).trip
+    trip = PurchaseService.get(context['purchase_cancel']).trip
 
     sms_storage = SmsStorage(user.external)
 
@@ -81,7 +87,7 @@ async def cancel_purchase(user, context, sms_code=None) ->BaseConnector:
         user.phone, trip.start_datetime, trip.direction, trip.car.name
     )
 
-    if connector.result == CancellationResult.NEED_SMS:
+    if connector.result in (CancellationResult.NEED_SMS, CancellationResult.WRONG_SMS):
         sms_storage.set_sms_code(None, trip=trip)
 
     connector.close()
@@ -89,18 +95,24 @@ async def cancel_purchase(user, context, sms_code=None) ->BaseConnector:
     return connector
 
 
-async def generic_cancellation(state, sms_code=None):
-    connnector = await cancel_purchase(state.user, state.data, sms_code)
-    result = connnector.get_result()
+async def generic_cancellation(state: 'CancelableStateMixin', sms_code=None):
+    connector = await cancel_purchase(state.user, state.data, sms_code)
+    result = connector.get_result()
     user_service = UserService(state.user)
 
     if result == CancellationResult.SUCCESS:
         user_service.delete_purchase(state.data['purchase_cancel'])
         state.set_state('purchaselist')
-        state.add_message(connnector.get_message() or _('Purchase was CANCELLED!'))
+        state.set_wrong_sms(False)
+        state.add_message(connector.get_message() or _('Purchase was CANCELLED!'))
         return
 
     if result == CancellationResult.NEED_SMS:
+        state.set_state('cancelpurchasewithsms')
+        return
+
+    if result == CancellationResult.WRONG_SMS:
+        state.set_wrong_sms()
         state.set_state('cancelpurchasewithsms')
         return
 
@@ -114,7 +126,7 @@ async def generic_cancellation(state, sms_code=None):
         return
 
     state.add_message(
-        connnector.get_message() or
+        connector.get_message() or
         _('Failed to cancel. Please, call the company to cancel.')
     )
 
@@ -125,12 +137,10 @@ async def store_purchase_event(user, context):
     station_id = int(context['station'])
     notes = context.get('notes')
 
-    purchase = Purchase(
+    PurchaseService.add(
         trip_id=trip_id,
         seats=seat,
         station_id=station_id,
         notes=notes,
         user=user
     )
-
-    get_db().add(purchase)

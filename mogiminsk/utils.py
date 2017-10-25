@@ -56,7 +56,7 @@ def get_db():
     try:
         return _LOCAL.db
     except AttributeError:
-        logger.warning('Using threaded db session.')
+        logger.info('Using threaded db session.')
         return threaded_session()
 
 
