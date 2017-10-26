@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-25 10:26+0300\n"
+"POT-Creation-Date: 2017-10-26 09:40+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,8 +31,8 @@ msgid "Other"
 msgstr "Другое"
 
 #: bot_telegram/messages.py:65 bot_telegram/messages.py:99
-#: bot_telegram/state_lib/cancel_purchase_with_sms.py:19
-#: bot_telegram/state_lib/cancel_purchase_with_sms.py:25
+#: bot_telegram/state_lib/cancel_purchase_with_sms.py:17
+#: bot_telegram/state_lib/cancel_purchase_with_sms.py:23
 #: bot_telegram/state_lib/feedback.py:21 bot_telegram/state_lib/feedback.py:28
 #: bot_telegram/state_lib/finish_purchase_with_sms.py:14
 #: bot_telegram/state_lib/first_name.py:14 bot_telegram/state_lib/notes.py:10
@@ -57,15 +57,15 @@ msgstr "Что-то пошло не так..."
 msgid "Unexpected response."
 msgstr "Непредвиденный ответ"
 
-#: bot_telegram/state_lib/cancel_purchase_with_sms.py:16
+#: bot_telegram/state_lib/cancel_purchase_with_sms.py:15
 msgid "Wrong SMS code."
 msgstr "Неправильный SMS-код."
 
-#: bot_telegram/state_lib/cancel_purchase_with_sms.py:20
+#: bot_telegram/state_lib/cancel_purchase_with_sms.py:18
 msgid "Send again"
 msgstr "Выслать заново"
 
-#: bot_telegram/state_lib/cancel_purchase_with_sms.py:24
+#: bot_telegram/state_lib/cancel_purchase_with_sms.py:22
 #: bot_telegram/state_lib/finish_purchase_with_sms.py:13
 #, python-format
 msgid "SMS was sent to +%s. Enter it."
@@ -95,7 +95,11 @@ msgstr ""
 "Прошу прощения, я не смог прочеть Ваш отзыв :( Пожалуйста, свяжитесь "
 "напрямую с %s. Спасибо!"
 
-#: bot_telegram/state_lib/finish_purchase_with_sms.py:39
+#: bot_telegram/state_lib/finish_purchase_with_sms.py:38
+msgid "Wrong SMS. Enter again."
+msgstr "Неправильный SMS-код. Введите ещё раз."
+
+#: bot_telegram/state_lib/finish_purchase_with_sms.py:43
 #: bot_telegram/state_lib/purchase.py:124
 msgid "Failed to purchase the trip. Try another provider."
 msgstr "Не удалось заказать поездку. Попробуйте другого перевозчика."
@@ -236,11 +240,11 @@ msgstr "Мои поездки"
 msgid "Feedback"
 msgstr "Обратная связь"
 
-#: bot_telegram/utils/helper.py:110
+#: bot_telegram/utils/helper.py:60
 msgid "Purchase was CANCELLED!"
 msgstr "Заказ ОТМЕНЁН!"
 
-#: bot_telegram/utils/helper.py:123
+#: bot_telegram/utils/helper.py:73
 msgid ""
 "Looks like the purchasement was already cancelled. Call the company if you "
 "don't think so."
@@ -248,7 +252,7 @@ msgstr ""
 "Похоже, что заказ уже был отменён. Позвоните диспетчеру, если Вы так не "
 "думаете."
 
-#: bot_telegram/utils/helper.py:133
+#: bot_telegram/utils/helper.py:83
 msgid "Failed to cancel. Please, call the company to cancel."
 msgstr "Не смог отменить заказ. Пожалуйста, позвоните диспетчеру для отмены."
 
@@ -260,12 +264,12 @@ msgstr "Могилёв - Минск"
 msgid "Minsk - Mogilev"
 msgstr "Минск - Могилёв"
 
-#: mogiminsk_interaction/connectors/fortima.py:160
-#: mogiminsk_interaction/connectors/fortima.py:166
+#: mogiminsk_interaction/connectors/fortima.py:164
+#: mogiminsk_interaction/connectors/fortima.py:170
 msgid "Trip is booked! You'll be notified with SMS shortly."
 msgstr "Поездка заказана! Скоро придёт SMS."
 
-#: mogiminsk_interaction/connectors/fortima.py:177
+#: mogiminsk_interaction/connectors/fortima.py:181
 msgid "Trip is booked! Operator will call you before departure."
 msgstr "Поездка заказана! Диспетчер позвонит Вам перед отправлением."
 

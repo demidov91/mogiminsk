@@ -2,7 +2,7 @@ import re
 
 from aiohttp_translation import gettext_lazy as _
 from bot_telegram.state_lib.base import BaseState
-from bot_telegram.utils.helper import generic_cancellation, CancelableStateMixin
+from bot_telegram.utils.helper import CancelableStateMixin
 from bot_telegram.messages import BotMessage
 from mogiminsk.services.user import UserService
 from mogiminsk.defines import TIME_FORMAT, DATE_FORMAT
@@ -56,7 +56,7 @@ class PurchaseListState(CancelableStateMixin, BaseState):
 
         if match.group('action') == 'cancel':
             self.data['purchase_cancel'] = match.group('purchase_id')
-            await generic_cancellation(self)
+            await self.cancellation()
             if self.is_wrong_sms():
-                await generic_cancellation(self)
+                await self.cancellation()
                 self.set_wrong_sms(False)

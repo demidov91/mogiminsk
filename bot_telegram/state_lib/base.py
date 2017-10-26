@@ -77,7 +77,7 @@ class BaseState:
         """
         raise NotImplementedError()
 
-    async def initialize(self, current_state) ->'BaseState':
+    async def initialize(self, current_state: str) ->'BaseState':
         """
         Prepare context for the state.
         Base class returns itself but you can implement redirection logic.

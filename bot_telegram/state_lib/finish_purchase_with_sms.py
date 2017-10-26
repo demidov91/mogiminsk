@@ -11,7 +11,7 @@ class FinishPurchaseWithSmsState(BaseState):
     def get_intro_message(self):
         return BotMessage(
             text=_('SMS was sent to +%s. Enter it.') % self.user.phone,
-            buttons=[[{'text': _('Back'), 'data': 'back',}]],
+            buttons=[[{'text': _('Back'), 'data': 'back', }]],
         )
 
     async def process(self):
@@ -32,6 +32,10 @@ class FinishPurchaseWithSmsState(BaseState):
             await store_purchase_event(self.user, self.data)
             self.set_state('where')
             self.add_message(connector.get_message())
+            return
+
+        if result == PurchaseResult.WRONG_SMS:
+            self.add_message(_('Wrong SMS. Enter again.'))
             return
 
         self.set_state('show')

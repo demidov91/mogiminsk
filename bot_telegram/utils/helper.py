@@ -48,6 +48,41 @@ class CancelableStateMixin:
     def is_wrong_sms(self) ->bool:
         return self.data.get(self.WRONG_SMS_KEY)
 
+    async def cancellation(self, sms_code=None):
+        connector = await cancel_purchase(self.user, self.data, sms_code)
+        result = connector.get_result()
+        user_service = UserService(self.user)
+
+        if result == CancellationResult.SUCCESS:
+            user_service.delete_purchase(self.data['purchase_cancel'])
+            self.set_state('purchaselist')
+            self.set_wrong_sms(False)
+            self.add_message(connector.get_message() or _('Purchase was CANCELLED!'))
+            return
+
+        if result == CancellationResult.NEED_SMS:
+            self.set_state('cancelpurchasewithsms')
+            return
+
+        if result == CancellationResult.WRONG_SMS:
+            self.set_wrong_sms()
+            self.set_state('cancelpurchasewithsms')
+            return
+
+        if result == CancellationResult.DOES_NOT_EXIST:
+            self.add_message(_(
+                "Looks like the purchasement was already cancelled. "
+                "Call the company if you don't think so."
+            ))
+            user_service.delete_purchase(self.data['purchase_cancel'])
+            self.set_state('purchaselist')
+            return
+
+        self.add_message(
+            connector.get_message() or
+            _('Failed to cancel. Please, call the company to cancel.')
+        )
+
 
 async def purchase(user, context: dict, sms_code: str=None) ->BaseConnector:
     trip = TripService.get(context['show'])
@@ -93,42 +128,6 @@ async def cancel_purchase(user, context, sms_code=None) ->BaseConnector:
     connector.close()
 
     return connector
-
-
-async def generic_cancellation(state: 'CancelableStateMixin', sms_code=None):
-    connector = await cancel_purchase(state.user, state.data, sms_code)
-    result = connector.get_result()
-    user_service = UserService(state.user)
-
-    if result == CancellationResult.SUCCESS:
-        user_service.delete_purchase(state.data['purchase_cancel'])
-        state.set_state('purchaselist')
-        state.set_wrong_sms(False)
-        state.add_message(connector.get_message() or _('Purchase was CANCELLED!'))
-        return
-
-    if result == CancellationResult.NEED_SMS:
-        state.set_state('cancelpurchasewithsms')
-        return
-
-    if result == CancellationResult.WRONG_SMS:
-        state.set_wrong_sms()
-        state.set_state('cancelpurchasewithsms')
-        return
-
-    if result == CancellationResult.DOES_NOT_EXIST:
-        state.add_message(_(
-            "Looks like the purchasement was already cancelled. "
-            "Call the company if you don't think so."
-        ))
-        user_service.delete_purchase(state.data['purchase_cancel'])
-        state.set_state('purchaselist')
-        return
-
-    state.add_message(
-        connector.get_message() or
-        _('Failed to cancel. Please, call the company to cancel.')
-    )
 
 
 async def store_purchase_event(user, context):

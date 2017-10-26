@@ -2,7 +2,6 @@ from aiohttp_translation import gettext_lazy as _
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.messages import BotMessage
 from bot_telegram.utils.helper import (
-    generic_cancellation,
     CancelableStateMixin,
     cancel_purchase
 )
@@ -43,4 +42,4 @@ class CancelPurchaseWithSmsState(CancelableStateMixin, BaseState):
             self.message_was_not_recognized = True
             return
 
-        await generic_cancellation(self, sms_code=self.text)
+        await self.cancellation(sms_code=self.text)
