@@ -3,7 +3,7 @@ import re
 from aiohttp_translation import gettext_lazy as _
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.utils.helper import CancelableStateMixin
-from bot_telegram.messages import BotMessage
+from bot.messages.base import BotMessage, BACK
 from mogiminsk.services.user import UserService
 from mogiminsk.models import Trip
 from mogiminsk.defines import TIME_FORMAT
@@ -32,7 +32,7 @@ class PurchaseListState(CancelableStateMixin, BaseState):
         if not purchases:
             return BotMessage(
                 _('You have no pending trips'),
-                buttons=[[{'text': _('Back'), 'data': 'back'}]]
+                buttons=[[BACK]]
             )
 
         buttons = []
@@ -48,7 +48,7 @@ class PurchaseListState(CancelableStateMixin, BaseState):
                 }
             ])
 
-        buttons.append([{'text': _('Back'), 'data': 'back'}])
+        buttons.append([BACK])
 
         text = _('Your purchases') if len(purchases) > 1 else _('Your purchase')
 

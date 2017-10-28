@@ -2,7 +2,7 @@ import logging
 
 from aiohttp_translation import gettext_lazy as _
 
-from bot_telegram.messages import BotMessage
+from bot.messages.base import BotMessage, BACK
 from .base import BaseState
 from mogiminsk.services.trip import TripService
 from mogiminsk.services.station import StationService
@@ -25,7 +25,7 @@ class StationState(BaseState):
         buttons = [
             [{'text': x.name, 'data': str(x.id)}] for x in stations
         ]
-        buttons.append([{'text': _('Back'), 'data': 'back'}])
+        buttons.append([BACK])
 
         return BotMessage(_('Choose start station:'), buttons=buttons)
 

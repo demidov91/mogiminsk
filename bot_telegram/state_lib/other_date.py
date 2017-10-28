@@ -1,4 +1,4 @@
-from bot_telegram.messages import OtherDateMessage
+from bot.messages.date import OtherDateMessage
 from .date import DateState
 
 

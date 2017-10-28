@@ -3,7 +3,7 @@ from sqlalchemy import and_
 from aiohttp_translation import gettext_lazy as _
 from bot_telegram.state_lib.base import BaseState
 from bot_telegram.utils.helper import purchase, store_purchase_event
-from bot_telegram.messages import BotMessage
+from bot.messages.base import BotMessage, BACK
 from mogiminsk.utils import get_db
 from mogiminsk.models import Trip, Purchase, Car, Provider
 from mogiminsk.services.trip import TripService
@@ -91,7 +91,7 @@ class PurchaseState(BaseState):
             [{'text': _('%s seat(s)') % self.data["seat"], 'data': 'seat'}],
             [{'text': notes, 'data': 'notes'}],
             [
-                {'text': _('Back'), 'data': 'back'},
+                BACK,
                 {'text': _('Book it!'), 'data': 'submit'},
             ],
         ]

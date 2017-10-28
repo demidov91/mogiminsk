@@ -4,7 +4,7 @@ from typing import Dict, Type, Sequence
 from sqlalchemy.orm.attributes import flag_modified
 
 from aiohttp_translation import gettext as _
-from bot_telegram.messages import BotMessage
+from bot.messages.base import BotMessage
 
 
 logger = logging.getLogger(__name__)

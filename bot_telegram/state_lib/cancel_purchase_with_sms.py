@@ -1,6 +1,6 @@
 from aiohttp_translation import gettext_lazy as _
 from bot_telegram.state_lib.base import BaseState
-from bot_telegram.messages import BotMessage
+from bot.messages.base import BotMessage, BACK
 from bot_telegram.utils.helper import (
     CancelableStateMixin,
     cancel_purchase
@@ -14,13 +14,13 @@ class CancelPurchaseWithSmsState(CancelableStateMixin, BaseState):
         if self.is_wrong_sms():
             text = _('Wrong SMS code.')
             buttons = [[
-                {'text': _('Back'), 'data': 'back', },
+                BACK,
                 {'text': _('Send again'), 'data': 'resend', }
             ]]
 
         else:
             text = _('SMS was sent to +%s. Enter it.') % self.user.phone
-            buttons = [[{'text': _('Back'), 'data': 'back', }]]
+            buttons = [[BACK]]
 
         return BotMessage(
             text=text,

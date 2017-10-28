@@ -2,7 +2,7 @@ import logging
 
 from aiohttp_translation import gettext_lazy as _
 from .base import BaseState
-from bot_telegram.messages import BotMessage
+from bot.messages.base import BotMessage, BACK
 from mogiminsk.services import ConversationService
 from mogiminsk.models import Conversation
 
@@ -17,17 +17,11 @@ class FeedbackState(BaseState):
         _('Send me some feedback. '
             'What would you improve, '
             'what went wrong while using the bot?\n'
-            'It will help me become better.'), buttons=[[{
-                'text': _('Back'),
-                'data': 'back',
-    }]])
+            'It will help me become better.'), buttons=[[BACK]])
 
     continue_intro_message = BotMessage(
         _('Add anything or press "Back" to return to booking trips.'),
-        buttons=[[{
-            'text': _('Back'),
-            'data': 'back',
-        }]]
+        buttons=[[BACK]]
     )
 
     def get_intro_message(self):

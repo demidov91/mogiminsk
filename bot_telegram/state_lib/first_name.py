@@ -1,6 +1,6 @@
 from aiohttp_translation import gettext_lazy as _
 from .base import BaseState
-from bot_telegram.messages import BotMessage
+from bot.messages.base import BotMessage
 
 
 class FirstNameState(BaseState):

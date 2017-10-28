@@ -4,7 +4,7 @@ import re
 from sqlalchemy import or_
 
 from aiohttp_translation import gettext_lazy as _
-from bot_telegram.messages import BotMessage
+from bot.messages.base import BotMessage, BACK
 from bot_telegram.state_lib.base import BaseState
 from mogiminsk.models import Trip
 from mogiminsk.defines import DATE_TIME_FORMAT
@@ -17,7 +17,7 @@ class TimeState(BaseState):
     _intro_message = BotMessage(
         text=_('Enter time. For example: 7, 1125 or 16:40.'),
         buttons=[
-            [{'data': 'back', 'text': _('Back')}]
+            [BACK]
         ],
     )
 

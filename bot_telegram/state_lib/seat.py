@@ -1,6 +1,6 @@
 from aiohttp_translation import gettext_lazy as _
 from bot_telegram.state_lib.base import BaseState
-from bot_telegram.messages import BotMessage
+from bot.messages.base import BotMessage, BACK
 
 
 class SeatState(BaseState):
@@ -11,10 +11,7 @@ class SeatState(BaseState):
             'text': str(x),
             'data': str(x),
         } for x in choices],
-        [{
-            'text': _('Back'),
-            'data': 'back',
-        }]
+        [BACK]
     ])
 
     async def get_back_state(self):

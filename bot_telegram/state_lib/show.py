@@ -1,9 +1,9 @@
 from aiohttp_translation import gettext_lazy as _
 import re
-from typing import Iterable, Dict, Collection
+from typing import Dict, Collection
 
 from bot_telegram.state_lib.base import BaseState
-from bot_telegram.messages import BotMessage
+from bot.messages.base import BotMessage, BACK
 from bot_telegram.defines import FULL_TRIPS_SWITCH
 from mogiminsk.models import Trip
 from mogiminsk.services.trip import TripService
@@ -59,10 +59,7 @@ class ShowState(BaseState):
                 'data': 'full',
             }])
 
-        buttons.append([{
-            'text': _('Back'),
-            'data': 'back',
-        }])
+        buttons.append([BACK])
         return BotMessage(text=_('Choose trip:'), buttons=buttons)
 
     async def process(self):

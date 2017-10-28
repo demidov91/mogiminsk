@@ -1,5 +1,5 @@
 from bot_telegram.state_lib.base import BaseState
-from bot_telegram.messages import MyTripMessage
+from bot.messages.trip import MyTripMessage
 from mogiminsk.services import PurchaseService
 from bot_telegram.utils.helper import CancelableStateMixin
 

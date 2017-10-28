@@ -5,7 +5,7 @@ import logging
 
 from aiohttp_translation import activate
 from bot_telegram.utils.messages_helper import TextButtonFormatter, InlineButtonFormatter
-from bot_telegram.messages import BotMessage
+from bot.messages.base import BotMessage
 from mogiminsk.settings import TELEGRAM_TOKEN, LANGUAGE
 from mogiminsk.models import User
 from mogiminsk.utils import Session
