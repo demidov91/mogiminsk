@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-26 09:40+0300\n"
+"POT-Creation-Date: 2017-10-28 20:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,21 +16,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.1\n"
 
-#: bot_telegram/messages.py:51
+#: bot_telegram/messages.py:62
 #, python-format
 msgid "Today, %s"
 msgstr "Сегодня, %s"
 
-#: bot_telegram/messages.py:55
+#: bot_telegram/messages.py:66
 #, python-format
 msgid "Tomorrow, %s"
 msgstr "Завтра, %s"
 
-#: bot_telegram/messages.py:59
+#: bot_telegram/messages.py:70
 msgid "Other"
 msgstr "Другое"
 
-#: bot_telegram/messages.py:65 bot_telegram/messages.py:99
+#: bot_telegram/messages.py:76 bot_telegram/messages.py:110
+#: bot_telegram/messages.py:152 bot_telegram/messages.py:166
 #: bot_telegram/state_lib/cancel_purchase_with_sms.py:17
 #: bot_telegram/state_lib/cancel_purchase_with_sms.py:23
 #: bot_telegram/state_lib/feedback.py:21 bot_telegram/state_lib/feedback.py:28
@@ -40,14 +41,33 @@ msgstr "Другое"
 #: bot_telegram/state_lib/purchase_list.py:20
 #: bot_telegram/state_lib/purchase_list.py:36 bot_telegram/state_lib/seat.py:15
 #: bot_telegram/state_lib/show.py:63 bot_telegram/state_lib/station.py:28
-#: bot_telegram/state_lib/time.py:20 bot_telegram/state_lib/trip.py:44
-#: bot_telegram/state_lib/trip.py:58
+#: bot_telegram/state_lib/time.py:20
 msgid "Back"
 msgstr "Назад"
 
-#: bot_telegram/messages.py:68 bot_telegram/messages.py:102
+#: bot_telegram/messages.py:79 bot_telegram/messages.py:113
 msgid "Choose the date"
 msgstr "Выбирете дату:"
+
+#: bot_telegram/messages.py:139
+msgid "Unfortunately I have no contacts for this trip :("
+msgstr "К сожалению, у меня нет контактной информации :("
+
+#: bot_telegram/messages.py:155
+msgid "Book it"
+msgstr "Заказать"
+
+#: bot_telegram/messages.py:159 bot_telegram/messages.py:169
+msgid "Got it"
+msgstr "В начало"
+
+#: bot_telegram/messages.py:179
+msgid "⬅ Back"
+msgstr "⬅ Назад"
+
+#: bot_telegram/messages.py:182
+msgid "Cancel ❌"
+msgstr "Отменить ❌"
 
 #: bot_telegram/server.py:40
 msgid "Something went wrong..."
@@ -199,19 +219,7 @@ msgstr "Выберите время. Например, 7, 1125 или 16:40"
 msgid "No trips found :("
 msgstr "Поездки не найдены :("
 
-#: bot_telegram/state_lib/trip.py:32
-msgid "Unfortunately I have no contacts for this trip :("
-msgstr "К сожалению, у меня нет контактной информации :("
-
-#: bot_telegram/state_lib/trip.py:47
-msgid "Book it"
-msgstr "Заказать"
-
-#: bot_telegram/state_lib/trip.py:51 bot_telegram/state_lib/trip.py:61
-msgid "Got it"
-msgstr "В начало"
-
-#: bot_telegram/state_lib/trip.py:77
+#: bot_telegram/state_lib/trip.py:18
 #, python-format
 msgid ""
 "I hope you've called dispatcher. Trips with %s icons can't be booked from "
@@ -240,11 +248,11 @@ msgstr "Мои поездки"
 msgid "Feedback"
 msgstr "Обратная связь"
 
-#: bot_telegram/utils/helper.py:60
+#: bot_telegram/utils/helper.py:76
 msgid "Purchase was CANCELLED!"
 msgstr "Заказ ОТМЕНЁН!"
 
-#: bot_telegram/utils/helper.py:73
+#: bot_telegram/utils/helper.py:89
 msgid ""
 "Looks like the purchasement was already cancelled. Call the company if you "
 "don't think so."
@@ -252,7 +260,7 @@ msgstr ""
 "Похоже, что заказ уже был отменён. Позвоните диспетчеру, если Вы так не "
 "думаете."
 
-#: bot_telegram/utils/helper.py:83
+#: bot_telegram/utils/helper.py:99
 msgid "Failed to cancel. Please, call the company to cancel."
 msgstr "Не смог отменить заказ. Пожалуйста, позвоните диспетчеру для отмены."
 

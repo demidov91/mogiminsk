@@ -1,4 +1,4 @@
-from bot_telegram.messages import OtherDateBotMessage
+from bot_telegram.messages import OtherDateMessage
 from .date import DateState
 
 
@@ -6,7 +6,7 @@ class OtherDateState(DateState):
     back = 'date'
 
     def get_intro_message(self):
-        return OtherDateBotMessage()
+        return OtherDateMessage()
 
     async def process(self):
         await super(OtherDateState, self).process()

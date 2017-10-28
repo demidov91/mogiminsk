@@ -1,11 +1,16 @@
 """
 Helper module to use FROM state classes.
 """
+import logging
+
 from aiohttp_translation import gettext_lazy as _
 from mogiminsk.models import Trip
 from mogiminsk.services import UserService, PurchaseService, TripService, StationService
 from mogiminsk_interaction.utils import get_connector
 from mogiminsk_interaction.connectors.core import BaseConnector, CancellationResult
+
+
+logger = logging.getLogger(__name__)
 
 
 class SmsStorage:
@@ -48,13 +53,24 @@ class CancelableStateMixin:
     def is_wrong_sms(self) ->bool:
         return self.data.get(self.WRONG_SMS_KEY)
 
+    def set_cancel_purchase_id(self, id):
+        self.data['purchase_cancel'] = id
+
+    def get_cancellation_trip_id(self):
+        return self.data.get('purchase_cancel')
+
     async def cancellation(self, sms_code=None):
+        """
+        Makes external API cancellation call to cancel self.data['purchase_cancel'] trip
+            and moves current state either to CancelWithSMS or to PurchaseList.
+        :param sms_code: just entered SMS-code if any.
+        """
         connector = await cancel_purchase(self.user, self.data, sms_code)
         result = connector.get_result()
         user_service = UserService(self.user)
 
         if result == CancellationResult.SUCCESS:
-            user_service.delete_purchase(self.data['purchase_cancel'])
+            user_service.delete_purchase(self.get_cancellation_trip_id())
             self.set_state('purchaselist')
             self.set_wrong_sms(False)
             self.add_message(connector.get_message() or _('Purchase was CANCELLED!'))
@@ -74,7 +90,7 @@ class CancelableStateMixin:
                 "Looks like the purchasement was already cancelled. "
                 "Call the company if you don't think so."
             ))
-            user_service.delete_purchase(self.data['purchase_cancel'])
+            user_service.delete_purchase(self.get_cancellation_trip_id())
             self.set_state('purchaselist')
             return
 
@@ -106,9 +122,14 @@ async def purchase(user, context: dict, sms_code: str=None) ->BaseConnector:
 
 
 async def cancel_purchase(user, context, sms_code=None) ->BaseConnector:
-    trip = PurchaseService.get(context['purchase_cancel']).trip
+    """
+    Makes external API cancel call for the :context:['purchase_cancel'] trip.
+    :return: External API connector with a result set.
+    """
 
+    trip = PurchaseService.get(context['purchase_cancel']).trip
     sms_storage = SmsStorage(user.external)
+    sms_was_expicitely_set = sms_code is not None
 
     if sms_code:
         sms_storage.set_sms_code(sms_code, trip=trip)
@@ -122,8 +143,18 @@ async def cancel_purchase(user, context, sms_code=None) ->BaseConnector:
         user.phone, trip.start_datetime, trip.direction, trip.car.name
     )
 
-    if connector.result in (CancellationResult.NEED_SMS, CancellationResult.WRONG_SMS):
+    if connector.result is CancellationResult.NEED_SMS:
         sms_storage.set_sms_code(None, trip=trip)
+
+    elif connector.result is CancellationResult.WRONG_SMS:
+        logger.info('Cancellation SMS %s has expired.', sms_code)
+        if not sms_was_expicitely_set:
+            sms_storage.set_sms_code(None, trip=trip)
+            if sms_code:
+                connector.close()
+                return await cancel_purchase(user, context)
+
+            logger.error("Got WRONG_SMS result for a None SMS. It shouldn't happen!")
 
     connector.close()
 

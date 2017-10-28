@@ -1,7 +1,7 @@
 import datetime
 
 from bot_telegram.state_lib.base import BaseState
-from bot_telegram.messages import DateBotMessage
+from bot_telegram.messages import DateMessage
 from mogiminsk.defines import DATE_FORMAT
 
 
@@ -12,7 +12,7 @@ class DateState(BaseState):
     back = 'where'
 
     def get_intro_message(self):
-        return DateBotMessage()
+        return DateMessage()
 
     async def process(self):
         if self.value == 'other':

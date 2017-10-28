@@ -5,12 +5,27 @@ from bot_telegram.state_lib.base import BaseState
 from bot_telegram.utils.helper import CancelableStateMixin
 from bot_telegram.messages import BotMessage
 from mogiminsk.services.user import UserService
-from mogiminsk.defines import TIME_FORMAT, DATE_FORMAT
+from mogiminsk.models import Trip
+from mogiminsk.defines import TIME_FORMAT
 
 
 class PurchaseListState(CancelableStateMixin, BaseState):
     back = 'where'
-    action_pattern = re.compile('(?P<action>\w+)_t(?P<trip_id>\d+)(_p(?P<purchase_id>\d+))?')
+    action_pattern = re.compile('(?P<action>\w+)_(?P<purchase_id>\d+)?')
+
+    def build_purchase_label(self, purchase):
+        trip_time = purchase.trip.start_datetime.strftime(TIME_FORMAT)
+        trip_date = purchase.trip.start_datetime.strftime('%d.%m')
+        if purchase.trip.direction == Trip.MINSK_MOG_DIRECTION:
+            trip_direction = _('Minsk-Mog.')
+
+        elif purchase.trip.direction == Trip.MOG_MINSK_DIRECTION:
+            trip_direction = _('Mog.-Minsk')
+
+        else:
+            trip_direction = ''
+
+        return f'{trip_direction} {trip_time} {trip_date}'
 
     def get_intro_message(self):
         purchases = tuple(UserService(self.user).future_purchases())
@@ -24,12 +39,12 @@ class PurchaseListState(CancelableStateMixin, BaseState):
         for purchase in purchases:
             buttons.append([
                 {
-                    'text': purchase.trip.start_datetime.strftime(TIME_FORMAT + ' ' + DATE_FORMAT),
-                    'data': 'show_t{}'.format(purchase.trip.id),
+                    'text': self.build_purchase_label(purchase),
+                    'data': 'show_{}'.format(purchase.id),
                 },
                 {
                     'text': b'\xE2\x9D\x8C'.decode('utf-8'),
-                    'data': 'cancel_t{}_p{}'.format(purchase.trip.id, purchase.id),
+                    'data': 'cancel_{}'.format(purchase.id),
                 }
             ])
 
@@ -50,13 +65,10 @@ class PurchaseListState(CancelableStateMixin, BaseState):
             return
 
         if match.group('action') == 'show':
-            self.data['show'] = match.group('trip_id')
-            self.set_state('trip')
+            self.data['purchaselist'] = match.group('purchase_id')
+            self.set_state('purchaselistitem')
             return
 
         if match.group('action') == 'cancel':
-            self.data['purchase_cancel'] = match.group('purchase_id')
+            self.set_cancel_purchase_id(match.group('purchase_id'))
             await self.cancellation()
-            if self.is_wrong_sms():
-                await self.cancellation()
-                self.set_wrong_sms(False)

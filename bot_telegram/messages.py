@@ -6,6 +6,8 @@ from babel.dates import format_date
 
 from aiohttp_translation import gettext_lazy as _, get_active
 from mogiminsk.defines import DATE_FORMAT
+from mogiminsk.services import TripService
+from mogiminsk_interaction.utils import has_connector
 
 
 class BotMessage:
@@ -14,10 +16,10 @@ class BotMessage:
                  buttons: List[List[Dict]]=None,
                  text_buttons: List[List[str]]=None,
                  parse_mode: str = None):
-        self.text = text
+        self.text = self.build_text(text)
         self.parse_mode = parse_mode
-        self.buttons = buttons
-        self.text_buttons = text_buttons
+        self.buttons = self.build_callback_buttons(buttons)
+        self.text_buttons = self.build_text_buttons(text_buttons)
 
     def copy(self, text=None, parse_mode=None, buttons=None) ->'BotMessage':
         if text is None:
@@ -41,8 +43,17 @@ class BotMessage:
         messages.append(self)
         return messages
 
+    def build_text(self, text: str) ->str:
+        return text
 
-class DateBotMessage(BotMessage):
+    def build_callback_buttons(self, buttons: List[List[dict]]) ->List[List[dict]]:
+        return buttons
+
+    def build_text_buttons(self, buttons: List[List[str]]) ->List[List[str]]:
+        return buttons
+
+
+class DateMessage(BotMessage):
     def __init__(self):
         today = datetime.date.today()
         tomorrow = today + datetime.timedelta(days=1)
@@ -65,10 +76,10 @@ class DateBotMessage(BotMessage):
             [{'text': _('Back'), 'data': 'back',}],
         ]
 
-        super(DateBotMessage, self).__init__(_('Choose the date'), buttons)
+        super(DateMessage, self).__init__(_('Choose the date'), buttons)
 
 
-class OtherDateBotMessage(BotMessage):
+class OtherDateMessage(BotMessage):
     def _date_to_button(self, date: datetime.date):
         return {
             'text': str(date.day),
@@ -99,4 +110,78 @@ class OtherDateBotMessage(BotMessage):
             [{'text': _('Back'), 'data': 'back', }],
         ]
 
-        super(OtherDateBotMessage, self).__init__(_('Choose the date'), buttons)
+        super(OtherDateMessage, self).__init__(_('Choose the date'), buttons)
+
+
+class TripMessage(BotMessage):
+    def __init__(self, trip):
+        self.trip = trip
+        super().__init__()
+
+    def build_text(self, text: str):
+        trip_service = TripService(self.trip)
+
+        contacts = filter(lambda x: x.kind in (
+            'velcom', 'mts', 'life'
+        ), trip_service.provider().contacts)
+
+        contacts_message = '\n'.join(
+            [f'{contact.kind}: {contact.contact}' for contact in contacts]
+        )
+
+        text = '{}, {}, {}'.format(
+            trip_service.provider_name(),
+            trip_service.direction_name(),
+            self.trip.start_datetime.strftime('%d.%m.%Y %H:%M')
+        )
+
+        if not contacts_message:
+            text += '\n' + _('Unfortunately I have no contacts for this trip :(')
+
+        else:
+            text += ':\n' + contacts_message
+
+        return text
+
+
+class PurchaseTripMessage(TripMessage):
+    def build_callback_buttons(self, buttons: List[List[dict]]):
+        if has_connector(self.trip.car.provider.identifier):
+            return [
+                [{
+                    'text': _('Back'),
+                    'data': 'back',
+                }, {
+                    'text': _('Book it'),
+                    'data': 'purchase',
+                }],
+                [{
+                    'text': _('Got it'),
+                    'data': 'finish',
+                }]
+            ]
+
+        return [
+            [{
+                'text': _('Back'),
+                'data': 'back',
+            }, {
+                'text': _('Got it'),
+                'data': 'finish',
+            }]
+        ]
+
+
+class MyTripMessage(TripMessage):
+    def build_callback_buttons(self, buttons: List[List[dict]]):
+        return [
+            [{
+                'text': _('⬅ Back'),
+                'data': 'back',
+            }, {
+                'text': _('Cancel ❌'),
+                'data': 'cancel',
+            }]
+        ]
+
+
