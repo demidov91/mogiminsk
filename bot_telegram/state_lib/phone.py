@@ -1,6 +1,6 @@
 from aiohttp_translation import gettext_lazy as _
 from bot_telegram.state_lib.base import BaseState
-from bot.messages.base import BotMessage
+from bot.messages.base import BotMessage, BACK
 
 
 class PhoneState(BaseState):
@@ -9,10 +9,7 @@ class PhoneState(BaseState):
         text_buttons=[[{
             'text': _('Share phone number'),
             'type': 'phone',
-        }, {
-            'text': _('Back'),
-            'type': 'text',
-        }]])
+        }, BACK]])
 
     async def process(self):
         if self.text and self.text.lower() == 'back':

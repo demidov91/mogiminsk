@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-28 20:57+0300\n"
+"POT-Creation-Date: 2017-10-29 00:08+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,56 +16,45 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.1\n"
 
-#: bot_telegram/messages.py:62
+#: bot/messages/base.py:52
+msgid "Back"
+msgstr "Назад"
+
+#: bot/messages/date.py:16
 #, python-format
 msgid "Today, %s"
 msgstr "Сегодня, %s"
 
-#: bot_telegram/messages.py:66
+#: bot/messages/date.py:20
 #, python-format
 msgid "Tomorrow, %s"
 msgstr "Завтра, %s"
 
-#: bot_telegram/messages.py:70
+#: bot/messages/date.py:24
 msgid "Other"
 msgstr "Другое"
 
-#: bot_telegram/messages.py:76 bot_telegram/messages.py:110
-#: bot_telegram/messages.py:152 bot_telegram/messages.py:166
-#: bot_telegram/state_lib/cancel_purchase_with_sms.py:17
-#: bot_telegram/state_lib/cancel_purchase_with_sms.py:23
-#: bot_telegram/state_lib/feedback.py:21 bot_telegram/state_lib/feedback.py:28
-#: bot_telegram/state_lib/finish_purchase_with_sms.py:14
-#: bot_telegram/state_lib/first_name.py:14 bot_telegram/state_lib/notes.py:10
-#: bot_telegram/state_lib/phone.py:13 bot_telegram/state_lib/purchase.py:94
-#: bot_telegram/state_lib/purchase_list.py:20
-#: bot_telegram/state_lib/purchase_list.py:36 bot_telegram/state_lib/seat.py:15
-#: bot_telegram/state_lib/show.py:63 bot_telegram/state_lib/station.py:28
-#: bot_telegram/state_lib/time.py:20
-msgid "Back"
-msgstr "Назад"
-
-#: bot_telegram/messages.py:79 bot_telegram/messages.py:113
+#: bot/messages/date.py:33 bot/messages/date.py:67
 msgid "Choose the date"
 msgstr "Выбирете дату:"
 
-#: bot_telegram/messages.py:139
+#: bot/messages/trip.py:32
 msgid "Unfortunately I have no contacts for this trip :("
 msgstr "К сожалению, у меня нет контактной информации :("
 
-#: bot_telegram/messages.py:155
+#: bot/messages/trip.py:46
 msgid "Book it"
 msgstr "Заказать"
 
-#: bot_telegram/messages.py:159 bot_telegram/messages.py:169
+#: bot/messages/trip.py:50 bot/messages/trip.py:58
 msgid "Got it"
 msgstr "В начало"
 
-#: bot_telegram/messages.py:179
+#: bot/messages/trip.py:68
 msgid "⬅ Back"
 msgstr "⬅ Назад"
 
-#: bot_telegram/messages.py:182
+#: bot/messages/trip.py:71
 msgid "Cancel ❌"
 msgstr "Отменить ❌"
 
@@ -100,13 +89,13 @@ msgstr ""
 "Что бы Вы хотели улучшить, что не понравилось при использовании бота?\n"
 "Ваше мнение поможет мне стать лучше."
 
-#: bot_telegram/state_lib/feedback.py:26
+#: bot_telegram/state_lib/feedback.py:23
 msgid "Add anything or press \"Back\" to return to booking trips."
 msgstr ""
 "Ещё что-то?\n"
 "Нажмите 'Назад', чтобы вернуться к заказу поездок."
 
-#: bot_telegram/state_lib/feedback.py:48
+#: bot_telegram/state_lib/feedback.py:42
 #, python-format
 msgid ""
 "Excuse me, I can't recognize your message :( Please, contact me directly at "
@@ -179,19 +168,31 @@ msgstr "Посадка: %s"
 msgid "%s seat(s)"
 msgstr "Места: %s"
 
-#: bot_telegram/state_lib/purchase.py:95
-msgid "Book it!"
-msgstr "Заказать!"
+#: bot_telegram/state_lib/purchase.py:94
+msgid "⬅️ Back"
+msgstr "⬅ Назад"
 
-#: bot_telegram/state_lib/purchase_list.py:19
+#: bot_telegram/state_lib/purchase.py:95
+msgid "Book it! ✅"
+msgstr "Заказать! ✅"
+
+#: bot_telegram/state_lib/purchase_list.py:20
+msgid "Minsk-Mog."
+msgstr "Минск-Мог."
+
+#: bot_telegram/state_lib/purchase_list.py:23
+msgid "Mog.-Minsk"
+msgstr "Мог.-Минск"
+
+#: bot_telegram/state_lib/purchase_list.py:34
 msgid "You have no pending trips"
 msgstr "У Вас нет активных заказов"
 
-#: bot_telegram/state_lib/purchase_list.py:38
+#: bot_telegram/state_lib/purchase_list.py:53
 msgid "Your purchases"
 msgstr "Ваши заказы"
 
-#: bot_telegram/state_lib/purchase_list.py:38
+#: bot_telegram/state_lib/purchase_list.py:53
 msgid "Your purchase"
 msgstr "Ваш заказ"
 
@@ -203,7 +204,7 @@ msgstr "Сколько мест?"
 msgid "More"
 msgstr "... и ещё"
 
-#: bot_telegram/state_lib/show.py:66
+#: bot_telegram/state_lib/show.py:63
 msgid "Choose trip:"
 msgstr "Выберите поездку:"
 

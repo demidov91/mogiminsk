@@ -91,8 +91,8 @@ class PurchaseState(BaseState):
             [{'text': _('%s seat(s)') % self.data["seat"], 'data': 'seat'}],
             [{'text': notes, 'data': 'notes'}],
             [
-                BACK,
-                {'text': _('Book it!'), 'data': 'submit'},
+                {'text': _('⬅️ Back'), 'data': 'back'},
+                {'text': _('Book it! ✅'), 'data': 'submit'},
             ],
         ]
 
