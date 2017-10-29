@@ -3,7 +3,7 @@ import sys
 
 from aiohttp.client import ClientSession
 
-from bot_telegram.utils.telegram_helper import post_data
+from bot_telegram.utils.telegram_api import post_data
 
 
 async def run(url: str):

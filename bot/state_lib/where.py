@@ -1,6 +1,6 @@
 from aiohttp_translation import gettext_lazy as _
-from bot_telegram.state_lib.base import BaseState
 from bot.messages.base import BotMessage
+from bot.state_lib.base import BaseState
 from mogiminsk.models import Trip
 from mogiminsk.services.user import UserService
 

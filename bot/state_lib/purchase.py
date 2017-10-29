@@ -1,12 +1,12 @@
 from sqlalchemy import and_
 
 from aiohttp_translation import gettext_lazy as _
-from bot_telegram.state_lib.base import BaseState
-from bot_telegram.utils.helper import purchase, store_purchase_event
-from bot.messages.base import BotMessage, BACK
-from mogiminsk.utils import get_db
+from bot.external_api import purchase, store_purchase_event
+from bot.messages.base import BotMessage
+from bot.state_lib.base import BaseState
 from mogiminsk.models import Trip, Purchase, Car, Provider
 from mogiminsk.services.trip import TripService
+from mogiminsk.utils import get_db
 from mogiminsk_interaction.connectors.core import PurchaseResult
 
 

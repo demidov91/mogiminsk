@@ -5,9 +5,9 @@ from sqlalchemy import or_
 
 from aiohttp_translation import gettext_lazy as _
 from bot.messages.base import BotMessage, BACK
-from bot_telegram.state_lib.base import BaseState
-from mogiminsk.models import Trip
+from bot.state_lib.base import BaseState
 from mogiminsk.defines import DATE_TIME_FORMAT
+from mogiminsk.models import Trip
 from mogiminsk.utils import get_db
 
 

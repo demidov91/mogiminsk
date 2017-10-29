@@ -1,9 +1,9 @@
-from aiohttp_translation import gettext_lazy as _
 import re
 from typing import Dict, Collection
 
-from bot_telegram.state_lib.base import BaseState
+from aiohttp_translation import gettext_lazy as _
 from bot.messages.base import BotMessage, BACK
+from bot.state_lib.base import BaseState
 from bot_telegram.defines import FULL_TRIPS_SWITCH
 from mogiminsk.models import Trip
 from mogiminsk.services.trip import TripService

@@ -5,8 +5,8 @@ import logging.config
 from aiohttp import web
 
 from aiohttp_translation import activate, gettext as _
-from bot_telegram.utils.states_helper import get_state
-from bot_telegram.utils.telegram_helper import Update, get_or_create_user, TgSender
+from bot_telegram.utils.telegram_states import get_state
+from bot_telegram.utils.telegram_api import Update, get_or_create_user, TgSender
 from mogiminsk.utils import init_client, destroy_client
 from mogiminsk.middleware import (
     block_ip,

@@ -1,7 +1,7 @@
 import datetime
 
-from bot_telegram.state_lib.base import BaseState
 from bot.messages.date import DateMessage
+from bot.state_lib.base import BaseState
 from mogiminsk.defines import DATE_FORMAT
 
 

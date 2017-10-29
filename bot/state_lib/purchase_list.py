@@ -1,12 +1,12 @@
 import re
 
 from aiohttp_translation import gettext_lazy as _
-from bot_telegram.state_lib.base import BaseState
-from bot_telegram.utils.helper import CancelableStateMixin
+from bot.external_api import CancelableStateMixin
 from bot.messages.base import BotMessage, BACK
-from mogiminsk.services.user import UserService
-from mogiminsk.models import Trip
+from bot.state_lib.base import BaseState
 from mogiminsk.defines import TIME_FORMAT
+from mogiminsk.models import Trip
+from mogiminsk.services.user import UserService
 
 
 class PurchaseListState(CancelableStateMixin, BaseState):

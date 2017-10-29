@@ -1,4 +1,4 @@
-from bot_telegram.utils.messages_helper import (
+from bot_telegram.utils.telegram_messages import (
     TextButtonFormatter,
     InlineButtonFormatter
 )

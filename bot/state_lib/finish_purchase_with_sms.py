@@ -1,7 +1,7 @@
 from aiohttp_translation import gettext_lazy as _
-from bot_telegram.state_lib.base import BaseState
+from bot.external_api import purchase, store_purchase_event
 from bot.messages.base import BotMessage, BACK
-from bot_telegram.utils.helper import purchase, store_purchase_event
+from bot.state_lib.base import BaseState
 from mogiminsk_interaction.connectors.core import PurchaseResult
 
 

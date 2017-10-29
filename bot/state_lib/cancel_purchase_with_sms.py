@@ -1,10 +1,10 @@
 from aiohttp_translation import gettext_lazy as _
-from bot_telegram.state_lib.base import BaseState
-from bot.messages.base import BotMessage, BACK
-from bot_telegram.utils.helper import (
+from bot.external_api import (
     CancelableStateMixin,
     cancel_purchase
 )
+from bot.messages.base import BotMessage, BACK
+from bot.state_lib.base import BaseState
 
 
 class CancelPurchaseWithSmsState(CancelableStateMixin, BaseState):

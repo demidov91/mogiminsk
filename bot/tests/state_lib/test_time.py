@@ -3,10 +3,10 @@ import asyncio
 import pytest
 
 # This import initializes state lib.
-from bot_telegram.utils import states_helper
-from bot_telegram.state_lib.time import TimeState
-from mogiminsk.factories import UserFactory
+from bot.state_lib.date import DateState
+from bot.state_lib.time import TimeState
 from messager.input_data import Message
+from mogiminsk.factories import UserFactory
 
 
 class TestTimeState:

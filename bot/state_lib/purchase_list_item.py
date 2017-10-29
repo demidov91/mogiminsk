@@ -1,7 +1,7 @@
-from bot_telegram.state_lib.base import BaseState
+from bot.external_api import CancelableStateMixin
 from bot.messages.trip import MyTripMessage
+from bot.state_lib.base import BaseState
 from mogiminsk.services import PurchaseService
-from bot_telegram.utils.helper import CancelableStateMixin
 
 
 class PurchaseListItemState(CancelableStateMixin, BaseState):
