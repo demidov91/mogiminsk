@@ -68,11 +68,11 @@ class CancelableStateMixin:
         connector = await cancel_purchase(self.user, self.data, sms_code)
         result = connector.get_result()
         user_service = UserService(self.user)
+        self.set_wrong_sms(False)
 
         if result == CancellationResult.SUCCESS:
             user_service.delete_purchase(self.get_cancellation_trip_id())
             self.set_state('purchaselist')
-            self.set_wrong_sms(False)
             self.add_message(connector.get_message() or _('Purchase was CANCELLED!'))
             return
 
