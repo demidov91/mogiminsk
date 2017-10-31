@@ -28,6 +28,10 @@ class BaseService:
         return cls.query().filter_by(**kwargs)
 
     @classmethod
+    def filter(cls, **kwargs):
+        return cls.query().filter(**kwargs)
+
+    @classmethod
     def delete(cls, **kwargs):
         cls.query().filter(**kwargs).delete()
 

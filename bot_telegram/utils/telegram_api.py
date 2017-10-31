@@ -8,6 +8,7 @@ from bot_telegram.utils.telegram_messages import TextButtonFormatter, InlineButt
 from bot.messages.base import BotMessage
 from mogiminsk.settings import TELEGRAM_TOKEN, LANGUAGE
 from mogiminsk.models import User
+from mogiminsk.services import UserService
 from mogiminsk.utils import Session
 from messager.input_data import Message as CommonMessage, Contact as CommonContact
 
@@ -222,17 +223,16 @@ class TgSender:
         return formatted
 
 
-def get_db_user(db: Session, remote_user: TelegramUser) -> User:
-    return db.query(User).filter(User.telegram_id == remote_user.id).first()
+def get_db_user(remote_user: TelegramUser) -> User:
+    return UserService.filter_by(telegram_id=remote_user.id).first()
 
 
-def get_or_create_user(db: Session, remote_user: TelegramUser):
-    user = get_db_user(db, remote_user)
+def get_or_create_user(remote_user: TelegramUser):
+    user = get_db_user(remote_user)
     if user is None:
-        user = User(telegram_context={'state': 'initial'}, telegram_id=remote_user.id)
-        db.add(user)
+        user = UserService.add(
+            telegram_context={'state': 'initial'},
+            telegram_id=remote_user.id
+        )
 
     return user
-
-
-
