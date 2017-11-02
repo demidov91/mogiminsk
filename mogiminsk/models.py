@@ -24,14 +24,14 @@ class User(Base):
     external = Column(JSON, default={})
 
     telegram_context = Column(JSON, default={})
-    telegram_id = Column(Integer, nullable=False, unique=True)
+    telegram_id = Column(Integer, nullable=True, unique=True)
     telegram_state = Column(String(31), nullable=True)
-    telegram_messages = Column(String(1023), nullable=False, default='')
+    telegram_messages = Column(String(1023), nullable=True, default='')
 
     viber_context = Column(JSON, default={})
-    viber_id = Column(Integer, nullable=False, unique=True)
+    viber_id = Column(Integer, nullable=True, unique=True)
     viber_state = Column(String(31), nullable=True)
-    viber_messages = Column(String(1023), nullable=False, default='')
+    viber_messages = Column(String(1023), nullable=True, default='')
 
     purchases = relationship('Purchase', back_populates='user', lazy='dynamic')
     conversation = relationship('Conversation', back_populates='user', lazy='dynamic')
