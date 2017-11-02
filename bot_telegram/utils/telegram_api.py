@@ -10,7 +10,7 @@ from mogiminsk.settings import TELEGRAM_TOKEN, LANGUAGE
 from mogiminsk.models import User
 from mogiminsk.services import UserService
 from mogiminsk.utils import Session
-from messager.input_data import Message as CommonMessage, Contact as CommonContact
+from messager.input_data import InputMessage, InputContact
 
 
 C = TypeVar('C')
@@ -106,16 +106,16 @@ class Update(OptionalObjectFactoryMixin):
 
         return msg.contact
 
-    def get_common_message(self):
+    def get_input_message(self):
         data = self.get_data()
         text = self.get_text()
         contact = self.get_contact()
         if contact is not None:
-            contact = CommonContact(
+            contact = InputContact(
                 phone=contact.phone, identifier=contact.user_id
             )
 
-        return CommonMessage(data=data, text=text, contact=contact)
+        return InputMessage(data=data, text=text, contact=contact)
 
 
 class TgSender:

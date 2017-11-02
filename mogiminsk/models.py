@@ -21,11 +21,17 @@ class User(Base):
     phone = Column(String(12), nullable=True, unique=True)
     first_name = Column(String(31), nullable=True)
     language = Column(String(5), nullable=True)
+    external = Column(JSON, default={})
+
     telegram_context = Column(JSON, default={})
     telegram_id = Column(Integer, nullable=False, unique=True)
     telegram_state = Column(String(31), nullable=True)
     telegram_messages = Column(String(1023), nullable=False, default='')
-    external = Column(JSON, default={})
+
+    viber_context = Column(JSON, default={})
+    viber_id = Column(Integer, nullable=False, unique=True)
+    viber_state = Column(String(31), nullable=True)
+    viber_messages = Column(String(1023), nullable=False, default='')
 
     purchases = relationship('Purchase', back_populates='user', lazy='dynamic')
     conversation = relationship('Conversation', back_populates='user', lazy='dynamic')

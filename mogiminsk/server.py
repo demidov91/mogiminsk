@@ -21,7 +21,10 @@ def init():
     ])
 
     from bot_telegram.server import TgServer
+    from bot_viber.server import ViberServer
+
     app.router.add_post("/mogiminsk/tg/", TgServer.webhook)
+    app.router.add_post("/mogiminsk/viber/", ViberServer.webhook)
 
     app.on_startup.append(init_client)
     app.on_cleanup.append(destroy_client)

@@ -5,7 +5,7 @@ import pytest
 # This import initializes state lib.
 from bot.state_lib.date import DateState
 from bot.state_lib.time import TimeState
-from messager.input_data import Message
+from messager.input_data import InputMessage
 from mogiminsk.factories import UserFactory
 
 
@@ -33,7 +33,7 @@ class TestTimeState:
     def test_consume__back(self):
         tested = TimeState(UserFactory())
         asyncio.get_event_loop().run_until_complete(
-            tested.consume(Message(data='back'))
+            tested.consume(InputMessage(data='back'))
         )
         assert tested.data['state'] == 'date'
 

@@ -1,1 +1,0 @@
-alter table mogiminsk_conversation add column seen boolean default false;
