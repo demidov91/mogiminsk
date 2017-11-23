@@ -2,7 +2,12 @@ import argparse
 
 from aiohttp import web
 
-from mogiminsk.utils import init_client, destroy_client
+from mogiminsk.utils import (
+    init_client,
+    destroy_client,
+    init_viber_client,
+    destroy_viber_client,
+)
 from mogiminsk.middleware import (
     block_ip,
     initilize_session,
@@ -27,7 +32,11 @@ def init():
     app.router.add_post("/mogiminsk/viber/", ViberServer.webhook)
 
     app.on_startup.append(init_client)
+    app.on_startup.append(init_viber_client)
+
+    app.on_cleanup.append(destroy_viber_client)
     app.on_cleanup.append(destroy_client)
+
     return app
 
 

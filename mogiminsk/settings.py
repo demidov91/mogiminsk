@@ -1,6 +1,7 @@
 import logging.config
 
 TELEGRAM_TOKEN = ''
+VIBER_TOKEN = ''
 DB_CONNECTION = {}
 LOGENTRIES_TOKEN = ''
 LANGUAGE = 'ru'

@@ -37,7 +37,7 @@ class BotServer:
         activate(request['user'].language or LANGUAGE)
 
         state = cls.get_state(request['user'])
-        common_message = remote_update.get_input_message()
+        common_message = cls.get_input_message(remote_update)
 
         bot_messages = await cls.consume(request['user'], state, common_message)
 
@@ -56,6 +56,10 @@ class BotServer:
     @classmethod
     async def get_remote_update(cls, request):
         raise NotImplementedError()
+
+    @classmethod
+    def get_input_message(cls, remote_update) ->InputMessage:
+        raise NotImplementedError
 
     @classmethod
     def get_or_create_user(cls, remote_update) -> User:

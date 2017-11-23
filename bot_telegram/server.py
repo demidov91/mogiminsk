@@ -30,6 +30,10 @@ class TgServer(BotServer):
         return update
 
     @classmethod
+    def get_input_message(cls, remote_update):
+        return remote_update.get_input_message()
+
+    @classmethod
     def get_or_create_user(cls, remote_update):
         return get_or_create_user(remote_update.get_user())
 
