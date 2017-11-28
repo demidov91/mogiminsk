@@ -21,7 +21,7 @@ def init():
     app = web.Application(middlewares=[
         suppress_error.middleware,
         clear_tasklocal.middleware,
-        block_ip.KeyShield(TELEGRAM_API_KEY).middleware,
+        #block_ip.KeyShield(TELEGRAM_API_KEY).middleware,
         initilize_session.middleware,
     ])
 

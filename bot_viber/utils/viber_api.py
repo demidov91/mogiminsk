@@ -27,6 +27,9 @@ def get_db_user(remote_user: UserProfile) -> User:
 
 
 def get_or_create_user(remote_user: UserProfile):
+    if remote_user is None:
+        return None
+
     user = get_db_user(remote_user)
     if user is None:
         user = UserService.add(

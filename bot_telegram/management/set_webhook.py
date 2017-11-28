@@ -3,15 +3,15 @@ import sys
 
 from aiohttp.client import ClientSession
 
-from bot_telegram.utils.telegram_api import post_data
+from bot_telegram.utils.telegram_api import TgSender
 
 
 async def run(url: str):
     with ClientSession() as client:
-        await post_data({
+        await TgSender(None, client, None).post_data({
             'method': 'setWebhook',
             'url': url,
-        }, client)
+        })
 
 
 if __name__ == '__main__':

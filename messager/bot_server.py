@@ -34,6 +34,9 @@ class BotServer:
     async def webhook(cls, request):
         remote_update = await cls.get_remote_update(request)
         request['user'] = cls.get_or_create_user(remote_update)
+        if request['user'] is None:
+            return await cls.handle_no_user_update(remote_update)
+
         activate(request['user'].language or LANGUAGE)
 
         state = cls.get_state(request['user'])
@@ -70,5 +73,10 @@ class BotServer:
         raise NotImplementedError()
 
     @classmethod
-    def get_response(cls, update):
+    def get_response(cls, remote_update):
+        raise NotImplementedError()
+
+
+    @classmethod
+    async def handle_no_user_update(cls, remote_update):
         raise NotImplementedError()

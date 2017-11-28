@@ -20,7 +20,7 @@ class ViberServer(BotServer):
 
     @classmethod
     async def get_remote_update(cls, request):
-        data = await request.post()
+        data = await request.read()
         logger.debug('Got viber update: %s', data)
         return request.app['viber'].parse_request(data)
 
@@ -38,4 +38,9 @@ class ViberServer(BotServer):
 
     @classmethod
     def get_response(cls, update):
+        return web.Response()
+
+    @classmethod
+    async def handle_no_user_update(cls, remote_update):
+        logger.info('Got no-user update: %s', remote_update)
         return web.Response()
