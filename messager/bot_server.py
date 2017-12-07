@@ -16,8 +16,9 @@ logger = logging.getLogger(__name__)
 class BotServer:
     @classmethod
     def get_state(cls, user: User) ->BaseState:
-        state_name = cls.get_bot_context(user).get('state')
-        return get_state_class(state_name)(user)
+        context = cls.get_bot_context(user)
+        state_name = context.get('state')
+        return get_state_class(state_name)(user, context)
 
     @classmethod
     async def consume(cls, user: User, state: BaseState, common_message: InputMessage):

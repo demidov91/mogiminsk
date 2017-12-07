@@ -35,12 +35,12 @@ class BaseState:
         super(BaseState, cls).__init_subclass__()
         STATES[cls.get_name()] = cls
 
-    def __init__(self, user):
-        self.data = user.telegram_context
+    def __init__(self, user, data: dict):
         self.user = user
+        self.data = data
 
     def create_state(self, state_name: str) ->'BaseState':
-        return STATES[state_name](self.user)
+        return STATES[state_name](self.user, self.data)
 
     def get_intro_message(self):
         return self._intro_message

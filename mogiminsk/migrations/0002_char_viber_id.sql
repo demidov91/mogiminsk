@@ -1,0 +1,1 @@
+alter table public.mogiminsk_user alter column viber_id type character varying(31);
