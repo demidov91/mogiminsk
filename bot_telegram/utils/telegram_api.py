@@ -1,6 +1,5 @@
 import asyncio
 import re
-from typing import TypeVar, Type
 import logging
 
 from aiohttp_translation import activate
@@ -11,19 +10,10 @@ from mogiminsk.models import User
 from mogiminsk.services import UserService
 from mogiminsk.utils import Session
 from messager.input_data import InputMessage, InputContact
+from messager.helper import OptionalObjectFactoryMixin
 
 
-C = TypeVar('C')
 logger = logging.getLogger(__name__)
-
-
-class OptionalObjectFactoryMixin:
-    @classmethod
-    def create(cls: Type[C], data) -> C:
-        if data is None:
-            return
-
-        return cls(data)
 
 
 class TelegramUser(OptionalObjectFactoryMixin):

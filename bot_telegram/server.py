@@ -38,15 +38,17 @@ class TgServer(BotServer):
         return get_or_create_user(remote_update.get_user())
 
     @classmethod
-    async def send_the_answer(cls, request, update, bot_messages):
-        if bot_messages:
-            request['db'].commit()
-            connector = TgSender(update.get_chat().id, request.app['client'], request['user'])
-            asyncio.ensure_future(
-                connector.send_messages(
-                    bot_messages, update.get_message().id if update.callback_query else None
-                )
+    async def send_the_answer(cls, request, remote_update, bot_messages):
+        if not bot_messages:
+            return
+
+        request['db'].commit()
+        connector = TgSender(remote_update.get_chat().id, request.app['client'], request['user'])
+        asyncio.ensure_future(
+            connector.send_messages(
+                bot_messages, remote_update.get_message().id if remote_update.callback_query else None
             )
+        )
 
     @classmethod
     def get_response(cls, update):

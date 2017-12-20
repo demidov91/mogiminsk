@@ -9,5 +9,3 @@ class InputMessage:
         self.data = data
         self.text = text
         self.contact = contact
-
-

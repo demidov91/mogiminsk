@@ -70,7 +70,10 @@ class BotServer:
         raise NotImplementedError()
 
     @classmethod
-    async def send_the_answer(cls, request, update, bot_messages: Iterable[BotMessage]):
+    async def send_the_answer(cls,
+                              request,
+                              remote_update,
+                              bot_messages: Iterable[BotMessage]):
         raise NotImplementedError()
 
     @classmethod
