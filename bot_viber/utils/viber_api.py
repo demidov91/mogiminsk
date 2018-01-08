@@ -11,6 +11,7 @@ from bot.messages.base import BotMessage
 
 BOT_NAME = 'Vasja'
 SEND_URL = 'https://chatapi.viber.com/pa/send_message'
+API_URL = 'https://chatapi.viber.com/pa/'
 
 
 class Update(OptionalObjectFactoryMixin):
@@ -40,33 +41,42 @@ class ViberUser(OptionalObjectFactoryMixin):
 
 
 class ViberSender:
+    SEND_MESSAGE = 'send_message'
+    SET_WEBHOOK = 'set_webhook'
+    GET_ACCOUNT_INFO = 'get_account_info'
+
     def __init__(self, client):
         self.client = client
 
     @classmethod
     def build_informative_message(cls, bot_message: BotMessage) ->dict:
         return {
-            'text': bot_message.text
+            'text': bot_message.text,
+            'type': 'text',
         }
 
     @classmethod
     def build_full_message(cls, bot_message: BotMessage, receiver: ViberUser):
         informative_message = cls.build_informative_message(bot_message)
         informative_message['receiver'] = receiver.id
-        informative_message['sender'] = {'name': BOT_NAME}
         return informative_message
 
     async def send_messages(self, receiver: ViberUser, messages: Iterable[BotMessage]):
         for bot_message in messages:
-            await self.post_data(self.build_full_message(bot_message, receiver))
+            await self.post_data(
+                self.SEND_MESSAGE,
+                self.build_full_message(bot_message, receiver)
+            )
 
-    async def post_data(self, data):
-        logging.info('Following message will be sent to %s:\n%s', SEND_URL, data)
+    async def post_data(self, action: str, data: dict):
+        url = API_URL + action
+        logging.info('Following message will be sent to %s:\n%s', url, data)
         async with self.client.post(
-                SEND_URL,
+                url,
                 json=data,
                 headers={
                     'X-Viber-Auth-Token': VIBER_TOKEN,
+                    'Content-Type': 'application/json',
                 }) as response:
             logging.info(
                 'Got following response from the viber server (%s):\n%s',
