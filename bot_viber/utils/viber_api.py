@@ -1,12 +1,15 @@
 import logging
 from typing import Iterable
 
+from aiohttp_translation import activate, default_language as aiohttp_default_language
+
 from messager.input_data import InputMessage
 from mogiminsk.models import User
 from mogiminsk.services import UserService
-from mogiminsk.settings import VIBER_TOKEN
+from mogiminsk.settings import VIBER_TOKEN, LANGUAGE
 from messager.helper import OptionalObjectFactoryMixin
 from bot.messages.base import BotMessage
+from bot_viber.constants import VIBER_BUTTONS_WIDTH
 
 
 BOT_NAME = 'Vasja'
@@ -39,6 +42,38 @@ class ViberUser(OptionalObjectFactoryMixin):
         self.name = data.get('name')
         self.language = data.get('language')
 
+    def get_bot_language(self):
+        if self.language in (aiohttp_default_language, LANGUAGE):
+            return self.language
+
+        return LANGUAGE
+
+
+def build_basic_message(bot_message: BotMessage) ->dict:
+    return {
+        'text': bot_message.text,
+        'type': 'text',
+    }
+
+
+def add_keyboard_into_message(viber_message: dict, bot_message: BotMessage):
+    buttons = []
+    for row in bot_message.buttons:
+        viber_width = VIBER_BUTTONS_WIDTH // len(row)
+
+        for bot_button in row:
+            buttons.append({
+                'Columns': viber_width,
+                'ActionType': 'reply',
+                'ActionBody': bot_button['data'],
+                'Text': bot_button['text'],
+            })
+
+    viber_message['keyboard'] = {
+        'Type': 'keyboard',
+        'Buttons': buttons,
+    }
+
 
 class ViberSender:
     SEND_MESSAGE = 'send_message'
@@ -49,19 +84,16 @@ class ViberSender:
         self.client = client
 
     @classmethod
-    def build_informative_message(cls, bot_message: BotMessage) ->dict:
-        return {
-            'text': bot_message.text,
-            'type': 'text',
-        }
-
-    @classmethod
     def build_full_message(cls, bot_message: BotMessage, receiver: ViberUser):
-        informative_message = cls.build_informative_message(bot_message)
-        informative_message['receiver'] = receiver.id
-        return informative_message
+        viber_message = build_basic_message(bot_message)
+        if bot_message.buttons:
+            add_keyboard_into_message(viber_message, bot_message)
+
+        viber_message['receiver'] = receiver.id
+        return viber_message
 
     async def send_messages(self, receiver: ViberUser, messages: Iterable[BotMessage]):
+        activate(receiver.language)
         for bot_message in messages:
             await self.post_data(
                 self.SEND_MESSAGE,
@@ -105,7 +137,8 @@ def get_or_create_user(remote_user: ViberUser):
     if user is None:
         user = UserService.add(
             viber_context={'state': 'initial'},
-            viber_id=remote_user.id
+            viber_id=remote_user.id,
+            language=remote_user.get_bot_language(),
         )
 
     return user

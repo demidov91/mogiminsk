@@ -2,12 +2,13 @@ import logging
 from typing import Iterable
 
 from aiohttp_translation import activate, gettext_lazy as _
+from sqlalchemy.orm.attributes import flag_modified
+
 from bot.messages.base import BotMessage
 from bot.state_lib.mediator import get_state_class
 from bot.state_lib.base import BaseState
 from messager.input_data import InputMessage
 from mogiminsk.models import User
-from mogiminsk.settings import LANGUAGE
 
 
 logger = logging.getLogger(__name__)
@@ -23,7 +24,9 @@ class BotServer:
     @classmethod
     async def consume(cls, user: User, state: BaseState, common_message: InputMessage):
         try:
-            return await state.consume(common_message)
+            messages = await state.consume(common_message)
+            cls.save_data(state)
+            return messages
         except Exception as e:
             logger.exception(e)
             cls.set_bot_context(user, {'state': 'where'})
@@ -38,7 +41,7 @@ class BotServer:
         if request['user'] is None:
             return await cls.handle_no_user_update(remote_update)
 
-        activate(request['user'].language or LANGUAGE)
+        activate(request['user'].language)
 
         state = cls.get_state(request['user'])
         common_message = cls.get_input_message(remote_update)
@@ -84,3 +87,7 @@ class BotServer:
     @classmethod
     async def handle_no_user_update(cls, remote_update):
         raise NotImplementedError()
+
+    @classmethod
+    def save_data(cls, state: BaseState):
+        flag_modified(state.user, 'external')

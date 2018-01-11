@@ -9,10 +9,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.engine.url import URL
 from tasklocal import local
-from viberbot import Api, BotConfiguration
 
 from aiohttp_translation import LazyAwareJsonEncoder
-from mogiminsk.settings import DB_CONNECTION, VIBER_TOKEN
+from mogiminsk.settings import DB_CONNECTION
 from mogiminsk.models import Base as MainBase
 from mogiminsk.middleware.block_ip_models import Base as BlockedIpBase
 
@@ -27,21 +26,6 @@ def init_client(app):
 
 def destroy_client(app):
     app['client'].close()
-
-
-def init_viber_client(app):
-    app['viber'] = Api(BotConfiguration(
-        name='helloworld',
-        auth_token=VIBER_TOKEN,
-        avatar=None,
-    ))
-
-
-def destroy_viber_client(app):
-    """
-    Close client session when it is written in aiohttp.
-    """
-    pass
 
 
 def create_db():

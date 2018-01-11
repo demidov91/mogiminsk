@@ -1,8 +1,6 @@
 import logging
 from typing import Dict, Type, Sequence
 
-from sqlalchemy.orm.attributes import flag_modified
-
 from aiohttp_translation import gettext as _
 from bot.messages.base import BotMessage
 
@@ -94,16 +92,7 @@ class BaseState:
             self.add_message(_('Unexpected response.'))
 
         extra_messages = self.pop_messages()
-        self.save_data()
         return message.to_sequence(extra_messages)
-
-    def save_data(self):
-        """
-        Flag JSON fields as modified.
-        """
-        self.user.telegram_context = self.data
-        flag_modified(self.user, 'telegram_context')
-        flag_modified(self.user, 'external')
 
     def add_message(self, text):
         messages = self.data.get('messages', [])

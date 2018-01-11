@@ -20,7 +20,7 @@ class TestTimeState:
         mocker.patch.object(TimeState, 'get_trip_id_list')
         TimeState.get_trip_id_list.return_value = [1]
 
-        tested = TimeState(UserFactory())
+        tested = TimeState(UserFactory(), {})
         tested.text = text
         asyncio.get_event_loop().run_until_complete(
             tested.process()
@@ -31,7 +31,7 @@ class TestTimeState:
         TimeState.get_trip_id_list.assert_called_once()
 
     def test_consume__back(self):
-        tested = TimeState(UserFactory())
+        tested = TimeState(UserFactory(), {})
         asyncio.get_event_loop().run_until_complete(
             tested.consume(InputMessage(data='back'))
         )
@@ -41,7 +41,7 @@ class TestTimeState:
         'back', '94', 'Hi!'
     ))
     def test_consume__not_correct(self, text):
-        tested = TimeState(UserFactory(telegram_context={'state': 'time'}))
+        tested = TimeState(UserFactory(), {'state': 'time'})
         tested.text = text
         asyncio.get_event_loop().run_until_complete(
             tested.process()

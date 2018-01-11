@@ -4,6 +4,7 @@ import logging
 from typing import Iterable
 
 from aiohttp import web
+from sqlalchemy.orm.attributes import flag_modified
 
 from bot.messages.base import BotMessage
 from bot_viber.utils.viber_api import (
@@ -67,3 +68,9 @@ class ViberServer(BotServer):
     async def handle_no_user_update(cls, remote_update):
         logger.info('Got no-user update: %s', remote_update)
         return web.Response()
+
+    @classmethod
+    def save_data(cls, state):
+        super().save_data(state)
+        state.user.viber_context = state.data
+        flag_modified(state.user, 'viber_context')

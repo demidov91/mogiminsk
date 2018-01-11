@@ -125,7 +125,7 @@ class TgSender:
         return msg
 
     async def send_messages(self, messages: list, callback_message_id: int):
-        activate(self.user.language or LANGUAGE)
+        activate(self.user.language)
         converted_messages = tuple(self.convert_message(x) for x in messages)
 
         if callback_message_id is not None and not messages[0].text_buttons:
@@ -222,7 +222,8 @@ def get_or_create_user(remote_user: TelegramUser):
     if user is None:
         user = UserService.add(
             telegram_context={'state': 'initial'},
-            telegram_id=remote_user.id
+            telegram_id=remote_user.id,
+            language=LANGUAGE,
         )
 
     return user

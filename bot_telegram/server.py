@@ -2,6 +2,7 @@ import asyncio
 import logging
 
 from aiohttp import web
+from sqlalchemy.orm.attributes import flag_modified
 
 from bot_telegram.utils.telegram_api import Update, get_or_create_user, TgSender
 from messager.bot_server import BotServer
@@ -59,3 +60,13 @@ class TgServer(BotServer):
             })
 
         return web.Response()
+
+    @classmethod
+    def save_data(cls, state):
+        """
+        Flag JSON fields as modified.
+        """
+        super().save_data(state)
+        state.user.telegram_context = state.data
+        flag_modified(state.user, 'telegram_context')
+
