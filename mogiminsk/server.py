@@ -2,24 +2,21 @@ import argparse
 
 from aiohttp import web
 
-from mogiminsk.utils import (
-    init_client,
-    destroy_client,
-)
 from mogiminsk.middleware import (
-    block_ip,
     initilize_session,
     suppress_error,
     clear_tasklocal,
 )
-from mogiminsk.settings import TELEGRAM_API_KEY
+from mogiminsk.utils import (
+    init_client,
+    destroy_client,
+)
 
 
 def init():
     app = web.Application(middlewares=[
         suppress_error.middleware,
         clear_tasklocal.middleware,
-        #block_ip.KeyShield(TELEGRAM_API_KEY).middleware,
         initilize_session.middleware,
     ])
 
@@ -27,7 +24,7 @@ def init():
     from bot_viber.server import ViberServer
 
     app.router.add_post("/mogiminsk/tg/", TgServer.webhook)
-    app.router.add_post("/mogiminsk/viber/", ViberServer.webhook)
+    app.router.add_post("/mogiminsk/viber/{token}/", ViberServer.webhook)
 
     app.on_startup.append(init_client)
 

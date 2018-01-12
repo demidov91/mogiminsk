@@ -13,7 +13,7 @@ from tasklocal import local
 from aiohttp_translation import LazyAwareJsonEncoder
 from mogiminsk.settings import DB_CONNECTION
 from mogiminsk.models import Base as MainBase
-from mogiminsk.middleware.block_ip_models import Base as BlockedIpBase
+from block_ip.models import Base as BlockedIpBase
 
 
 logger = logging.getLogger(__name__)

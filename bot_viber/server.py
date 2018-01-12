@@ -6,6 +6,7 @@ from typing import Iterable
 from aiohttp import web
 from sqlalchemy.orm.attributes import flag_modified
 
+from block_ip.decorators import api_key
 from bot.messages.base import BotMessage
 from bot_viber.utils.viber_api import (
     get_or_create_user,
@@ -13,6 +14,7 @@ from bot_viber.utils.viber_api import (
     Update,
     ViberSender
 )
+from mogiminsk.settings import VIBER_API_KEY
 from messager.bot_server import BotServer
 from messager.input_data import InputMessage
 
@@ -21,6 +23,11 @@ logger = logging.getLogger(__name__)
 
 
 class ViberServer(BotServer):
+    @classmethod
+    @api_key(VIBER_API_KEY)
+    async def webhook(cls, request):
+        return await super().webhook(request)
+
     @classmethod
     def get_bot_context(cls, user):
         return user.viber_context

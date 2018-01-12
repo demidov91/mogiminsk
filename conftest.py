@@ -1,7 +1,8 @@
-import sys
+from block_ip.models import Base as BlockIpBase
 from mogiminsk.settings import DB_CONNECTION
 from mogiminsk.utils import get_db_engine, Session
 from mogiminsk.models import Base
+
 
 
 def pytest_configure(config):
@@ -13,4 +14,6 @@ def pytest_configure(config):
     engine = get_db_engine(db_connection)
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
+    BlockIpBase.metadata.drop_all(engine)
+    BlockIpBase.metadata.create_all(engine)
     Session.configure(bind=engine)

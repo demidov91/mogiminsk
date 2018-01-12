@@ -6,6 +6,6 @@ Base = declarative_base()
 
 
 class BlockedIp(Base):
-    __tablename__ = 'middleware_blocked_ip'
+    __tablename__ = 'block_ip_blocked_ip'
 
     ip = Column(String(31), primary_key=True)
