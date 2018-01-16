@@ -108,6 +108,31 @@ class Update(OptionalObjectFactoryMixin):
         return InputMessage(data=data, text=text, contact=contact)
 
 
+def to_telegram_message(message: BotMessage, chat_id):
+    formatted = {
+        'text': message.text,
+        'method': 'sendMessage',
+        'chat_id': chat_id,
+    }
+
+    if message.parse_mode:
+        formatted['parse_mode'] = message.parse_mode
+
+    if message.text_buttons:
+        formatted['reply_markup'] = {
+            'keyboard': TextButtonFormatter.format_list(message.text_buttons),
+            'resize_keyboard': True,
+            'one_time_keyboard': True,
+        }
+
+    elif message.buttons:
+        formatted['reply_markup'] = {
+            'inline_keyboard': InlineButtonFormatter.format_list(message.buttons),
+        }
+
+    return formatted
+
+
 class TgSender:
     def __init__(self, chat_id: int, client, user: User):
         self.db_session = Session(autocommit=True)
@@ -116,17 +141,9 @@ class TgSender:
         self.user = self.db_session.query(User).get(user.id)
         self._loop = asyncio.get_event_loop()
 
-    def convert_message(self, message):
-        msg = self.to_telegram_message(message)
-        msg.update({
-            'method': 'sendMessage',
-            'chat_id': self.chat_id,
-        })
-        return msg
-
     async def send_messages(self, messages: list, callback_message_id: int):
         activate(self.user.language)
-        converted_messages = tuple(self.convert_message(x) for x in messages)
+        converted_messages = tuple(to_telegram_message(x, self.chat_id) for x in messages)
 
         if callback_message_id is not None and not messages[0].text_buttons:
             converted_messages[0].update({
@@ -188,29 +205,6 @@ class TgSender:
     @staticmethod
     def get_api_url(method: str):
         return f'https://api.telegram.org/bot{TELEGRAM_TOKEN}/{method}'
-
-    @staticmethod
-    def to_telegram_message(message: BotMessage):
-        formatted = {
-            'text': message.text,
-        }
-
-        if message.parse_mode:
-            formatted['parse_mode'] = message.parse_mode
-
-        if message.text_buttons:
-            formatted['reply_markup'] = {
-                'keyboard': TextButtonFormatter.format_list(message.text_buttons),
-                'resize_keyboard': True,
-                'one_time_keyboard': True,
-            }
-
-        elif message.buttons:
-            formatted['reply_markup'] = {
-                'inline_keyboard': InlineButtonFormatter.format_list(message.buttons),
-            }
-
-        return formatted
 
 
 def get_db_user(remote_user: TelegramUser) -> User:

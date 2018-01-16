@@ -75,6 +75,15 @@ def add_keyboard_into_message(viber_message: dict, bot_message: BotMessage):
     }
 
 
+def to_viber_message(bot_message: BotMessage, receiver: ViberUser) ->dict:
+    viber_message = build_basic_message(bot_message)
+    if bot_message.buttons:
+        add_keyboard_into_message(viber_message, bot_message)
+
+    viber_message['receiver'] = receiver.id
+    return viber_message
+
+
 class ViberSender:
     SEND_MESSAGE = 'send_message'
     SET_WEBHOOK = 'set_webhook'
@@ -83,21 +92,12 @@ class ViberSender:
     def __init__(self, client):
         self.client = client
 
-    @classmethod
-    def build_full_message(cls, bot_message: BotMessage, receiver: ViberUser):
-        viber_message = build_basic_message(bot_message)
-        if bot_message.buttons:
-            add_keyboard_into_message(viber_message, bot_message)
-
-        viber_message['receiver'] = receiver.id
-        return viber_message
-
     async def send_messages(self, receiver: ViberUser, messages: Iterable[BotMessage]):
         activate(receiver.language)
         for bot_message in messages:
             await self.post_data(
                 self.SEND_MESSAGE,
-                self.build_full_message(bot_message, receiver)
+                to_viber_message(bot_message, receiver)
             )
 
     async def post_data(self, action: str, data: dict):
