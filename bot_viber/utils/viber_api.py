@@ -9,7 +9,7 @@ from mogiminsk.services import UserService
 from mogiminsk.settings import VIBER_TOKEN, LANGUAGE
 from messager.helper import OptionalObjectFactoryMixin
 from bot.messages.base import BotMessage
-from bot_viber.constants import VIBER_BUTTONS_WIDTH
+from bot_viber.utils.viber_messages import to_viber_message
 
 
 BOT_NAME = 'Vasja'
@@ -47,41 +47,6 @@ class ViberUser(OptionalObjectFactoryMixin):
             return self.language
 
         return LANGUAGE
-
-
-def build_basic_message(bot_message: BotMessage) ->dict:
-    return {
-        'text': bot_message.text,
-        'type': 'text',
-    }
-
-
-def add_keyboard_into_message(viber_message: dict, bot_message: BotMessage):
-    buttons = []
-    for row in bot_message.buttons:
-        viber_width = VIBER_BUTTONS_WIDTH // len(row)
-
-        for bot_button in row:
-            buttons.append({
-                'Columns': viber_width,
-                'ActionType': 'reply',
-                'ActionBody': bot_button['data'],
-                'Text': bot_button['text'],
-            })
-
-    viber_message['keyboard'] = {
-        'Type': 'keyboard',
-        'Buttons': buttons,
-    }
-
-
-def to_viber_message(bot_message: BotMessage, receiver: ViberUser) ->dict:
-    viber_message = build_basic_message(bot_message)
-    if bot_message.buttons:
-        add_keyboard_into_message(viber_message, bot_message)
-
-    viber_message['receiver'] = receiver.id
-    return viber_message
 
 
 class ViberSender:

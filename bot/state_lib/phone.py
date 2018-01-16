@@ -11,6 +11,8 @@ class PhoneState(BaseState):
             'type': 'phone',
         }, BACK]])
 
+    back = 'show'
+
     async def process(self):
         if self.text and self.text.lower() == 'back':
             self.set_state('show')

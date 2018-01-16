@@ -127,7 +127,7 @@ msgstr "Нажмите на кнопку ниже, чтобы отправить
 
 #: bot_telegram/state_lib/phone.py:10
 msgid "Share phone number"
-msgstr "Отправить номер теоефона"
+msgstr "Отправить номер телефона"
 
 #: bot_telegram/state_lib/purchase.py:71
 #, python-format
