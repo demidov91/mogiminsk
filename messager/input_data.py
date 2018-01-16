@@ -1,7 +1,7 @@
 class InputContact:
-    def __init__(self, phone, identifier):
+    def __init__(self, phone: str, is_user_phone: bool):
         self.phone = phone
-        self.identifier = identifier
+        self.is_user_phone = is_user_phone
 
 
 class InputMessage:

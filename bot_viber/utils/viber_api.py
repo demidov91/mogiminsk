@@ -3,7 +3,7 @@ from typing import Iterable
 
 from aiohttp_translation import activate, default_language as aiohttp_default_language
 
-from messager.input_data import InputMessage
+from messager.input_data import InputMessage, InputContact
 from mogiminsk.models import User
 from mogiminsk.services import UserService
 from mogiminsk.settings import VIBER_TOKEN, LANGUAGE
@@ -27,13 +27,14 @@ class Update(OptionalObjectFactoryMixin):
 class Message(OptionalObjectFactoryMixin):
     @classmethod
     def create(cls, data):
-        if data.get('type') != 'text':
+        if data.get('type') not in ('text', 'contact'):
             return None
 
         return super().create(data)
 
     def __init__(self, data):
         self.text = data.get('text')
+        self.contact = ViberContact.create(data.get('contact'))
 
 
 class ViberUser(OptionalObjectFactoryMixin):
@@ -47,6 +48,30 @@ class ViberUser(OptionalObjectFactoryMixin):
             return self.language
 
         return LANGUAGE
+
+
+class ViberContact(OptionalObjectFactoryMixin):
+    def __init__(self, data):
+        self.phone_number = data['phone_number']
+        self.name = data.get('name')
+        self.avatar = data.get('avatar')
+
+    def is_user_contact(self):
+        return self.name is None and self.avatar is None
+
+
+def to_input_message(viber_update: Update) ->InputMessage:
+    text = viber_update.message.text
+    if not viber_update.message.contact:
+        contact = None
+
+    else:
+        contact = InputContact(
+            phone=viber_update.message.contact.phone_number,
+            is_user_phone=viber_update.message.contact.is_user_contact()
+        )
+
+    return InputMessage(text=text, data=text, contact=contact)
 
 
 class ViberSender:

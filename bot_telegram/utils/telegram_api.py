@@ -96,16 +96,21 @@ class Update(OptionalObjectFactoryMixin):
 
         return msg.contact
 
-    def get_input_message(self):
+    def get_input_message(self) ->InputMessage:
         data = self.get_data()
         text = self.get_text()
         contact = self.get_contact()
-        if contact is not None:
-            contact = InputContact(
-                phone=contact.phone, identifier=contact.user_id
+        user_id = self.get_message().user.id
+
+        if contact is None:
+            tg_contact = None
+
+        else:
+            tg_contact = InputContact(
+                phone=contact.phone, is_user_phone=contact.user_id == user_id
             )
 
-        return InputMessage(data=data, text=text, contact=contact)
+        return InputMessage(data=data, text=text, contact=tg_contact)
 
 
 def to_telegram_message(message: BotMessage, chat_id):

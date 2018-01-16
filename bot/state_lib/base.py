@@ -3,6 +3,7 @@ from typing import Dict, Type, Sequence
 
 from aiohttp_translation import gettext as _
 from bot.messages.base import BotMessage
+from messager.input_data import InputMessage, InputContact
 
 
 logger = logging.getLogger(__name__)
@@ -21,7 +22,7 @@ class BaseState:
     is_callback_state = True
     value = None
     text = None
-    contact = None
+    contact = None          # type: InputContact
     ignorable_values = '-',
     back = None
 
@@ -52,7 +53,7 @@ class BaseState:
     async def get_back_state(self):
         return self.back
 
-    async def consume(self, common_message):
+    async def consume(self, common_message: InputMessage):
         self.value = common_message.data
 
         if self.value == 'back':

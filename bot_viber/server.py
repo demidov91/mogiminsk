@@ -11,12 +11,12 @@ from bot.messages.base import BotMessage
 from bot_viber.utils.viber_api import (
     get_or_create_user,
     get_viber_user,
+    to_input_message,
     Update,
     ViberSender
 )
 from mogiminsk.settings import VIBER_API_KEY
 from messager.bot_server import BotServer
-from messager.input_data import InputMessage
 
 
 logger = logging.getLogger(__name__)
@@ -50,10 +50,7 @@ class ViberServer(BotServer):
 
     @classmethod
     def get_input_message(cls, remote_update: Update):
-        return InputMessage(
-            text=remote_update.message.text,
-            data=remote_update.message.text
-        )
+        return to_input_message(remote_update)
 
     @classmethod
     def get_or_create_user(cls, remote_update):
@@ -64,6 +61,10 @@ class ViberServer(BotServer):
                               request,
                               remote_update: Update,
                               bot_messages: Iterable[BotMessage]):
+        if not bot_messages:
+            return
+
+        request['db'].commit()
         sender = ViberSender(request.app['client'])
         asyncio.ensure_future(sender.send_messages(remote_update.user, bot_messages))
 

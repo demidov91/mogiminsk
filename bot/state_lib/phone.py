@@ -18,7 +18,7 @@ class PhoneState(BaseState):
             self.set_state('show')
             return
 
-        if self.contact is None or self.contact.identifier != self.user.telegram_id:
+        if self.contact is None or not self.contact.is_user_phone:
             self.set_state('show')
             self.message_was_not_recognized = True
             return
