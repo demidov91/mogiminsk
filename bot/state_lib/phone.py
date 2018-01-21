@@ -1,6 +1,8 @@
 from aiohttp_translation import gettext_lazy as _
 from bot.messages.base import BotMessage, BACK
 from bot.state_lib.base import BaseState
+from mogiminsk.models import User
+from mogiminsk.services.user import UserService
 
 
 class PhoneState(BaseState):
@@ -23,5 +25,12 @@ class PhoneState(BaseState):
             self.message_was_not_recognized = True
             return
 
-        self.user.phone = self.contact.phone
+        existing_user = UserService.filter(User.phone == self.contact.phone).first()
+        if existing_user is None:
+            self.user.phone = self.contact.phone
+
+        else:
+            UserService(existing_user).merge_user(self.user)
+            self.user = existing_user
+
         self.set_state('purchase')

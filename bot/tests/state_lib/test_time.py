@@ -1,4 +1,5 @@
 import asyncio
+from unittest.mock import patch
 
 import pytest
 
@@ -16,10 +17,8 @@ class TestTimeState:
         ['115', '1:15'],
         ['1330', '13:30'],
     ))
-    def test_consume__optimistic(self, text, expected, mocker):
-        mocker.patch.object(TimeState, 'get_trip_id_list')
-        TimeState.get_trip_id_list.return_value = [1]
-
+    @patch.object(TimeState, 'get_trip_id_list', return_value=[1])
+    def test_consume__optimistic(self, patched, text, expected):
         tested = TimeState(UserFactory(), {})
         tested.text = text
         asyncio.get_event_loop().run_until_complete(
@@ -28,7 +27,7 @@ class TestTimeState:
         assert tested.data['time'] == expected
         assert tested.data['state'] == 'show'
         assert len(tested.data['trip_id_list']) == 1
-        TimeState.get_trip_id_list.assert_called_once()
+        patched.assert_called_once()
 
     def test_consume__back(self):
         tested = TimeState(UserFactory(), {})

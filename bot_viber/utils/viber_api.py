@@ -57,7 +57,7 @@ class ViberContact(OptionalObjectFactoryMixin):
         self.avatar = data.get('avatar')
 
     def is_user_contact(self):
-        return self.name is None and self.avatar is None
+        return self.name is None
 
 
 def to_input_message(viber_update: Update) ->InputMessage:

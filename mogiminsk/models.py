@@ -29,7 +29,7 @@ class User(Base):
     telegram_messages = Column(String(1023), nullable=True, default='')
 
     viber_context = Column(JSON, default={})
-    viber_id = Column(Integer, nullable=True, unique=True)
+    viber_id = Column(String(31), nullable=True, unique=True)
     viber_state = Column(String(31), nullable=True)
     viber_messages = Column(String(1023), nullable=True, default='')
 

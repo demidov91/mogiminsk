@@ -40,7 +40,6 @@ class UserFactory(SQLAlchemyModelFactory):
         model = User
         sqlalchemy_session = threaded_session
 
-    telegram_id = factory.Sequence(lambda x: x)
-
     # ... or you can use Meta.force_flush=True
     telegram_context = {}
+    viber_context = {}
