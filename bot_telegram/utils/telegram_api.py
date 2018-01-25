@@ -123,17 +123,21 @@ def to_telegram_message(message: BotMessage, chat_id):
     if message.parse_mode:
         formatted['parse_mode'] = message.parse_mode
 
-    if message.is_tg_text_buttons:
-        formatted['reply_markup'] = {
-            'keyboard': TextButtonFormatter.format_list(message.buttons),
-            'resize_keyboard': True,
-            'one_time_keyboard': True,
-        }
+    buttons = message.get_tg_buttons()
 
-    elif message.buttons:
-        formatted['reply_markup'] = {
-            'inline_keyboard': InlineButtonFormatter.format_list(message.buttons),
-        }
+    if buttons:
+
+        if message.is_tg_text_buttons:
+            formatted['reply_markup'] = {
+                'keyboard': TextButtonFormatter.format_list(buttons),
+                'resize_keyboard': True,
+                'one_time_keyboard': True,
+            }
+
+        else:
+            formatted['reply_markup'] = {
+                'inline_keyboard': InlineButtonFormatter.format_list(buttons),
+            }
 
     return formatted
 

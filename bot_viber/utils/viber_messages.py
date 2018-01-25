@@ -48,8 +48,10 @@ def format_button(bot_button: dict, width) ->dict:
 def to_viber_message(bot_message: BotMessage, receiver) -> dict:
     viber_message = build_basic_message(bot_message)
 
-    if bot_message.buttons:
-        add_keyboard_into_message(viber_message, bot_message.buttons)
+    buttons = bot_message.get_viber_buttons()
+
+    if buttons:
+        add_keyboard_into_message(viber_message, buttons)
 
     viber_message['receiver'] = receiver.id
     return viber_message

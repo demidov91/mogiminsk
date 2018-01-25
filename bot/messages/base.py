@@ -43,6 +43,12 @@ class BotMessage:
     def build_callback_buttons(self, buttons: List[List[dict]]) ->List[List[dict]]:
         return buttons
 
+    def get_tg_buttons(self):
+        return self.buttons
+
+    def get_viber_buttons(self):
+        return self.buttons
+
 
 # Standard 'Back' button.
 BACK = {
