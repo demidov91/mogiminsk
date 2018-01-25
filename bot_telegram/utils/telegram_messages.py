@@ -28,6 +28,10 @@ class TextButtonFormatter(ButtonFormatter):
                 'type': 'text',
             }
 
+        else:
+            if 'type' not in button:
+                button['type'] = 'text'
+
         super().__init__(button)
 
     def format(self):

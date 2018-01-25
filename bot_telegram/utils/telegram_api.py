@@ -123,9 +123,9 @@ def to_telegram_message(message: BotMessage, chat_id):
     if message.parse_mode:
         formatted['parse_mode'] = message.parse_mode
 
-    if message.text_buttons:
+    if message.is_tg_text_buttons:
         formatted['reply_markup'] = {
-            'keyboard': TextButtonFormatter.format_list(message.text_buttons),
+            'keyboard': TextButtonFormatter.format_list(message.buttons),
             'resize_keyboard': True,
             'one_time_keyboard': True,
         }
@@ -150,7 +150,7 @@ class TgSender:
         activate(self.user.language)
         converted_messages = tuple(to_telegram_message(x, self.chat_id) for x in messages)
 
-        if callback_message_id is not None and not messages[0].text_buttons:
+        if callback_message_id is not None and not messages[0].is_tg_text_buttons:
             converted_messages[0].update({
                 'method': 'editMessageText',
                 'message_id': callback_message_id,

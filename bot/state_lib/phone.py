@@ -8,10 +8,12 @@ from mogiminsk.services.user import UserService
 class PhoneState(BaseState):
     _intro_message = BotMessage(
         text=_('Tap the button below to share your phone number.'),
-        text_buttons=[[{
+        buttons=[[{
             'text': _('Share phone number'),
             'type': 'phone',
-        }, BACK]])
+        }, BACK]],
+        is_tg_text_buttons=True
+    )
 
     back = 'show'
 
