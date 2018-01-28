@@ -13,7 +13,7 @@ class TimePeriodState(BaseState):
     EVENING_START = 17
 
     TEXT = _('When?')
-    BUTTONS = (
+    buttons = (
         {
             'text': _('\U0001f305 Morning'),
             'data': 'morning',
@@ -31,16 +31,35 @@ class TimePeriodState(BaseState):
     def get_intro_message(self):
         current_time = datetime.datetime.now()
 
-        if current_time.date() != datetime.datetime.strptime(self.data['date'], DATE_FORMAT):
-            return BotMessage(self.TEXT, [self.BUTTONS, [BACK]])
+        if current_time.date() != datetime.datetime.strptime(self.data['date'], DATE_FORMAT).date():
+            return BotMessage(self.TEXT, [self.buttons, [BACK]])
 
         if current_time.hour < self.MORNING_END:
-            return BotMessage(self.TEXT, [self.BUTTONS, [BACK]])
+            return BotMessage(self.TEXT, [self.buttons, [BACK]])
 
         if self.MORNING_END <= current_time.hour < self.EVENING_START:
-            return BotMessage(self.TEXT, [self.BUTTONS[1:], [BACK]])
+            return BotMessage(self.TEXT, [self.buttons[1:], [BACK]])
 
-        return BotMessage(self.TEXT, [self.BUTTONS[2:], [BACK]])
+        return BotMessage(self.TEXT, [self.buttons[2:], [BACK]])
+
+    async def initialize(self, current_state: str):
+        current_time = datetime.datetime.now()
+
+        if current_time.date() != datetime.datetime.strptime(self.data['date'], DATE_FORMAT).date():
+            return self
+
+        if current_time.hour < self.MORNING_END:
+            return self
+
+        if self.MORNING_END <= current_time.hour < self.EVENING_START:
+            self.buttons = self.buttons[1:]
+            return self
+
+        if current_state == 'time':
+            return await self.create_state('date').initialize(current_state)
+
+        self.data['timeperiod'] = 'evening'
+        return await self.create_state('time').initialize(current_state)
 
     async def process(self):
         if self.value not in ('morning', 'day', 'evening'):

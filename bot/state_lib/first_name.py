@@ -10,7 +10,11 @@ class FirstNameState(BaseState):
 
         return 'show'
 
-    _intro_message = BotMessage(text=_("What's your name?"), buttons=[[BACK]])
+    _intro_message = BotMessage(
+        text=_("What's your name?"),
+        buttons=[[BACK]],
+        is_text_input=True
+    )
 
     async def process(self):
         if self.text:
