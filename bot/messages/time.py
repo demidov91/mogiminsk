@@ -21,7 +21,7 @@ class MorningMessage(AbstractPeriodMessage):
     FIRST_TIME = '6:00'
 
     viber_buttons = ({
-        'text': _('Before %s') % FIRST_TIME,
+        'text': _('Before 6:00'),
         'data': FIRST,
         'viber': {
             'TextSize': 'large',
@@ -174,7 +174,7 @@ class MorningMessage(AbstractPeriodMessage):
 
     tg_buttons = (
         ({
-            'text': _('Before %s') % FIRST_TIME,
+            'text': _('Before 6:00'),
             'data': FIRST,
         }, {
             'text': '6:00',
@@ -520,7 +520,7 @@ class EveningMessage(AbstractPeriodMessage):
             'Columns': 1,
         },
     }, {
-        'text': _('After %s') % LAST_TIME,
+        'text': _('After 22:00'),
         'data': LAST,
         'viber': {
             'TextSize': 'large',
@@ -568,7 +568,7 @@ class EveningMessage(AbstractPeriodMessage):
             'text': '21:00',
             'data': '21:00',
         }, {
-            'text': _('After %s') % LAST_TIME,
+            'text': _('After 22:00'),
             'data': LAST,
         }, ),
                   (BACK, )
