@@ -28,4 +28,4 @@ class DateState(BaseState):
             self.message_was_not_recognized = True
             return
 
-        self.set_state('time')
+        self.set_state('timeperiod')

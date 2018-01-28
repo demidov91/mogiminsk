@@ -1,10 +1,9 @@
 import datetime
-import re
 
 from sqlalchemy import or_
 
 from aiohttp_translation import gettext_lazy as _
-from bot.messages.base import BotMessage, BACK
+from bot.messages.time import MorningMessage, DayMessage, EveningMessage
 from bot.state_lib.base import BaseState
 from mogiminsk.defines import DATE_TIME_FORMAT
 from mogiminsk.models import Trip
@@ -12,37 +11,36 @@ from mogiminsk.utils import get_db
 
 
 class TimeState(BaseState):
-    back = 'date'
+    back = 'timeperiod'
 
-    _intro_message = BotMessage(
-        text=_('Enter time. For example: 7, 1125 or 16:40.'),
-        buttons=[
-            [BACK]
-        ],
-    )
+    def get_intro_message(self):
+        if self.data['timeperiod'] == 'morning':
+            return MorningMessage()
 
-    time_pattern = re.compile('(?P<hours>\d{1,2}?):?(?P<minutes>\d{2})?\s*$')
-    is_callback_state = False
+        if self.data['timeperiod'] == 'day':
+            return DayMessage()
+
+        if self.data['timeperiod'] == 'evening':
+            return EveningMessage()
+
+        raise ValueError(self.data['timeperiod'])
 
     async def process(self):
-        match = self.time_pattern.search(self.text)
-        if match is None:
-            self.message_was_not_recognized = True
-            return
+        is_morning = False
+        is_evening = False
 
-        hours = match.group('hours')
-        minutes = match.group('minutes') or '00'
+        if self.value == MorningMessage.FIRST:
+            is_morning = True
+            time = MorningMessage.FIRST_TIME
 
-        cleared_time = f'{hours}:{minutes}'
+        elif self.value == EveningMessage.LAST:
+            is_evening = True
+            time = EveningMessage.LAST_TIME
 
-        try:
-            datetime.datetime.strptime(cleared_time, '%H:%M')
-        except ValueError:
-            self.message_was_not_recognized = True
-            return
+        else:
+            time = self.value
 
-        self.data[self.get_name()] = cleared_time
-        self.data['trip_id_list'] = self.get_trip_id_list()
+        self.data['trip_id_list'] = self.get_trip_id_list(time, is_morning, is_evening)
 
         if len(self.data['trip_id_list']) == 0:
             self.set_state('where')
@@ -51,11 +49,20 @@ class TimeState(BaseState):
 
         self.set_state('show')
 
-    def get_trip_id_list(self):
-        start_datetime_string = '{} {}'.format(self.data['date'], self.data['time'])
+    def get_trip_id_list(self, time_string, is_morning, is_evening):
+        start_datetime_string = '{} {}'.format(self.data['date'], time_string)
         start_datetime = datetime.datetime.strptime(start_datetime_string, DATE_TIME_FORMAT)
 
-        return TripFetcher(start_datetime, self.data['where']).produce()
+        if is_morning:
+            fetcher = MorningTripFetcher(start_datetime, self.data['where'])
+
+        elif is_evening:
+            fetcher = EveningTripFetcher(start_datetime, self.data['where'])
+
+        else:
+            fetcher = TripFetcher(start_datetime, self.data['where'])
+
+        return fetcher.produce()
 
 
 class TripFetcher:
@@ -115,6 +122,22 @@ class TripFetcher:
 
     def no_trips(self):
         return ExtendedTripFetcher(self.dt, self.direction).produce()
+
+
+class MorningTripFetcher(TripFetcher):
+    """
+    Returns first trips of the day.
+    """
+    big_start_datetime_range = datetime.timedelta(hours=3), datetime.timedelta(minutes=-1)
+    small_start_datetime_range = datetime.timedelta(hours=3), datetime.timedelta(minutes=-1)
+
+
+class EveningTripFetcher(TripFetcher):
+    """
+    Returns last trips of the day.
+    """
+    big_start_datetime_range = datetime.timedelta(hours=0), datetime.timedelta(hours=3)
+    small_start_datetime_range = datetime.timedelta(hours=0), datetime.timedelta(hours=3)
 
 
 class ExtendedTripFetcher(TripFetcher):

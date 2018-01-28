@@ -17,11 +17,15 @@ class FeedbackState(BaseState):
         _('Send me some feedback. '
             'What would you improve, '
             'what went wrong while using the bot?\n'
-            'It will help me become better.'), buttons=[[BACK]])
+            'It will help me become better.'),
+        buttons=[[BACK]],
+        is_text_input=True
+    )
 
     continue_intro_message = BotMessage(
         _('Add anything or press "Back" to return to booking trips.'),
-        buttons=[[BACK]]
+        buttons=[[BACK]],
+        is_text_input=True
     )
 
     def get_intro_message(self):

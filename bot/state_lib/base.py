@@ -19,7 +19,6 @@ class BaseState:
 
     _intro_message = None    # type: BotMessage
     message_was_not_recognized = False
-    is_callback_state = True
     value = None
     text = None
     contact = None          # type: InputContact

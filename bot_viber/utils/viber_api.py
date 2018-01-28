@@ -16,6 +16,8 @@ BOT_NAME = 'Vasja'
 SEND_URL = 'https://chatapi.viber.com/pa/send_message'
 API_URL = 'https://chatapi.viber.com/pa/'
 
+logger = logging.getLogger(__name__)
+
 
 class Update(OptionalObjectFactoryMixin):
     def __init__(self, data):
@@ -100,11 +102,23 @@ class ViberSender:
                     'X-Viber-Auth-Token': VIBER_TOKEN,
                     'Content-Type': 'application/json',
                 }) as response:
-            logging.info(
+            logger.info(
                 'Got following response from the viber server (%s):\n%s',
                 response.status,
                 (await response.read())
             )
+
+            if response.status != 200:
+                raise ValueError(f'Status is {response.status} instead of 200.')
+
+            response_data = await response.json()
+            if response_data.get('status') != 0:
+                logger.warning(
+                    'Unexpected Viber server response. 0 expected, got %s. Status message is: %s',
+                    response_data.get('status'),
+                    response_data.get('status_message')
+                )
+                raise ValueError(f'Error Viber server response:\n{response_data}')
 
 
 def get_input_message(update: dict) ->InputMessage:

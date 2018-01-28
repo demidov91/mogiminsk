@@ -20,8 +20,8 @@ def init():
         initilize_session.middleware,
     ])
 
-    from bot_telegram.server import TgServer
-    from bot_viber.server import ViberServer
+    from bot_telegram.tg_server import TgServer
+    from bot_viber.viber_server import ViberServer
 
     app.router.add_post("/mogiminsk/tg/", TgServer.webhook)
     app.router.add_post("/mogiminsk/viber/{token}/", ViberServer.webhook)
