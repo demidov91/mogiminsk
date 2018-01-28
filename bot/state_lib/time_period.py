@@ -29,18 +29,7 @@ class TimePeriodState(BaseState):
     )
 
     def get_intro_message(self):
-        current_time = datetime.datetime.now()
-
-        if current_time.date() != datetime.datetime.strptime(self.data['date'], DATE_FORMAT).date():
-            return BotMessage(self.TEXT, [self.buttons, [BACK]])
-
-        if current_time.hour < self.MORNING_END:
-            return BotMessage(self.TEXT, [self.buttons, [BACK]])
-
-        if self.MORNING_END <= current_time.hour < self.EVENING_START:
-            return BotMessage(self.TEXT, [self.buttons[1:], [BACK]])
-
-        return BotMessage(self.TEXT, [self.buttons[2:], [BACK]])
+        return BotMessage(self.TEXT, [self.buttons, [BACK]])
 
     async def initialize(self, current_state: str):
         current_time = datetime.datetime.now()
