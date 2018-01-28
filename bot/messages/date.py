@@ -60,7 +60,7 @@ class OtherDateMessage(BotMessage):
         missing_buttons = 7 - len(self.buttons[0])
 
         prepended = [{
-            'text': b'\xE2\x9D\x8C'.decode('utf-8'),
+            'text': '\u274c',
             'data': '-',
         } for _ in range(missing_buttons)]
 
@@ -69,7 +69,8 @@ class OtherDateMessage(BotMessage):
 
     def get_viber_buttons(self):
         self._convert_buttons_to_viber()
-        return [[x] for x in chain(*self.buttons)]
+        self.buttons = [[x] for x in chain(*self.buttons)]
+        return super().get_viber_buttons()
 
     def __init__(self):
         today = datetime.date.today()

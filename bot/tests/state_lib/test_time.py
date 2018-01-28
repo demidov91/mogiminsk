@@ -4,46 +4,32 @@ from unittest.mock import patch
 import pytest
 
 # This import initializes state lib.
-from bot.state_lib.date import DateState
+from bot.state_lib.time_period import TimePeriodState
 from bot.state_lib.time import TimeState
 from messager.input_data import InputMessage
 from mogiminsk.factories import UserFactory
 
 
 class TestTimeState:
-    @pytest.mark.parametrize('text,expected', (
-        ['1', '1:00'],
-        ['2:12', '2:12'],
-        ['115', '1:15'],
-        ['1330', '13:30'],
+    @pytest.mark.parametrize('value,time,is_morning,is_evening', (
+        ['first', '5:59', True, False],
+        ['last', '22:00', False, True],
+        ['7:40', '7:40', False, False],
     ))
     @patch.object(TimeState, 'get_trip_id_list', return_value=[1])
-    def test_consume__optimistic(self, patched, text, expected):
+    def test_consume__optimistic(self, patched, value, time, is_morning, is_evening):
         tested = TimeState(UserFactory(), {})
-        tested.text = text
+        tested.value = value
         asyncio.get_event_loop().run_until_complete(
             tested.process()
         )
-        assert tested.data['time'] == expected
         assert tested.data['state'] == 'show'
-        assert len(tested.data['trip_id_list']) == 1
-        patched.assert_called_once()
+        assert tested.data['trip_id_list'] == [1]
+        patched.assert_called_once_with(time, is_morning, is_evening)
 
     def test_consume__back(self):
         tested = TimeState(UserFactory(), {})
         asyncio.get_event_loop().run_until_complete(
             tested.consume(InputMessage(data='back'))
         )
-        assert tested.data['state'] == 'date'
-
-    @pytest.mark.parametrize('text', (
-        'back', '94', 'Hi!'
-    ))
-    def test_consume__not_correct(self, text):
-        tested = TimeState(UserFactory(), {'state': 'time'})
-        tested.text = text
-        asyncio.get_event_loop().run_until_complete(
-            tested.process()
-        )
-        assert tested.data['state'] == 'time'
-        assert tested.message_was_not_recognized
+        assert tested.data['state'] == 'timeperiod'

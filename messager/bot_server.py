@@ -22,17 +22,18 @@ class BotServer:
         return get_state_class(state_name)(user, context)
 
     @classmethod
-    async def consume(cls, user: User, state: BaseState, common_message: InputMessage):
+    async def consume(
+            cls,
+            user: User,
+            state: BaseState,
+            common_message: InputMessage) ->Iterable[BotMessage]:
         try:
             messages = await state.consume(common_message)
             cls.save_data(state)
             return messages
         except Exception as e:
             logger.exception(e)
-            cls.set_bot_context(user, {'state': 'where'})
-            return cls.get_state(user).get_intro_message().to_sequence([
-                _('Something went wrong...')
-            ])
+            return cls.handle_exception(user)
 
     @classmethod
     async def webhook(cls, request):
@@ -51,6 +52,13 @@ class BotServer:
         await cls.send_the_answer(request, remote_update, bot_messages)
 
         return cls.get_response(remote_update)
+
+    @classmethod
+    def handle_exception(cls, user: User) ->Iterable[BotMessage]:
+        cls.set_bot_context(user, {'state': 'where'})
+        return cls.get_state(user).get_intro_message().to_sequence([
+            _('Something went wrong...')
+        ])
 
     @classmethod
     def get_bot_context(cls, user):

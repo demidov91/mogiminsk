@@ -12,6 +12,10 @@ class UserService(BaseService):
         ('viber_id', 'viber_context'),
     )
 
+    @classmethod
+    def get_by_viber_id(self, viber_id):
+        return self.filter(User.viber_id == viber_id).first()
+
     def future_purchases(self):
         return self.instance.purchases.join(Trip).filter(
             Trip.start_datetime > datetime.datetime.now()

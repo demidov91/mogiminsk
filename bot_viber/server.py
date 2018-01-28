@@ -15,7 +15,9 @@ from bot_viber.utils.viber_api import (
     Update,
     ViberSender
 )
+from mogiminsk.services.user import UserService
 from mogiminsk.settings import VIBER_API_KEY
+from mogiminsk.utils import Session, set_db, get_db
 from messager.bot_server import BotServer
 
 
@@ -65,8 +67,30 @@ class ViberServer(BotServer):
             return
 
         request['db'].commit()
-        sender = ViberSender(request.app['client'])
-        asyncio.ensure_future(sender.send_messages(remote_update.user, bot_messages))
+        asyncio.ensure_future(
+            cls._answer_callback(request.app['client'], remote_update.user, bot_messages)
+        )
+
+    @classmethod
+    async def _answer_callback(cls, client, remote_user, bot_messages):
+        sender = ViberSender(client)
+        try:
+            await sender.send_messages(remote_user, bot_messages)
+        except:
+            logger.exception('Got exception during sending message to Viber server. Messages:\n%s',
+                             bot_messages)
+
+            set_db(Session())
+            try:
+                user = UserService.get_by_viber_id(remote_user.id)
+                messages = cls.handle_exception(user)
+                get_db().commit()
+                await sender.send_messages(remote_user, messages)
+            except:
+                logger.exception("Couldn't even reset the state.")
+
+            finally:
+                get_db().close()
 
     @classmethod
     def get_response(cls, update):
