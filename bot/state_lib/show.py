@@ -28,11 +28,10 @@ def trip_to_line(trip: Trip) -> Collection[Dict]:
 
     is_bookable = has_connector(trip_service.provider().identifier)
     action = f'purchase_{trip_service.id}' if is_bookable else f'trip_{trip_service.id}'
-    action_text = b'\xF0\x9F\x9A\x90'.decode('utf-8') \
-        if is_bookable else b'\xF0\x9F\x93\x9E'.decode('utf-8')
+    icon = '\U0001f690' if is_bookable else '\U0001f4de'
 
     return [{
-        'text': f'{action_text} {description}',
+        'text': f'{icon} {description}',
         'data': action,
     }]
 

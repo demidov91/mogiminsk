@@ -9,6 +9,7 @@ from bot.state_lib.mediator import get_state_class
 from bot.state_lib.base import BaseState
 from messager.input_data import InputMessage
 from mogiminsk.models import User
+from mogiminsk.settings import LANGUAGE
 
 
 logger = logging.getLogger(__name__)
@@ -39,10 +40,13 @@ class BotServer:
     async def webhook(cls, request):
         remote_update = await cls.get_remote_update(request)
         request['user'] = cls.get_or_create_user(remote_update)
-        if request['user'] is None:
-            return await cls.handle_no_user_update(remote_update)
+        activate(request['user'].language if request['user'] is not None else LANGUAGE)
 
-        activate(request['user'].language)
+        if remote_update.is_system_update():
+            return await cls.handle_system_message(remote_update)
+
+        if request['user'] is None:
+            raise ValueError("User can't be None.")
 
         state = cls.get_state(request['user'])
         common_message = cls.get_input_message(remote_update)
@@ -91,9 +95,8 @@ class BotServer:
     def get_response(cls, remote_update):
         raise NotImplementedError()
 
-
     @classmethod
-    async def handle_no_user_update(cls, remote_update):
+    async def handle_system_message(cls, remote_update):
         raise NotImplementedError()
 
     @classmethod

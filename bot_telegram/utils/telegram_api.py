@@ -112,6 +112,9 @@ class Update(OptionalObjectFactoryMixin):
 
         return InputMessage(data=data, text=text, contact=tg_contact)
 
+    def is_system_update(self):
+        return False
+
 
 def to_telegram_message(message: BotMessage, chat_id):
     formatted = {

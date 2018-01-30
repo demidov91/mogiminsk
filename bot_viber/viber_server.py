@@ -6,8 +6,10 @@ from typing import Iterable
 from aiohttp import web
 from sqlalchemy.orm.attributes import flag_modified
 
+from aiohttp_translation import gettext_lazy as _
 from block_ip.decorators import api_key
 from bot.messages.base import BotMessage
+from bot_viber import defines
 from bot_viber.utils.viber_api import (
     get_or_create_user,
     get_viber_user,
@@ -17,7 +19,7 @@ from bot_viber.utils.viber_api import (
 )
 from mogiminsk.services.user import UserService
 from mogiminsk.settings import VIBER_API_KEY
-from mogiminsk.utils import Session, set_db, get_db
+from mogiminsk.utils import Session, set_db, get_db, lazy_string_aware_json_dumps
 from messager.bot_server import BotServer
 
 
@@ -42,12 +44,8 @@ class ViberServer(BotServer):
     async def get_remote_update(cls, request):
         data = await request.read()
         logger.debug('Got viber update: %s', data)
+
         remote_update = json.loads(data)
-
-        if remote_update.get('event') != 'message':
-            logger.warning('Unexpected event: %s.', remote_update.get('event'))
-            return None
-
         return Update.create(remote_update)
 
     @classmethod
@@ -97,8 +95,41 @@ class ViberServer(BotServer):
         return web.Response()
 
     @classmethod
-    async def handle_no_user_update(cls, remote_update):
-        logger.info('Got no-user update: %s', remote_update)
+    async def handle_system_message(cls, remote_update: Update):
+        if remote_update.event == defines.EVENT_TYPE_CONVERSATION_STARTED:
+            return web.json_response({
+                'text': _('This is a bot for booking Mogilev-Minsk minibusses.\n'
+                          'Choose the date, time and book your trip!\n'
+                          'Notice:\n\U0001f690 - bookable directly from bot.\n'
+                          '\U0001f4de - you have to make a call to book your trip.\n'),
+                'type': 'text',
+                'min_api_version': 4,
+                "keyboard": {
+                    "Type": "keyboard",
+                    'InputFieldState': 'hidden',
+                    "Buttons": [{
+                            "ActionType": "open-url",
+                            "ActionBody": "https://78.media.tumblr.com/a9308a69b396b5f809653d63ec56eb56/tumblr_o2jjpncAIs1uqe8iio1_500.gif",
+                            "Text": _("Take a quick animated tour"),
+                            'OpenURLMediaType': 'gif',
+                         },
+                    ],
+                },
+            }, dumps=lazy_string_aware_json_dumps)
+
+        if remote_update.event == defines.EVENT_TYPE_UNSUBSCRIBED:
+            logger.info('User %s has unsubscribed.', remote_update.user.id)
+
+        elif remote_update.event == defines.EVENT_TYPE_SUBSCRIBED:
+            logger.info('User %s has subscribed.', remote_update.user.id)
+
+        elif remote_update.event == defines.EVENT_TYPE_FAILED:
+            logger.error('Failed to deliver message to the user %s. Error message is: %s.',
+                         remote_update.user.id, remote_update.description)
+
+        else:
+            logger.error('Unexpected event: %s', remote_update.event)
+
         return web.Response()
 
     @classmethod

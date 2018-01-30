@@ -9,6 +9,7 @@ from mogiminsk.services import UserService
 from mogiminsk.settings import VIBER_TOKEN, LANGUAGE
 from messager.helper import OptionalObjectFactoryMixin
 from bot.messages.base import BotMessage
+from bot_viber import defines
 from bot_viber.utils.viber_messages import to_viber_message
 
 
@@ -23,13 +24,20 @@ class Update(OptionalObjectFactoryMixin):
     def __init__(self, data):
         self.event = data['event']
         self.message = Message.create(data.get('message'))
-        self.user = ViberUser(data['sender'])
+        self.user = ViberUser.create(data.get('sender') or data.get('user'))
+        self.description = data.get('desc')
+
+        if self.user is None and 'user_id' in data:
+            self.user = ViberUser({'id': data['user_id']})
+
+    def is_system_update(self):
+        return self.event != defines.EVENT_TYPE_MESSAGE
 
 
 class Message(OptionalObjectFactoryMixin):
     @classmethod
     def create(cls, data):
-        if data.get('type') not in ('text', 'contact'):
+        if not data or data.get('type') not in ('text', 'contact'):
             return None
 
         return super().create(data)

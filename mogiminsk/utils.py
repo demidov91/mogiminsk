@@ -19,9 +19,11 @@ from block_ip.models import Base as BlockedIpBase
 logger = logging.getLogger(__name__)
 _LOCAL = local()
 
+lazy_string_aware_json_dumps = partial(json.dumps, cls=LazyAwareJsonEncoder)
+
 
 def init_client(app):
-    app['client'] = ClientSession(json_serialize=partial(json.dumps, cls=LazyAwareJsonEncoder))
+    app['client'] = ClientSession(json_serialize=lazy_string_aware_json_dumps)
 
 
 def destroy_client(app):
