@@ -12,6 +12,7 @@ class FinishPurchaseWithSmsState(BaseState):
         return BotMessage(
             text=_('SMS was sent to +%s. Enter it.') % self.user.phone,
             buttons=[[BACK]],
+            is_text_input=True,
         )
 
     async def process(self):

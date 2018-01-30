@@ -109,7 +109,7 @@ class ViberServer(BotServer):
                     'InputFieldState': 'hidden',
                     "Buttons": [{
                             "ActionType": "open-url",
-                            "ActionBody": "https://78.media.tumblr.com/a9308a69b396b5f809653d63ec56eb56/tumblr_o2jjpncAIs1uqe8iio1_500.gif",
+                            "ActionBody": "https://rate.pautuzin.by/static/viber_intro.gif?v=2",
                             "Text": _("Take a quick animated tour"),
                             'OpenURLMediaType': 'gif',
                          },

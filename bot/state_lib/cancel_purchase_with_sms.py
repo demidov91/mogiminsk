@@ -25,6 +25,7 @@ class CancelPurchaseWithSmsState(CancelableStateMixin, BaseState):
         return BotMessage(
             text=text,
             buttons=buttons,
+            is_text_input=True,
         )
 
     async def process(self):
