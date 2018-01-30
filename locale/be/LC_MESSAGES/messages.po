@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-28 18:09+0300\n"
+"POT-Creation-Date: 2018-01-31 00:10+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -121,15 +121,15 @@ msgid ""
 "%s to tell what you wanted."
 msgstr ""
 
-#: bot/state_lib/finish_purchase_with_sms.py:38
+#: bot/state_lib/finish_purchase_with_sms.py:39
 msgid "Wrong SMS. Enter again."
 msgstr ""
 
-#: bot/state_lib/finish_purchase_with_sms.py:43 bot/state_lib/purchase.py:124
+#: bot/state_lib/finish_purchase_with_sms.py:44 bot/state_lib/purchase.py:124
 msgid "Failed to purchase the trip. Try another provider."
 msgstr ""
 
-#: bot/state_lib/first_name.py:13
+#: bot/state_lib/first_name.py:14
 msgid "What's your name?"
 msgstr ""
 
@@ -211,11 +211,11 @@ msgstr ""
 msgid "How many seats?"
 msgstr ""
 
-#: bot/state_lib/show.py:58
+#: bot/state_lib/show.py:57
 msgid "More"
 msgstr ""
 
-#: bot/state_lib/show.py:63
+#: bot/state_lib/show.py:62
 msgid "Choose trip:"
 msgstr ""
 
@@ -270,7 +270,20 @@ msgstr ""
 msgid "Feedback"
 msgstr ""
 
-#: messager/bot_server.py:60
+#: bot_viber/viber_server.py:101
+msgid ""
+"This is a bot for booking Mogilev-Minsk minibusses.\n"
+"Choose the date, time and book your trip!\n"
+"Notice:\n"
+"🚐 - bookable directly from bot.\n"
+"📞 - you have to make a call to book your trip.\n"
+msgstr ""
+
+#: bot_viber/viber_server.py:113
+msgid "Take a quick animated tour"
+msgstr ""
+
+#: messager/bot_server.py:64
 msgid "Something went wrong..."
 msgstr ""
 
