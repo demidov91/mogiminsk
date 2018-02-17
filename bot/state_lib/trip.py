@@ -12,7 +12,7 @@ class TripState(BaseState):
         return PurchaseTripMessage(trip)
 
     async def process(self):
-        if self.value == 'finish':
+        if self.value == 'finish' or self.value.startswith('tel:'):
             self.set_state('where')
             self.add_message(
                 _("I hope you've called dispatcher. "
@@ -22,10 +22,6 @@ class TripState(BaseState):
                     b'\xF0\x9F\x9A\x90'.decode('utf-8')
                 )
             )
-            return
-
-        if self.value == 'purchase':
-            self.set_state('purchase')
             return
 
         self.message_was_not_recognized = True

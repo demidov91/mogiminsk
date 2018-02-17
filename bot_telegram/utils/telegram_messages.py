@@ -14,10 +14,15 @@ class ButtonFormatter:
 
 class InlineButtonFormatter(ButtonFormatter):
     def format(self):
-        return {
+        button = {
             'text': self.button['text'],
             'callback_data': self.button['data'],
         }
+
+        if self.button.get('type') == 'url':
+            button['url'] = self.button['data']
+
+        return button
 
 
 class TextButtonFormatter(ButtonFormatter):

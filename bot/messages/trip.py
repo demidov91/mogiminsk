@@ -7,25 +7,27 @@ from mogiminsk_interaction.utils import has_connector
 
 
 class TripMessage(BotMessage):
-    def __init__(self, trip):
-        self.trip = trip
-        super().__init__()
+    def __init__(self, trip, **kwargs):
+        self.trip_id = trip.id
+        self.trip_service = TripService(trip)
+        super().__init__(**kwargs)
+
+    def _get_contacts(self):
+        return filter(lambda x: x.kind in (
+            'velcom', 'mts', 'life'
+        ), self.trip_service.provider().contacts)
 
     def build_text(self, text: str):
-        trip_service = TripService(self.trip)
-
-        contacts = filter(lambda x: x.kind in (
-            'velcom', 'mts', 'life'
-        ), trip_service.provider().contacts)
+        contacts = self._get_contacts()
 
         contacts_message = '\n'.join(
             [f'{contact.kind}: {contact.contact}' for contact in contacts]
         )
 
         text = '{}, {}, {}'.format(
-            trip_service.provider_name(),
-            trip_service.direction_name(),
-            self.trip.start_datetime.strftime('%d.%m.%Y %H:%M')
+            self.trip_service.provider_name(),
+            self.trip_service.direction_name(),
+            self.trip_service.instance.start_datetime.strftime('%d.%m.%Y %H:%M')
         )
 
         if not contacts_message:
@@ -39,19 +41,6 @@ class TripMessage(BotMessage):
 
 class PurchaseTripMessage(TripMessage):
     def build_callback_buttons(self, buttons: List[List[dict]]):
-        if has_connector(self.trip.car.provider.identifier):
-            return [
-                [BACK,
-                 {
-                    'text': _('Book it'),
-                    'data': 'purchase',
-                }],
-                [{
-                    'text': _('Got it'),
-                    'data': 'finish',
-                }]
-            ]
-
         return [
             [BACK,
              {
@@ -59,6 +48,18 @@ class PurchaseTripMessage(TripMessage):
                 'data': 'finish',
             }]
         ]
+
+    def get_viber_buttons(self):
+        self.trip_service = TripService.get_service(self.trip_id)
+
+        contacts = self._get_contacts()
+
+        phone_numbers = [{
+            'text': f'{x.kind}: {x.contact}',
+            'data': f'tel:{x.contact}',
+            'type': 'url',
+        } for x in contacts]
+        return phone_numbers + super().get_viber_buttons()
 
 
 class MyTripMessage(TripMessage):

@@ -71,10 +71,4 @@ class ShowState(BaseState):
             return
 
         self.data[self.get_name()] = match.group('id')
-        next_state = match.group('action')
-
-        if next_state == 'purchase':
-            self.set_state('purchase')
-
-        else:
-            self.set_state(next_state)
+        self.set_state(match.group('action'))

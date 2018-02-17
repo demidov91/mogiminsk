@@ -29,6 +29,13 @@ def format_button(bot_button: dict) ->dict:
             'Text': bot_button['text'],
         }
 
+    elif bot_button.get('type') == 'url':
+        viber_button = {
+            'ActionType': 'open-url',
+            'ActionBody': bot_button['data'],
+            'Text': bot_button['text'],
+        }
+
     else:
         viber_button = {
             'ActionType': 'reply',
