@@ -14,13 +14,10 @@ class TripState(BaseState):
     async def process(self):
         if self.value == 'finish':
             self.set_state('where')
-            self.add_message(
-                _("I hope you've called dispatcher. "
-                  "Trips with %s icons can't be booked from bot. "
-                  "Choose trip with %s symbol to book in-app.") % (
-                    b'\xF0\x9F\x93\x9E'.decode('utf-8'),
-                    b'\xF0\x9F\x9A\x90'.decode('utf-8')
-                )
+            self.add_message(_(
+                "I hope you've called dispatcher. "
+                "Trips with \U0001f4de icons can't be booked from bot. "
+                "Choose trip with \U0001f690 symbol to book in-app.")
             )
             return
 

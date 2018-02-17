@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-17 13:48+0300\n"
+"POT-Creation-Date: 2018-02-17 14:35+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -227,7 +227,15 @@ msgstr "... и ещё"
 msgid "Choose trip:"
 msgstr "Выберите поездку:"
 
-#: bot/state_lib/station.py:30
+#: bot/state_lib/station.py:37
+msgid "...previous"
+msgstr "...предыдущие"
+
+#: bot/state_lib/station.py:44
+msgid "more..."
+msgstr "ещё..."
+
+#: bot/state_lib/station.py:49
 msgid "Choose start station:"
 msgstr "Место посадки:"
 
@@ -251,16 +259,15 @@ msgstr "🌞 День"
 msgid "🌇 Evening"
 msgstr "🌇 Вечер"
 
-#: bot/state_lib/trip.py:18
-#, python-format
+#: bot/state_lib/trip.py:17
 msgid ""
-"I hope you've called dispatcher. Trips with %s icons can't be booked from "
-"bot. Choose trip with %s symbol to book in-app."
+"I hope you've called dispatcher. Trips with 📞 icons can't be booked from "
+"bot. Choose trip with 🚐 symbol to book in-app."
 msgstr ""
-"Надеюсь, вы позвонили диспетчеру. Поездки с иконкой %s не могут быть "
-"заказаны ботом. Выбирайте  варианты обозначеные %s для заказа из приложения."
+"Надеюсь, Вы позвонили диспетчеру. Поездки с иконкой 📞 не могут быть "
+"заказаны ботом. Выбирайте  варианты обозначеные 🚐 для заказа из приложения."
 
-#: bot/state_lib/trip.py:28
+#: bot/state_lib/trip.py:25
 msgid "Press \"Got it\" button after you've purchased the trip."
 msgstr "Нажмите на кнопку 'В начало', после того как закажите поездку."
 

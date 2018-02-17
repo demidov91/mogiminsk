@@ -55,7 +55,7 @@ class PurchaseTripMessage(TripMessage):
         contacts = self._get_contacts()
 
         phone_numbers = [{
-            'text': f'{x.kind}: {x.contact}',
+            'text': f'{x.kind}: {x.contact} \U0001f4de',
             'data': f'tel:{x.contact}',
             'type': 'url',
         } for x in contacts]
