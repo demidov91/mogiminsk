@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-31 00:10+0300\n"
+"POT-Creation-Date: 2018-02-17 13:48+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,23 +66,19 @@ msgstr "Раньше 6:00"
 msgid "After 22:00"
 msgstr "22:00 и позже"
 
-#: bot/messages/trip.py:32
+#: bot/messages/trip.py:34
 msgid "Unfortunately I have no contacts for this trip :("
 msgstr "К сожалению, у меня нет контактной информации :("
 
-#: bot/messages/trip.py:46
-msgid "Book it"
-msgstr "Заказать"
-
-#: bot/messages/trip.py:50 bot/messages/trip.py:58
+#: bot/messages/trip.py:47
 msgid "Got it"
 msgstr "В начало"
 
-#: bot/messages/trip.py:68
+#: bot/messages/trip.py:69
 msgid "⬅ Back"
 msgstr "⬅ Назад"
 
-#: bot/messages/trip.py:71
+#: bot/messages/trip.py:72
 msgid "Cancel ❌"
 msgstr "Отменить ❌"
 
@@ -264,6 +260,10 @@ msgstr ""
 "Надеюсь, вы позвонили диспетчеру. Поездки с иконкой %s не могут быть "
 "заказаны ботом. Выбирайте  варианты обозначеные %s для заказа из приложения."
 
+#: bot/state_lib/trip.py:28
+msgid "Press \"Got it\" button after you've purchased the trip."
+msgstr "Нажмите на кнопку 'В начало', после того как закажите поездку."
+
 #: bot/state_lib/where.py:13 bot/state_lib/where.py:32
 msgid "Where are we going?"
 msgstr "Куда едем?"
@@ -291,7 +291,8 @@ msgid ""
 "Notice:\n"
 "🚐 - bookable directly from bot.\n"
 "📞 - you have to make a call to book your trip.\n"
-msgstr "Для заказа маршрутки выберите направление, дату и время.\n"
+msgstr ""
+"Для заказа маршрутки выберите направление, дату и время.\n"
 "Обозначения:\n"
 "🚐 - можно заказать прямо из бота.\n"
 "📞 - для заказа надо позвонить диспетчеру.\n"
@@ -325,6 +326,3 @@ msgstr "Поездка заказана! Диспетчер позвонит В�
 #: tests/test_aiohttp_translation.py:27 tests/test_aiohttp_translation.py:43
 msgid "Test message"
 msgstr "Сие есть сущая тестовая строка"
-
-#~ msgid "MTS"
-#~ msgstr "МТС"

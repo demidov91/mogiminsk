@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-31 00:10+0300\n"
+"POT-Creation-Date: 2018-02-17 13:48+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,23 +65,19 @@ msgstr ""
 msgid "After 22:00"
 msgstr ""
 
-#: bot/messages/trip.py:32
+#: bot/messages/trip.py:34
 msgid "Unfortunately I have no contacts for this trip :("
 msgstr ""
 
-#: bot/messages/trip.py:46
-msgid "Book it"
-msgstr ""
-
-#: bot/messages/trip.py:50 bot/messages/trip.py:58
+#: bot/messages/trip.py:47
 msgid "Got it"
 msgstr ""
 
-#: bot/messages/trip.py:68
+#: bot/messages/trip.py:69
 msgid "⬅ Back"
 msgstr ""
 
-#: bot/messages/trip.py:71
+#: bot/messages/trip.py:72
 msgid "Cancel ❌"
 msgstr ""
 
@@ -248,6 +244,10 @@ msgstr ""
 msgid ""
 "I hope you've called dispatcher. Trips with %s icons can't be booked from "
 "bot. Choose trip with %s symbol to book in-app."
+msgstr ""
+
+#: bot/state_lib/trip.py:28
+msgid "Press \"Got it\" button after you've purchased the trip."
 msgstr ""
 
 #: bot/state_lib/where.py:13 bot/state_lib/where.py:32
