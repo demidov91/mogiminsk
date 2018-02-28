@@ -40,11 +40,19 @@ LOGGING = {
                 '%(asctime)s : [p%(process)d] %(levelname)s, %(message)s',
                 '%a %b %d %H:%M:%S %Z %Y'
             ),
-        }
+        },
+        'sentry': {
+            'level': 'INFO',
+            'class': 'raven.handlers.logging.SentryHandler',
+            'dsn': SENTRY_DSN,
+            'formatter': 'standard',
+            'tags': {'server': SENTRY_SERVER_TAG, },
+            'enable_breadcrumbs': False,
+        },
     },
     'loggers': {
         '': {
-            'handlers': ['console', 'logentries'],
+            'handlers': ['console', 'logentries', 'sentry'],
             'level': 'DEBUG',
             'propagate': True
         },
