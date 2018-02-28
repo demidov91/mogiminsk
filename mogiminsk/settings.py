@@ -46,7 +46,7 @@ LOGGING = {
             'class': 'raven.handlers.logging.SentryHandler',
             'dsn': SENTRY_DSN,
             'formatter': 'standard',
-            'tags': {'server': SENTRY_SERVER_TAG, },
+            'environment': SENTRY_ENVIRONMENT,
             'enable_breadcrumbs': False,
         },
     },
