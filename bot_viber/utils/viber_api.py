@@ -71,11 +71,10 @@ class ViberContact(OptionalObjectFactoryMixin):
 
 
 def to_input_message(viber_update: Update) ->InputMessage:
-    text = viber_update.message.text
-    if not viber_update.message.contact:
-        contact = None
+    text = viber_update.message and viber_update.message.text
+    contact = None
 
-    else:
+    if viber_update.message and viber_update.message.contact:
         contact = InputContact(
             phone=viber_update.message.contact.phone_number,
             is_user_phone=viber_update.message.contact.is_user_contact()
