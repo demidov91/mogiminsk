@@ -1,3 +1,4 @@
+from .car import CarService
 from .conversation import ConversationService
 from .provider import ProviderService
 from .purchase import PurchaseService
