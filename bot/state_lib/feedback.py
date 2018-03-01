@@ -4,7 +4,8 @@ from aiohttp_translation import gettext_lazy as _
 from .base import BaseState
 from bot.messages.base import BotMessage, BACK
 from mogiminsk.services import ConversationService
-from mogiminsk.models import Conversation
+from mogiminsk.settings import TG_CONTACT, VIBER_CONTACT
+from bot_telegram.defines import TELEGRAM_BOT
 
 
 logger = logging.getLogger(__name__)
@@ -35,23 +36,39 @@ class FeedbackState(BaseState):
         return self.greeting_intro_message
 
     async def process(self):
+        bot = self.get_bot()
+
         logger.info(
-            'Got feedback! %s\n'
+            'Got %s feedback!\n---\n%s\n---\n'
             'User: first_name - %s; phone - %s\n'
             'Context: %s',
-            self.text, self.user.first_name, self.user.phone, self.data
+            bot, self.text, self.user.first_name, self.user.phone, self.data,
+            extra={
+                'tags': {
+                    'event': 'feedback',
+                    'bot': bot,
+                },
+            },
         )
 
         if not self.text:
+            if bot == TELEGRAM_BOT:
+                contact = TG_CONTACT
+
+            else:
+                contact = VIBER_CONTACT
+
             self.add_message(_(
                 "Excuse me, I can't recognize your message :( "
                 "Please, contact me directly at %s to tell what you wanted."
-            ) % '@dzimdziam')
+            ) % contact)
 
         else:
             ConversationService.add_user_message(
                 self.user,
-                self.text, Conversation.MESSENGER_TELEGRAM
+                self.text,
+                self.data,
+                bot
             )
 
         self.data['feedback__continue'] = True

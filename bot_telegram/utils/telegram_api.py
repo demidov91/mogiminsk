@@ -5,6 +5,7 @@ import logging
 from aiohttp_translation import activate
 from bot_telegram.utils.telegram_messages import TextButtonFormatter, InlineButtonFormatter
 from bot.messages.base import BotMessage
+from bot_telegram.defines import TELEGRAM_BOT
 from mogiminsk.settings import TELEGRAM_TOKEN, LANGUAGE
 from mogiminsk.models import User
 from mogiminsk.services import UserService
@@ -227,7 +228,10 @@ def get_or_create_user(remote_user: TelegramUser):
     user = get_db_user(remote_user)
     if user is None:
         user = UserService.add(
-            telegram_context={'state': 'initial'},
+            telegram_context={
+                'state': 'initial',
+                'bot': TELEGRAM_BOT,
+            },
             telegram_id=remote_user.id,
             language=LANGUAGE,
         )

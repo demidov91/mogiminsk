@@ -6,13 +6,11 @@ class ConversationService(BaseService):
     model = Conversation
 
     @classmethod
-    def add_user_message(cls, user: User, text: str, messenger: str) ->Conversation:
-        if messenger == Conversation.MESSENGER_TELEGRAM:
-            context = user.telegram_context
-
-        else:
-            raise ValueError(messenger)
-
+    def add_user_message(cls,
+                         user: User,
+                         text: str,
+                         context: dict,
+                         messenger: str) ->Conversation:
         return cls.add(
             user=user,
             text=text,

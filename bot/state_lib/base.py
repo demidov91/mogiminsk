@@ -103,3 +103,6 @@ class BaseState:
         messages = self.data.pop('messages', ())
         self.data['messages'] = ()
         return messages
+
+    def get_bot(self):
+        return self.data.get('bot')

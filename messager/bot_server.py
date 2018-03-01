@@ -16,6 +16,9 @@ logger = logging.getLogger(__name__)
 
 
 class BotServer:
+    # Value to set as a context **bot** value.
+    BOT_CONTEXT_VALUE = None
+
     @classmethod
     def get_state(cls, user: User) ->BaseState:
         context = cls.get_bot_context(user)
@@ -59,7 +62,10 @@ class BotServer:
 
     @classmethod
     def handle_exception(cls, user: User) ->Iterable[BotMessage]:
-        cls.set_bot_context(user, {'state': 'where'})
+        cls.set_bot_context(user, {
+            'state': 'where',
+            'bot': cls.BOT_CONTEXT_VALUE,
+        })
         return cls.get_state(user).get_intro_message().to_sequence([
             _('Something went wrong...')
         ])

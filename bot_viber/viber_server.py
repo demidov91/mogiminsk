@@ -27,6 +27,8 @@ logger = logging.getLogger(__name__)
 
 
 class ViberServer(BotServer):
+    BOT_CONTEXT_VALUE = defines.VIBER_BOT
+
     @classmethod
     @api_key(VIBER_API_KEY)
     async def webhook(cls, request):

@@ -12,6 +12,9 @@ EMAIL_PORT = 587
 EMAIL_FROM = 'dmitryDemidov91@gmail.com'
 EMAIL_TO = 'demidov91@mail.ru',
 
+TG_CONTACT = '@dzimdziam'
+VIBER_CONTACT = 'demidov91@mail.ru'
+
 try:
     from mogiminsk.local_settings import *
 except ImportError:

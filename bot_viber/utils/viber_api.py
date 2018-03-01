@@ -10,10 +10,10 @@ from mogiminsk.settings import VIBER_TOKEN, LANGUAGE
 from messager.helper import OptionalObjectFactoryMixin
 from bot.messages.base import BotMessage
 from bot_viber import defines
+from bot_viber.defines import VIBER_BOT
 from bot_viber.utils.viber_messages import to_viber_message
 
 
-BOT_NAME = 'Vasja'
 SEND_URL = 'https://chatapi.viber.com/pa/send_message'
 API_URL = 'https://chatapi.viber.com/pa/'
 
@@ -148,7 +148,10 @@ def get_or_create_user(remote_user: ViberUser):
     user = get_db_user(remote_user)
     if user is None:
         user = UserService.add(
-            viber_context={'state': 'initial'},
+            viber_context={
+                'state': 'initial',
+                'bot': VIBER_BOT,
+            },
             viber_id=remote_user.id,
             language=remote_user.get_bot_language(),
         )

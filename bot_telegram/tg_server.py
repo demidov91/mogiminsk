@@ -5,6 +5,7 @@ from aiohttp import web
 from sqlalchemy.orm.attributes import flag_modified
 
 from bot_telegram.decorators import tg_api_key
+from bot_telegram.defines import TELEGRAM_BOT
 from bot_telegram.utils.telegram_api import Update, get_or_create_user, TgSender
 from messager.bot_server import BotServer
 from mogiminsk.settings import TELEGRAM_API_KEY
@@ -13,6 +14,8 @@ logger = logging.getLogger(__name__)
 
 
 class TgServer(BotServer):
+    BOT_CONTEXT_VALUE = TELEGRAM_BOT
+
     @classmethod
     @tg_api_key(TELEGRAM_API_KEY)
     async def webhook(cls, request):
