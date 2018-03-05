@@ -99,27 +99,30 @@ class ViberServer(BotServer):
     @classmethod
     async def handle_system_message(cls, remote_update: Update):
         if remote_update.event == defines.EVENT_TYPE_CONVERSATION_STARTED:
-            return web.json_response({
-                'text': _('This is a bot for booking Mogilev-Minsk minibusses.\n'
-                          'Choose the date, time and book your trip!\n'
-                          'Notice:\n\U0001f690 - bookable directly from bot.\n'
-                          '\U0001f4de - you have to make a call to book your trip.\n'),
-                'type': 'text',
-                'min_api_version': 4,
-                "keyboard": {
-                    "Type": "keyboard",
-                    'InputFieldState': 'hidden',
-                    "Buttons": [{
-                            "ActionType": "open-url",
-                            "ActionBody": "https://rate.pautuzin.by/static/viber_intro.gif?v=2",
-                            "Text": _("Take a quick animated tour"),
-                            'OpenURLMediaType': 'gif',
-                         },
-                    ],
-                },
-            }, dumps=lazy_string_aware_json_dumps)
+            if not remote_update.subscribed:
+                return web.json_response({
+                    'text': _('This is a bot for booking Mogilev-Minsk minibusses.\n'
+                              'Choose the date, time and book your trip!\n'
+                              'Notice:\n\U0001f690 - bookable directly from bot.\n'
+                              '\U0001f4de - you have to make a call to book your trip.\n'),
+                    'type': 'text',
+                    'min_api_version': 4,
+                    "keyboard": {
+                        "Type": "keyboard",
+                        'InputFieldState': 'hidden',
+                        "Buttons": [{
+                                "ActionType": "open-url",
+                                "ActionBody": "https://rate.pautuzin.by/static/viber_intro.gif?v=2",
+                                "Text": _("Take a quick animated tour"),
+                                'OpenURLMediaType': 'gif',
+                             },
+                        ],
+                    },
+                }, dumps=lazy_string_aware_json_dumps)
 
-        if remote_update.event == defines.EVENT_TYPE_UNSUBSCRIBED:
+            logger.debug('User %s has started conversation again. Ignoring it.', remote_update.user.id)
+
+        elif remote_update.event == defines.EVENT_TYPE_UNSUBSCRIBED:
             logger.info('User %s has unsubscribed.', remote_update.user.id)
 
         elif remote_update.event == defines.EVENT_TYPE_SUBSCRIBED:

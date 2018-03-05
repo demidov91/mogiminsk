@@ -30,6 +30,8 @@ class Update(OptionalObjectFactoryMixin):
         if self.user is None and 'user_id' in data:
             self.user = ViberUser({'id': data['user_id']})
 
+        self.subscribed = data.get('subscribed')
+
     def is_system_update(self):
         return self.event != defines.EVENT_TYPE_MESSAGE
 
