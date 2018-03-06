@@ -21,32 +21,13 @@ class MorningMessage(AbstractPeriodMessage):
     FIRST_TIME = '6:00'
 
     viber_buttons = ({
-        'text': _('Before 6:00'),
+        'text': _('Earlier \U0001f305'),
         'data': FIRST,
         'viber': {
             'TextSize': 'large',
-            'Rows': 2,
+            'TextVAlign': 'bottom',
+            'Rows': 1,
             'Columns': 2,
-        },
-    }, {
-        'text': '6:00',
-        'data': '6:00',
-        'viber': {
-            'TextSize': 'large',
-            'TextVAlign': 'bottom',
-            'TextHAlign': 'right',
-            'Rows': 1,
-            'Columns': 1,
-        },
-    }, {
-        'text': '6:15',
-        'data': '6:15',
-        'viber': {
-            'TextSize': 'small',
-            'TextVAlign': 'bottom',
-            'TextHAlign': 'left',
-            'Rows': 1,
-            'Columns': 1,
         },
     }, {
         'text': '7:00',
@@ -69,8 +50,28 @@ class MorningMessage(AbstractPeriodMessage):
             'Columns': 1,
         },
     }, {
-        'text': '6:30',
-        'data': '6:30',
+        'text': '8:00',
+        'data': '8:00',
+        'viber': {
+            'TextSize': 'large',
+            'TextVAlign': 'bottom',
+            'TextHAlign': 'right',
+            'Rows': 1,
+            'Columns': 1,
+        },
+    }, {
+        'text': '8:15',
+        'data': '8:15',
+        'viber': {
+            'TextSize': 'small',
+            'TextVAlign': 'bottom',
+            'TextHAlign': 'left',
+            'Rows': 1,
+            'Columns': 1,
+        },
+    }, {
+        'text': '6:00',
+        'data': '6:00',
         'viber': {
             'TextSize': 'small',
             'TextVAlign': 'top',
@@ -79,8 +80,8 @@ class MorningMessage(AbstractPeriodMessage):
             'Columns': 1,
         },
     }, {
-        'text': '6:45',
-        'data': '6:45',
+        'text': '6:30',
+        'data': '6:30',
         'viber': {
             'TextSize': 'small',
             'TextVAlign': 'top',
@@ -109,21 +110,21 @@ class MorningMessage(AbstractPeriodMessage):
             'Columns': 1,
         },
     }, {
-        'text': '8:00',
-        'data': '8:00',
+        'text': '8:30',
+        'data': '8:30',
         'viber': {
-            'TextSize': 'large',
-            'TextVAlign': 'bottom',
+            'TextSize': 'small',
+            'TextVAlign': 'top',
             'TextHAlign': 'right',
             'Rows': 1,
             'Columns': 1,
         },
     }, {
-        'text': '8:15',
-        'data': '8:15',
+        'text': '8:45',
+        'data': '8:45',
         'viber': {
             'TextSize': 'small',
-            'TextVAlign': 'bottom',
+            'TextVAlign': 'top',
             'TextHAlign': 'left',
             'Rows': 1,
             'Columns': 1,
@@ -169,24 +170,13 @@ class MorningMessage(AbstractPeriodMessage):
             'Columns': 1,
         },
     }, {
-        'text': '8:30',
-        'data': '8:30',
+        'text': '11:00',
+        'data': '11:00',
         'viber': {
-            'TextSize': 'small',
-            'TextVAlign': 'top',
-            'TextHAlign': 'right',
+            'TextSize': 'large',
+            'TextVAlign': 'bottom',
             'Rows': 1,
-            'Columns': 1,
-        },
-    }, {
-        'text': '8:45',
-        'data': '8:45',
-        'viber': {
-            'TextSize': 'small',
-            'TextVAlign': 'top',
-            'TextHAlign': 'left',
-            'Rows': 1,
-            'Columns': 1,
+            'Columns': 2,
         },
     }, {
         'text': '9:30',
@@ -228,6 +218,15 @@ class MorningMessage(AbstractPeriodMessage):
             'Rows': 1,
             'Columns': 1,
         },
+    }, {
+        'text': _('Later \U0001f31e'),
+        'data': 'day',
+        'viber': {
+            'TextSize': 'large',
+            'TextVAlign': 'top',
+            'Rows': 1,
+            'Columns': 2,
+        },
     },
                      BACK
     )
@@ -259,172 +258,107 @@ class MorningMessage(AbstractPeriodMessage):
 
 class DayMessage(AbstractPeriodMessage):
     viber_buttons = ({
-        'text': '11',
-        'data': '11:00',
+        'text': _('Earlier \U0001f305'),
+        'data': 'morning',
         'viber': {
             'TextSize': 'large',
-            'Rows': 2,
-            'Columns': 1,
-        },
-    }, {
-        'text': '00',
-        'data': '11:00',
-        'viber': {
-            'TextSize': 'small',
             'TextVAlign': 'bottom',
-            'TextHAlign': 'left',
             'Rows': 1,
-            'Columns': 1,
+            'Columns': 2,
         },
     }, {
-        'text': '12',
+        'text': '12:00',
         'data': '12:00',
         'viber': {
             'TextSize': 'large',
-            'Rows': 2,
-            'Columns': 1,
-        },
-    }, {
-        'text': '00',
-        'data': '12:00',
-        'viber': {
-            'TextSize': 'small',
             'TextVAlign': 'bottom',
-            'TextHAlign': 'left',
             'Rows': 1,
-            'Columns': 1,
+            'Columns': 2,
         },
     }, {
-        'text': '13',
+        'text': '13:00',
         'data': '13:00',
         'viber': {
             'TextSize': 'large',
-            'Rows': 2,
-            'Columns': 1,
-        },
-    }, {
-        'text': '00',
-        'data': '13:00',
-        'viber': {
-            'TextSize': 'small',
             'TextVAlign': 'bottom',
-            'TextHAlign': 'left',
             'Rows': 1,
-            'Columns': 1,
+            'Columns': 2,
         },
     }, {
-        'text': '30',
+        'text': '11:30',
         'data': '11:30',
         'viber': {
-            'TextSize': 'small',
             'TextVAlign': 'top',
-            'TextHAlign': 'left',
             'Rows': 1,
-            'Columns': 1,
+            'Columns': 2,
         },
     }, {
-        'text': '30',
+        'text': '12:30',
         'data': '12:30',
         'viber': {
-            'TextSize': 'small',
             'TextVAlign': 'top',
-            'TextHAlign': 'left',
             'Rows': 1,
-            'Columns': 1,
+            'Columns': 2,
         },
     }, {
-        'text': '30',
+        'text': '13:30',
         'data': '13:30',
         'viber': {
-            'TextSize': 'small',
             'TextVAlign': 'top',
-            'TextHAlign': 'left',
             'Rows': 1,
-            'Columns': 1,
+            'Columns': 2,
         },
     }, {
-        'text': '14',
+        'text': '14:00',
         'data': '14:00',
         'viber': {
             'TextSize': 'large',
-            'Rows': 2,
-            'Columns': 1,
-        },
-    }, {
-        'text': '00',
-        'data': '14:00',
-        'viber': {
-            'TextSize': 'small',
             'TextVAlign': 'bottom',
-            'TextHAlign': 'left',
             'Rows': 1,
-            'Columns': 1,
+            'Columns': 2,
         },
     }, {
-        'text': '15',
+        'text': '15:00',
         'data': '15:00',
         'viber': {
             'TextSize': 'large',
-            'Rows': 2,
-            'Columns': 1,
-        },
-    }, {
-        'text': '00',
-        'data': '15:00',
-        'viber': {
-            'TextSize': 'small',
             'TextVAlign': 'bottom',
-            'TextHAlign': 'left',
             'Rows': 1,
-            'Columns': 1,
+            'Columns': 2,
         },
     }, {
-        'text': '16',
+        'text': '16:00',
         'data': '16:00',
         'viber': {
             'TextSize': 'large',
-            'Rows': 2,
-            'Columns': 1,
-        },
-    }, {
-        'text': '00',
-        'data': '16:00',
-        'viber': {
-            'TextSize': 'small',
             'TextVAlign': 'bottom',
-            'TextHAlign': 'left',
             'Rows': 1,
-            'Columns': 1,
+            'Columns': 2,
         },
     }, {
-        'text': '30',
+        'text': '14:30',
         'data': '14:30',
         'viber': {
-            'TextSize': 'small',
             'TextVAlign': 'top',
-            'TextHAlign': 'left',
             'Rows': 1,
-            'Columns': 1,
+            'Columns': 2,
         },
     }, {
-        'text': '30',
+        'text': '15:30',
         'data': '15:30',
         'viber': {
-            'TextSize': 'small',
             'TextVAlign': 'top',
-            'TextHAlign': 'left',
             'Rows': 1,
-            'Columns': 1,
+            'Columns': 2,
         },
     }, {
-        'text': '30',
-        'data': '16:30',
+        'text': _('Later \U0001f307'),
+        'data': 'day',
         'viber': {
-            'TextSize': 'small',
+            'TextSize': 'large',
             'TextVAlign': 'top',
-            'TextHAlign': 'left',
             'Rows': 1,
-            'Columns': 1,
+            'Columns': 2,
         },
     },
                      BACK
@@ -457,19 +391,30 @@ class DayMessage(AbstractPeriodMessage):
 
 class EveningMessage(AbstractPeriodMessage):
     LAST = 'last'
-    LAST_TIME = '22:00'
+    LAST_TIME = '21:30'
 
     viber_buttons = ({
-        'text': '17',
+        'text': _('Earlier \U0001f31e'),
+        'data': 'day',
+        'viber': {
+            'TextSize': 'large',
+            'TextVAlign': 'bottom',
+            'Rows': 1,
+            'Columns': 2,
+        },
+    }, {
+        'text': '17:00',
         'data': '17:00',
         'viber': {
-            'TextSize': 'large',
-            'Rows': 2,
+            'TextSize': 'small',
+            'TextVAlign': 'bottom',
+            'TextHAlign': 'right',
+            'Rows': 1,
             'Columns': 1,
         },
     }, {
-        'text': '00',
-        'data': '17:00',
+        'text': '17:15',
+        'data': '17:15',
         'viber': {
             'TextSize': 'small',
             'TextVAlign': 'bottom',
@@ -478,34 +423,18 @@ class EveningMessage(AbstractPeriodMessage):
             'Columns': 1,
         },
     }, {
-        'text': '18',
-        'data': '18:00',
-        'viber': {
-            'TextSize': 'large',
-            'Rows': 2,
-            'Columns': 1,
-        },
-    }, {
-        'text': '00',
+        'text': '18:00',
         'data': '18:00',
         'viber': {
             'TextSize': 'small',
             'TextVAlign': 'bottom',
-            'TextHAlign': 'left',
+            'TextHAlign': 'right',
             'Rows': 1,
             'Columns': 1,
         },
     }, {
-        'text': '19',
-        'data': '19:00',
-        'viber': {
-            'TextSize': 'large',
-            'Rows': 2,
-            'Columns': 1,
-        },
-    }, {
-        'text': '00',
-        'data': '19:00',
+        'text': '18:15',
+        'data': '18:15',
         'viber': {
             'TextSize': 'small',
             'TextVAlign': 'bottom',
@@ -514,98 +443,173 @@ class EveningMessage(AbstractPeriodMessage):
             'Columns': 1,
         },
     }, {
-        'text': '30',
+        'text': '16:30',
+        'data': '16:30',
+        'viber': {
+            'TextSize': 'small',
+            'TextVAlign': 'top',
+            'TextHAlign': 'right',
+            'Rows': 1,
+            'Columns': 1,
+        },
+    }, {
+        'text': '16:45',
+        'data': '16:45',
+        'viber': {
+            'TextSize': 'small',
+            'TextVAlign': 'top',
+            'TextHAlign': 'left',
+            'Rows': 1,
+            'Columns': 1,
+        },
+    }, {
+        'text': '17:30',
         'data': '17:30',
         'viber': {
             'TextSize': 'small',
             'TextVAlign': 'top',
+            'TextHAlign': 'right',
+            'Rows': 1,
+            'Columns': 1,
+        },
+    }, {
+        'text': '17:45',
+        'data': '17:45',
+        'viber': {
+            'TextSize': 'small',
+            'TextVAlign': 'top',
             'TextHAlign': 'left',
             'Rows': 1,
             'Columns': 1,
         },
     }, {
-        'text': '30',
+        'text': '18:30',
         'data': '18:30',
         'viber': {
             'TextSize': 'small',
             'TextVAlign': 'top',
+            'TextHAlign': 'right',
+            'Rows': 1,
+            'Columns': 1,
+        },
+    }, {
+        'text': '18:45',
+        'data': '18:45',
+        'viber': {
+            'TextSize': 'small',
+            'TextVAlign': 'top',
             'TextHAlign': 'left',
             'Rows': 1,
             'Columns': 1,
         },
     }, {
-        'text': '30',
+        'text': '19:00',
+        'data': '19:00',
+        'viber': {
+            'TextSize': 'small',
+            'TextVAlign': 'bottom',
+            'TextHAlign': 'right',
+            'Rows': 1,
+            'Columns': 1,
+        },
+    }, {
+        'text': '19:15',
+        'data': '19:15',
+        'viber': {
+            'TextSize': 'small',
+            'TextVAlign': 'bottom',
+            'TextHAlign': 'left',
+            'Rows': 1,
+            'Columns': 1,
+        },
+    }, {
+        'text': '20:00',
+        'data': '20:00',
+        'viber': {
+            'TextSize': 'small',
+            'TextVAlign': 'bottom',
+            'TextHAlign': 'right',
+            'Rows': 1,
+            'Columns': 1,
+        },
+    }, {
+        'text': '20:15',
+        'data': '20:15',
+        'viber': {
+            'TextSize': 'small',
+            'TextVAlign': 'bottom',
+            'TextHAlign': 'left',
+            'Rows': 1,
+            'Columns': 1,
+        },
+    }, {
+        'text': '21:00',
+        'data': '21:00',
+        'viber': {
+            'TextSize': 'small',
+            'TextVAlign': 'bottom',
+            'TextHAlign': 'right',
+            'Rows': 1,
+            'Columns': 1,
+        },
+    }, {
+        'text': '21:15',
+        'data': '21:15',
+        'viber': {
+            'TextSize': 'small',
+            'TextVAlign': 'bottom',
+            'TextHAlign': 'left',
+            'Rows': 1,
+            'Columns': 1,
+        },
+    }, {
+        'text': '19:30',
         'data': '19:30',
         'viber': {
             'TextSize': 'small',
             'TextVAlign': 'top',
-            'TextHAlign': 'left',
+            'TextHAlign': 'right',
             'Rows': 1,
             'Columns': 1,
         },
     }, {
-        'text': '20',
-        'data': '20:00',
-        'viber': {
-            'TextSize': 'large',
-            'Rows': 2,
-            'Columns': 1,
-        },
-    }, {
-        'text': '00',
-        'data': '20:00',
+        'text': '19:45',
+        'data': '19:45',
         'viber': {
             'TextSize': 'small',
-            'TextVAlign': 'bottom',
+            'TextVAlign': 'top',
             'TextHAlign': 'left',
             'Rows': 1,
             'Columns': 1,
         },
     }, {
-        'text': '21',
-        'data': '21:00',
-        'viber': {
-            'TextSize': 'large',
-            'Rows': 2,
-            'Columns': 1,
-        },
-    }, {
-        'text': '00',
-        'data': '21:00',
-        'viber': {
-            'TextSize': 'small',
-            'TextVAlign': 'bottom',
-            'TextHAlign': 'left',
-            'Rows': 1,
-            'Columns': 1,
-        },
-    }, {
-        'text': _('After 22:00'),
-        'data': LAST,
-        'viber': {
-            'TextSize': 'large',
-            'Rows': 2,
-            'Columns': 2,
-        },
-    }, {
-        'text': '30',
+        'text': '20:30',
         'data': '20:30',
         'viber': {
             'TextSize': 'small',
             'TextVAlign': 'top',
-            'TextHAlign': 'left',
+            'TextHAlign': 'right',
             'Rows': 1,
             'Columns': 1,
         },
     }, {
-        'text': '30',
-        'data': '21:30',
+        'text': '20:45',
+        'data': '20:45',
         'viber': {
             'TextSize': 'small',
             'TextVAlign': 'top',
             'TextHAlign': 'left',
             'Rows': 1,
             'Columns': 1,
+        },
+    }, {
+        'text': _('Later \U0001f307'),
+        'data': LAST,
+        'viber': {
+            'TextSize': 'large',
+            'TextVAlign': 'top',
+            'Rows': 1,
+            'Columns': 2,
         },
     },
                      BACK
