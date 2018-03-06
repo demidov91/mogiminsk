@@ -45,7 +45,7 @@ LOGGING = {
             ),
         },
         'sentry': {
-            'level': 'INFO',
+            'level': 'WARNING',
             'class': 'raven.handlers.logging.SentryHandler',
             'dsn': SENTRY_DSN,
             'formatter': 'standard',
@@ -55,7 +55,7 @@ LOGGING = {
     },
     'loggers': {
         '': {
-            'handlers': ['console', 'logentries', 'sentry'],
+            'handlers': ['console', 'logentries'],
             'level': 'DEBUG',
             'propagate': True
         },
