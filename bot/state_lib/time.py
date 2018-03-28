@@ -26,6 +26,10 @@ class TimeState(BaseState):
         raise ValueError(self.data['timeperiod'])
 
     async def process(self):
+        if self.value in ('morning', 'day', 'evening'):
+            self.data['timeperiod'] = self.value
+            return
+
         is_morning = False
         is_evening = False
 
