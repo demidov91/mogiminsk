@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-17 14:35+0300\n"
+"POT-Creation-Date: 2018-03-28 09:04+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,11 +57,27 @@ msgstr ""
 msgid "What time?"
 msgstr ""
 
-#: bot/messages/time.py:24 bot/messages/time.py:177
+#: bot/messages/time.py:24 bot/messages/time.py:261
+msgid "Earlier 🌅"
+msgstr ""
+
+#: bot/messages/time.py:222
+msgid "Later 🌞"
+msgstr ""
+
+#: bot/messages/time.py:236
 msgid "Before 6:00"
 msgstr ""
 
-#: bot/messages/time.py:523 bot/messages/time.py:571
+#: bot/messages/time.py:355 bot/messages/time.py:606
+msgid "Later 🌇"
+msgstr ""
+
+#: bot/messages/time.py:397
+msgid "Earlier 🌞"
+msgstr ""
+
+#: bot/messages/time.py:635
 msgid "After 22:00"
 msgstr ""
 
@@ -99,18 +115,18 @@ msgstr ""
 msgid "SMS was sent to +%s. Enter it."
 msgstr ""
 
-#: bot/state_lib/feedback.py:17
+#: bot/state_lib/feedback.py:18
 msgid ""
 "Send me some feedback. What would you improve, what went wrong while using "
 "the bot?\n"
 "It will help me become better."
 msgstr ""
 
-#: bot/state_lib/feedback.py:26
+#: bot/state_lib/feedback.py:27
 msgid "Add anything or press \"Back\" to return to booking trips."
 msgstr ""
 
-#: bot/state_lib/feedback.py:46
+#: bot/state_lib/feedback.py:61
 #, python-format
 msgid ""
 "Excuse me, I can't recognize your message :( Please, contact me directly at "
@@ -277,7 +293,7 @@ msgstr ""
 msgid "Feedback"
 msgstr ""
 
-#: bot_viber/viber_server.py:101
+#: bot_viber/viber_server.py:104
 msgid ""
 "This is a bot for booking Mogilev-Minsk minibusses.\n"
 "Choose the date, time and book your trip!\n"
@@ -286,11 +302,11 @@ msgid ""
 "📞 - you have to make a call to book your trip.\n"
 msgstr ""
 
-#: bot_viber/viber_server.py:113
+#: bot_viber/viber_server.py:116
 msgid "Take a quick animated tour"
 msgstr ""
 
-#: messager/bot_server.py:64
+#: messager/bot_server.py:70
 msgid "Something went wrong..."
 msgstr ""
 
