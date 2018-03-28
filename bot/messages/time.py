@@ -353,7 +353,7 @@ class DayMessage(AbstractPeriodMessage):
         },
     }, {
         'text': _('Later \U0001f307'),
-        'data': 'day',
+        'data': 'evening',
         'viber': {
             'TextSize': 'large',
             'TextVAlign': 'top',
