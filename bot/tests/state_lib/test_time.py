@@ -16,7 +16,7 @@ async def _stub_initialize(self, state_name):
 
 class TestTimeState:
     @pytest.mark.parametrize('value,time,is_morning,is_evening', (
-        ['first', '6:00', True, False],
+        ['first', '6:30', True, False],
         ['last', '21:30', False, True],
         ['7:40', '7:40', False, False],
     ))
