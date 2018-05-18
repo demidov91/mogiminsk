@@ -38,7 +38,7 @@ class FeedbackState(BaseState):
     async def process(self):
         bot = self.get_bot()
 
-        logger.info(
+        logger.warning(
             'Got %s feedback!\n---\n%s\n---\n'
             'User: first_name - %s; phone - %s\n'
             'Context: %s',

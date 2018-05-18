@@ -52,10 +52,11 @@ LOGGING = {
             'environment': SENTRY_ENVIRONMENT,
             'enable_breadcrumbs': False,
         },
+
     },
     'loggers': {
         '': {
-            'handlers': ['console', 'logentries'],
+            'handlers': ['console', 'logentries', 'sentry'],
             'level': 'DEBUG',
             'propagate': True
         },
