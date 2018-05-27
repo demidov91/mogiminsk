@@ -1,9 +1,10 @@
+import os
 import logging.config
 
+BASE_DIR = os.path.dirname(os.getcwd())
 TELEGRAM_TOKEN = ''
 VIBER_TOKEN = ''
 DB_CONNECTION = {}
-LOGENTRIES_TOKEN = ''
 LANGUAGE = 'ru'
 
 EMAIL_FEEDBACK_SUBJECT = 'Mogiminsk feedback'
@@ -30,19 +31,13 @@ LOGGING = {
         },
     },
     'handlers': {
-        'console': {
+        'filesystem': {
             'level': 'DEBUG',
             'formatter': 'standard',
-            'class': 'logging.StreamHandler',
-        },
-        'logentries': {
-            'level': 'DEBUG',
-            'class': 'logentries.LogentriesHandler',
-            'token': LOGENTRIES_TOKEN,
-            'format': logging.Formatter(
-                '%(asctime)s : [p%(process)d] %(levelname)s, %(message)s',
-                '%a %b %d %H:%M:%S %Z %Y'
-            ),
+            'class': 'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024 * 1024 * 10,       # 10 Mb
+            'backupCount': 10,                  # 10 * 10Mb == 100Mb
+            'filename': os.path.join(BASE_DIR, 'logs', 'mogiminsk.log'),
         },
         'sentry': {
             'level': 'WARNING',
@@ -56,7 +51,7 @@ LOGGING = {
     },
     'loggers': {
         '': {
-            'handlers': ['console', 'logentries', 'sentry'],
+            'handlers': ['filesystem', 'sentry'],
             'level': 'DEBUG',
             'propagate': True
         },

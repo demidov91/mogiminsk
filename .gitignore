@@ -5,6 +5,7 @@ __pycache__/*
 *.key
 *.pem
 
+logs/*
 mogiminsk_parsing
 mogiminsk_interaction
 .cache
