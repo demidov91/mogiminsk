@@ -1,7 +1,7 @@
 import os
 import logging.config
 
-BASE_DIR = os.path.dirname(os.getcwd())
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 TELEGRAM_TOKEN = ''
 VIBER_TOKEN = ''
 DB_CONNECTION = {}
