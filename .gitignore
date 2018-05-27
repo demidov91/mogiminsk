@@ -6,7 +6,6 @@ __pycache__/*
 *.pem
 
 logs/*
-mogiminsk_parsing
 mogiminsk_interaction
 .cache
 mogiminsk/local_settings.py
