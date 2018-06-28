@@ -4,6 +4,7 @@ from typing import Iterable
 from aiohttp_translation import activate, default_language as aiohttp_default_language
 
 from messager.input_data import InputMessage, InputContact
+from messager.input_data import Messager
 from mogiminsk.models import User
 from mogiminsk.services import UserService
 from mogiminsk.settings import VIBER_TOKEN, LANGUAGE
@@ -82,7 +83,7 @@ def to_input_message(viber_update: Update) ->InputMessage:
             is_user_phone=viber_update.message.contact.is_user_contact()
         )
 
-    return InputMessage(text=text, data=text, contact=contact)
+    return InputMessage(text=text, data=text, contact=contact, messager=Messager.VIBER)
 
 
 class ViberSender:

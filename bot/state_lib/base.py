@@ -3,6 +3,7 @@ from typing import Dict, Type, Sequence
 
 from aiohttp_translation import gettext as _
 from bot.messages.base import BotMessage
+from messager.helper import Messager
 from messager.input_data import InputMessage, InputContact
 
 
@@ -17,13 +18,14 @@ class BaseState:
         **messages** - messages to show a user. Should be shown once before main message.
     """
 
-    _intro_message = None    # type: BotMessage
+    _intro_message = None   # type: BotMessage
     message_was_not_recognized = False
-    value = None
-    text = None
+    value = None            # type: str
+    text = None             # type: str
     contact = None          # type: InputContact
-    ignorable_values = '-',
-    back = None
+    ignorable_values = ('-', )
+    messager = None         # type: Messager
+    back = None             # type: str
 
     @classmethod
     def get_name(cls):
@@ -57,21 +59,24 @@ class BaseState:
 
         if self.value == 'back':
             self.set_state(await self.get_back_state())
+            return await self.produce()
 
-        elif self.value in self.ignorable_values:
+        if self.value in self.ignorable_values:
             return []
 
-        else:
-            self.data[self.get_name()] = self.value
-            self.text = common_message.text
-            self.contact = common_message.contact
-            await self.process()
+        self.data[self.get_name()] = self.value
+        self.text = common_message.text
+        self.contact = common_message.contact
+        self.messager = common_message.messager
+        await self.process()
 
         return await self.produce()
 
     async def process(self):
         """
-        Updates user state and sets *is_unrecognized* value.
+        * Performs state-essential logic
+        * Updates user state
+        * Sets *is_unrecognized* field value if necessary
         """
         raise NotImplementedError()
 

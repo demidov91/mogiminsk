@@ -1,6 +1,8 @@
+from enum import Enum
 from typing import TypeVar, Type
 
 C = TypeVar('C')
+
 
 class OptionalObjectFactoryMixin:
     @classmethod
@@ -9,3 +11,8 @@ class OptionalObjectFactoryMixin:
             return
 
         return cls(data)
+
+
+class Messager(Enum):
+    TELEGRAM = 'tg'
+    VIBER = 'viber'

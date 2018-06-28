@@ -11,7 +11,7 @@ from mogiminsk.models import User
 from mogiminsk.services import UserService
 from mogiminsk.utils import Session
 from messager.input_data import InputMessage, InputContact
-from messager.helper import OptionalObjectFactoryMixin
+from messager.helper import OptionalObjectFactoryMixin, Messager
 
 
 logger = logging.getLogger(__name__)
@@ -111,7 +111,7 @@ class Update(OptionalObjectFactoryMixin):
                 phone=contact.phone, is_user_phone=contact.user_id == user_id
             )
 
-        return InputMessage(data=data, text=text, contact=tg_contact)
+        return InputMessage(data=data, text=text, contact=tg_contact, messager=Messager.TELEGRAM)
 
     def is_system_update(self):
         return False
@@ -149,10 +149,12 @@ def to_telegram_message(message: BotMessage, chat_id):
 class TgSender:
     def __init__(self, chat_id: int, client, user: User):
         self.db_session = Session(autocommit=True)
+        self._loop = asyncio.get_event_loop()
         self.chat_id = chat_id
         self.client = client
-        self.user = self.db_session.query(User).get(user.id)
-        self._loop = asyncio.get_event_loop()
+
+        if user is not None:
+            self.user = self.db_session.query(User).get(user.id)
 
     async def send_messages(self, messages: list, callback_message_id: int):
         activate(self.user.language)

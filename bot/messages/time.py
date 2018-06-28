@@ -18,7 +18,6 @@ class AbstractPeriodMessage(BotMessage):
 
 class MorningMessage(AbstractPeriodMessage):
     FIRST = 'first'
-    FIRST_TIME = '6:30'
 
     viber_buttons = ({
         'text': _('Earlier \U0001f305'),
@@ -287,7 +286,6 @@ class DayMessage(AbstractPeriodMessage):
 
 class EveningMessage(AbstractPeriodMessage):
     LAST = 'last'
-    LAST_TIME = '21:30'
 
     viber_buttons = ({
         'text': _('Earlier \U0001f31e'),
