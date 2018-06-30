@@ -6,6 +6,7 @@ import pytest
 from bot.state_lib.time import TimeState
 # This import initializes state lib.
 from bot.state_lib.time_period import TimePeriodState
+from messager.helper import Messager
 from messager.input_data import InputMessage
 from mogiminsk.factories import UserFactory
 
@@ -15,21 +16,24 @@ async def _stub_initialize(self, state_name):
 
 
 class TestTimeState:
-    @pytest.mark.parametrize('value,time,is_morning,is_evening', (
-        ['first', '6:30', True, False],
-        ['last', '21:30', False, True],
-        ['7:40', '7:40', False, False],
+    @pytest.mark.parametrize('value,messager,is_morning,is_evening,expected', (
+        ['first', Messager.VIBER, True, False, '6:30'],
+        ['first', Messager.TELEGRAM, True, False, '6:00'],
+        ['last', Messager.VIBER, False, True, '21:30'],
+        ['last', Messager.TELEGRAM, False, True, '22:00'],
+        ['7:40', None, False, False, '7:40'],
     ))
     @patch.object(TimeState, 'get_trip_id_list', return_value=[1])
-    def test_consume__optimistic(self, patched, value, time, is_morning, is_evening):
+    def test_consume__optimistic(self, patched, value, messager, is_morning, is_evening, expected):
         tested = TimeState(UserFactory(), {})
         tested.value = value
+        tested.messager = messager
         asyncio.get_event_loop().run_until_complete(
             tested.process()
         )
         assert tested.data['state'] == 'show'
         assert tested.data['trip_id_list'] == [1]
-        patched.assert_called_once_with(time, is_morning, is_evening)
+        patched.assert_called_once_with(expected, is_morning, is_evening)
 
     @pytest.mark.parametrize('value', ('morning', 'day', 'evening'))
     def test_consume__navigation(self, value):
