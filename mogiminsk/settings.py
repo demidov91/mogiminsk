@@ -58,4 +58,10 @@ LOGGING = {
     }
 }
 
+# Let different users in the same group use same log files:
+# chgrp www-data logs
+# chmod g+w logs
+# chmod g+s logs
+# usermod -a -G www-data user-which-launches-scripts
+os.umask(0o0002)
 logging.config.dictConfig(LOGGING)
