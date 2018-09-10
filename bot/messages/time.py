@@ -272,7 +272,7 @@ class DayMessage(AbstractPeriodMessage):
         }, ),
         ({
             'text': '14:00',
-            'data': '8:00',
+            'data': '14:00',
         }, {
             'text': '15:00',
             'data': '15:00',
