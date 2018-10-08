@@ -41,7 +41,7 @@ def build_contact(provider, kind, value) -> ProviderContact:
 def run():
     contacts = [
         {'provider': 'novaja_linija', 'kind': 'velcom', 'value': '+375293597597'},
-        {'provider': 'novaja_linija', 'kind': 'mts', 'value': '+375293597597'},
+        {'provider': 'novaja_linija', 'kind': 'mts', 'value': '+375333597597'},
         {'provider': 'novaja_linija', 'kind': 'web', 'value': 'https://7311.by'},
 
         {'provider': 'dve_stolicy', 'kind': 'velcom', 'value': '+375296024444'},
