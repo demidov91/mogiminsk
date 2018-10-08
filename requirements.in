@@ -1,10 +1,25 @@
+# core
 aiohttp
+SQLAlchemy
+psycopg2-binary
+
+# utils
+babel
 dateparser
-factory-boy
-freezegun
+speaklater
+
+# html parsing
 lxml
 cssselect
-psycopg2-binary
+
+# unittests
 pytest
+factory-boy
+freezegun
+
+# error handling
 raven
-SQLAlchemy
+
+# server
+gunicorn
+uvloop

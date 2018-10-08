@@ -8,12 +8,14 @@ aiohttp==3.4.4
 async-timeout==3.0.0      # via aiohttp
 atomicwrites==1.2.1       # via pytest
 attrs==18.2.0             # via aiohttp, pytest
+babel==2.6.0
 chardet==3.0.4            # via aiohttp
 cssselect==1.0.3
 dateparser==0.7.0
 factory-boy==2.11.1
 faker==0.9.1              # via factory-boy
 freezegun==0.3.10
+gunicorn==19.9.0
 idna-ssl==1.1.0           # via aiohttp
 idna==2.7                 # via idna-ssl, yarl
 lxml==4.2.5
@@ -24,11 +26,13 @@ psycopg2-binary==2.7.5
 py==1.6.0                 # via pytest
 pytest==3.8.2
 python-dateutil==2.7.3    # via dateparser, faker, freezegun
-pytz==2018.5              # via dateparser, tzlocal
+pytz==2018.5              # via babel, dateparser, tzlocal
 raven==6.9.0
 regex==2018.8.29          # via dateparser
 six==1.11.0               # via faker, freezegun, more-itertools, pytest, python-dateutil
+speaklater==1.3
 sqlalchemy==1.2.12
 text-unidecode==1.2       # via faker
 tzlocal==1.5.1            # via dateparser
+uvloop==0.11.2
 yarl==1.2.6               # via aiohttp

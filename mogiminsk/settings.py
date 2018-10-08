@@ -2,8 +2,14 @@ import os
 import logging.config
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN', '')
-VIBER_TOKEN = os.environ.get('VIBER_TOKEN', '')
+
+TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN')
+VIBER_TOKEN = os.environ.get('VIBER_TOKEN')
+
+TELEGRAM_API_KEY = os.environ.get('TELEGRAM_API_KEY')
+VIBER_API_KEY = os.environ.get('VIBER_API_KEY')
+
+
 DB_CONNECTION = {
     'drivername': 'postgres',
     'host': 'postgres',
@@ -18,7 +24,6 @@ LANGUAGE = 'ru'
 TG_CONTACT = '@dzimdziam'
 VIBER_CONTACT = 'demidov91@mail.ru'
 
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -31,7 +36,7 @@ LOGGING = {
         'console': {
             'level': 'DEBUG',
             'formatter': 'standard',
-            'class': 'logging.handlers.StreamHandler',
+            'class': 'logging.StreamHandler',
         },
         'sentry': {
             'level': 'WARNING',
@@ -44,7 +49,7 @@ LOGGING = {
     },
     'loggers': {
         '': {
-            'handlers': ['filesystem', 'sentry'],
+            'handlers': ['console', 'sentry'],
             'level': 'DEBUG',
             'propagate': True
         },

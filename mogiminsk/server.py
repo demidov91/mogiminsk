@@ -33,6 +33,10 @@ def init():
     return app
 
 
+async def async_init():
+    return init()
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--path')
