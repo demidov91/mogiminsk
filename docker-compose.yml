@@ -1,0 +1,18 @@
+version: 3
+servies:
+  - python:
+    build: .
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - TELEGRAM_API_KEY=${TELEGRAM_API_KEY}
+      - VIBER_API_KEY=${VIBER_API_KEY}
+      - VIBER_TOKEN=${VIBER_API_KEY}
+      - SENTRY_DSN=${SENTRY_DSN}
+      - SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT}
+  - postgres:
+    image: "postgres:9.6.10-alpine"
+    values:
+      - mogminskbot.pgsql:"/var/lib/postgresql/data":rw
+    environment:
+      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

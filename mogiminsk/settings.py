@@ -2,24 +2,21 @@ import os
 import logging.config
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-TELEGRAM_TOKEN = ''
-VIBER_TOKEN = ''
-DB_CONNECTION = {}
+TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN', '')
+VIBER_TOKEN = os.environ.get('VIBER_TOKEN', '')
+DB_CONNECTION = {
+    'drivername': 'postgres',
+    'host': 'postgres',
+    'port': '5432',
+    'database': 'postgres',
+    'username': 'postgres',
+    'password':  os.environ['POSTGRES_PASSWORD'],
+}
 LANGUAGE = 'ru'
 
-EMAIL_FEEDBACK_SUBJECT = 'Mogiminsk feedback'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_FROM = 'dmitryDemidov91@gmail.com'
-EMAIL_TO = 'demidov91@mail.ru',
 
 TG_CONTACT = '@dzimdziam'
 VIBER_CONTACT = 'demidov91@mail.ru'
-
-try:
-    from mogiminsk.local_settings import *
-except ImportError:
-    pass
 
 
 LOGGING = {
@@ -31,23 +28,19 @@ LOGGING = {
         },
     },
     'handlers': {
-        'filesystem': {
+        'console': {
             'level': 'DEBUG',
             'formatter': 'standard',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'maxBytes': 1024 * 1024 * 10,       # 10 Mb
-            'backupCount': 10,                  # 10 * 10Mb == 100Mb
-            'filename': os.path.join(BASE_DIR, 'logs', 'mogiminsk.log'),
+            'class': 'logging.handlers.StreamHandler',
         },
         'sentry': {
             'level': 'WARNING',
             'class': 'raven.handlers.logging.SentryHandler',
-            'dsn': SENTRY_DSN,
+            'dsn': os.environ.get('SENTRY_DSN'),
             'formatter': 'standard',
-            'environment': SENTRY_ENVIRONMENT,
+            'environment': os.environ.get('SENTRY_ENVIRONMENT'),
             'enable_breadcrumbs': False,
         },
-
     },
     'loggers': {
         '': {
@@ -58,10 +51,4 @@ LOGGING = {
     }
 }
 
-# Let different users in the same group use same log files:
-# chgrp www-data logs
-# chmod g+w logs
-# chmod g+s logs
-# usermod -a -G www-data user-which-launches-scripts
-os.umask(0o0002)
 logging.config.dictConfig(LOGGING)

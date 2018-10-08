@@ -1,0 +1,10 @@
+aiohttp
+dateparser
+factory-boy
+freezegun
+lxml
+cssselect
+psycopg2-binary
+pytest
+raven
+SQLAlchemy
