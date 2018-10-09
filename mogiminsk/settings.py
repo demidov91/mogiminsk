@@ -12,8 +12,8 @@ VIBER_API_KEY = os.environ.get('VIBER_API_KEY')
 
 DB_CONNECTION = {
     'drivername': 'postgres',
-    'host': 'postgres',
-    'port': '5432',
+    'host': os.environ['POSTGRESS_HOST'],
+    'port': os.environ['POSTGRESS_PORT'],
     'database': 'postgres',
     'username': 'postgres',
     'password':  os.environ['POSTGRES_PASSWORD'],
