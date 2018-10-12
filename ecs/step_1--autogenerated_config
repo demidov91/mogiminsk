@@ -1,0 +1,97 @@
+{
+    "containerDefinitions": [
+        {
+            "environment": [
+                {
+                    "name": "POSTGRES_PASSWORD",
+                    "value": "${POSTGRES_PASSWORD}"
+                }
+            ],
+            "essential": true,
+            "image": "postgres:9.6.10-alpine",
+            "mountPoints": [
+                {
+                    "containerPath": "/var/lib/postgresql/data",
+                    "sourceVolume": "Mogminskbot_Pgsql"
+                }
+            ],
+            "name": "postgres",
+            "portMappings": [
+                {
+                    "containerPort": 5432,
+                    "hostPort": 6432
+                }
+            ]
+        },
+        {
+            "environment": [
+                {
+                    "name": "POSTGRES_PASSWORD",
+                    "value": "${POSTGRES_PASSWORD}"
+                },
+                {
+                    "name": "TELEGRAM_TOKEN",
+                    "value": "${TELEGRAM_TOKEN}"
+                },
+                {
+                    "name": "TELEGRAM_API_KEY",
+                    "value": "${TELEGRAM_API_KEY}"
+                },
+                {
+                    "name": "VIBER_API_KEY",
+                    "value": "${VIBER_API_KEY}"
+                },
+                {
+                    "name": "VIBER_TOKEN",
+                    "value": "${VIBER_API_KEY}"
+                },
+                {
+                    "name": "SENTRY_DSN",
+                    "value": "${SENTRY_DSN}"
+                },
+                {
+                    "name": "SENTRY_ENVIRONMENT",
+                    "value": "${SENTRY_ENVIRONMENT}"
+                },
+                {
+                    "name": "POSTGRESS_HOST",
+                    "value": "${POSTGRESS_HOST}"
+                },
+                {
+                    "name": "POSTGRESS_PORT",
+                    "value": "${POSTGRESS_PORT}"
+                }
+            ],
+            "essential": true,
+            "image": "dzmitry/mogminsk",
+            "mountPoints": [
+                {
+                    "containerPath": "/app",
+                    "sourceVolume": "_"
+                }
+            ],
+            "name": "python",
+            "portMappings": [
+                {
+                    "containerPort": 8090,
+                    "hostPort": 8090
+                }
+            ]
+        }
+    ],
+    "family": "",
+    "volumes": [
+        {
+            "host": {
+                "sourcePath": "."
+            },
+            "name": "_"
+        },
+        {
+            "host": {
+                "sourcePath": "mogminskbot.pgsql"
+            },
+            "name": "Mogminskbot_Pgsql"
+        }
+    ]
+}

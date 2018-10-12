@@ -6,8 +6,13 @@ __pycache__/*
 *.pem
 
 .env
-logs/*
+.dev-env
+
 mogiminsk_interaction
-.cache
+ecs/step_3--prepared.json
 mogiminsk/local_settings.py
+
+logs/*
+.cache
 viberbot
+
