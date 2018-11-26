@@ -108,6 +108,7 @@ async def purchase(user, context: dict, sms_code: str=None) ->BaseConnector:
 
     await connector.purchase(
         start_datetime=trip.start_datetime,
+        external_identifier=trip.external_identifier,
         direction=context['where'],
         seat=int(context['seat']),
         first_name=user.first_name,

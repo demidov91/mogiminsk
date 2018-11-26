@@ -95,6 +95,7 @@ class Trip(Base):
     MINSK_MOG_DIRECTION = 'minsk-mogilev'
 
     id = Column(Integer, primary_key=True)
+    external_identifier = Column(String(63), nullable=True)
 
     car_id = Column(Integer, ForeignKey(Car.id), nullable=False)
     car = relationship('Car', back_populates='trips')
