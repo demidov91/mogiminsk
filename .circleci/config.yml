@@ -75,5 +75,6 @@ jobs:
             docker-compose down
             docker system prune -af
             zcat python.tar.gz | docker load
-            GIT_HASH=$CIRCLE_SHA1 && docker-compose up -d --no-build
+            export GIT_HASH=$CIRCLE_SHA1
+            docker-compose up -d --no-build
           "
