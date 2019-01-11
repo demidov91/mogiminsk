@@ -1,0 +1,29 @@
+version: '3'
+services:
+  python:
+    build: .
+    image: dzmitry/mogiminsk:${GIT_HASH:-latest}
+    environment:
+      - SENTRY_DSN=$SENTRY_DSN
+      - SENTRY_ENVIRONMENT=$SENTRY_ENVIRONMENT
+      - DB_HOST=${DB_HOST:-postgres}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE:-postgres}
+      - DB_USERNAME=${DB_USERNAME:-postgres}
+      - TELEGRAM_API_KEY=$TELEGRAM_API_KEY
+      - VIBER_API_KEY=$VIBER_API_KEY
+      - TELEGRAM_TOKEN=$TELEGRAM_TOKEN
+      - VIBER_TOKEN=$VIBER_TOKEN
+
+  postgres:
+    image: "postgres:9.6"
+    ports:
+      - "${DB_EXTERNAL_PORT}:5432"
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - mogiminsk.dzmitry.psql:/var/lib/postgresql/data
+
+volumes:
+  mogiminsk.dzmitry.psql:

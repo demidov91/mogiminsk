@@ -22,11 +22,11 @@ _LOCAL = local()
 lazy_string_aware_json_dumps = partial(json.dumps, cls=LazyAwareJsonEncoder)
 
 
-def init_client(app):
+async def init_client(app):
     app['client'] = ClientSession(json_serialize=lazy_string_aware_json_dumps)
 
 
-def destroy_client(app):
+async def destroy_client(app):
     app['client'].close()
 
 

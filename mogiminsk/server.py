@@ -1,8 +1,6 @@
-import asyncio
 import argparse
 
 from aiohttp import web
-import uvloop
 
 from mogiminsk.middleware import (
     initilize_session,
@@ -13,9 +11,6 @@ from mogiminsk.utils import (
     init_client,
     destroy_client,
 )
-
-
-asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
 def init():
@@ -36,6 +31,10 @@ def init():
     app.on_cleanup.append(destroy_client)
 
     return app
+
+
+async def init_async():
+    return init()
 
 
 if __name__ == '__main__':
