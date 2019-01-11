@@ -4,7 +4,6 @@ RUN apt-get update -y && apt-get install -y cron
 
 ADD crontab /etc/cron.d/crontab
 RUN chmod 644 /etc/cron.d/crontab
-RUN env > /home/cron-env.sh && chmod u+x /home/cron-env.sh && cron
 
 RUN mkdir /app
 WORKDIR /app
@@ -27,5 +26,5 @@ ADD start_server.sh start_server.sh
 
 RUN pip install -r requirements.txt
 
-CMD ["./start_server.sh"]
+CMD env > /home/cron-env.sh && chmod u+x /home/cron-env.sh && cron && ./start_server.sh
 
