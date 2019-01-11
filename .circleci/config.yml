@@ -70,8 +70,9 @@ jobs:
           echo '|1|X8RdkooHIKF0zlqOUc7R+hyXAT0=|G7IQk3BedSMbUE3IIz4vGwQCBhs= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFx56CIPJLfDFVY2TVyWOOMQdNk7lr5HnryrS+4zkVFrVzsZCQ06vgU3gW4Pp8YjSvd08E1fVpUxvhWm3iY1bC8=' >> ~/.ssh/known_hosts
           scp python.tar.gz $AWS_USER@$AWS_HOST:/home/$AWS_USER/mogiminsk/python.tar.gz
           scp docker-compose.yml $AWS_USER@$AWS_HOST:/home/$AWS_USER/mogiminsk/docker-compose.yml
-          ssh $EC2_USER@$EC2_HOST "
+          ssh $AWS_USER@$AWS_HOST "
             cd mogiminsk
             zcat python.tar.gz | docker load
+            echo \"export GIT_HASH=$CIRCLE_SHA1\" > set_hash.sh
           "
 

@@ -1,4 +1,10 @@
-FROM python:3.7
+FROM python:3.6
+
+RUN apt-get update -y && apt-get install -y cron
+
+ADD crontab /etc/cron.d/crontab
+RUN chmod 644 /etc/cron.d/crontab
+RUN env > /home/cron-env.sh && chmod u+x /home/cron-env.sh && cron
 
 RUN mkdir /app
 WORKDIR /app
