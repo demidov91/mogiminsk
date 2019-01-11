@@ -1,10 +1,6 @@
 FROM python:3.6
 
-RUN apt-get update -y && apt-get install -y cron
-
-ADD crontab /etc/cron.d/crontab
-RUN chmod 644 /etc/cron.d/crontab
-
+# Install application
 RUN mkdir /app
 WORKDIR /app
 ADD alembic alembic
@@ -23,8 +19,13 @@ ADD alembic.ini alembic.ini
 ADD conftest.py conftest.py
 ADD requirements.txt requirements.txt
 ADD start_server.sh start_server.sh
-
 RUN pip install -r requirements.txt
 
-CMD env > /home/cron-env.sh && chmod u+x /home/cron-env.sh && cron && ./start_server.sh
+# Install cron
+RUN apt-get update -y && apt-get install -y cron
+ADD crontab /etc/cron.d/crontab
+RUN chmod 644 /etc/cron.d/crontab
+RUN cron && touch /etc/cron.d/crontab
 
+# Launch
+CMD env > /home/cron-env.sh && chmod u+x /home/cron-env.sh && ./start_server.sh
