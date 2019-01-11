@@ -20,7 +20,6 @@ jobs:
         POSTGRES_DB: test_postgres
 
    steps:
-    - setup_remote_docker
     - checkout
 
     - run:
@@ -45,9 +44,22 @@ jobs:
          paths:
           - env
 
-    - run: |
-        . env/bin/activate
-        pytest
+    - run:
+        name: pytest
+        command: |
+          . env/bin/activate
+          pytest
+
+  deploy:
+   docker:
+    - image: circleci/python:3.6
+   steps:
+    - setup_remote_docker
+    - checkout
+
+    - run:
+        name: add interaction
+        command: git clone git@bitbucket.org:demidov91/mogiminsk_interaction.git mogiminsk_interaction
 
     - run:
         name: build image
@@ -78,3 +90,17 @@ jobs:
             export GIT_HASH=$CIRCLE_SHA1
             docker-compose up -d --no-build
           "
+
+workflows:
+  version: 2
+  default:
+    jobs:
+     - build
+     - deploy:
+         requires:
+          - build
+         filters:
+           branches:
+             only:
+              - master
+              - feature/dockerize-v2
