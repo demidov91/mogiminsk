@@ -25,7 +25,6 @@ RUN pip install -r requirements.txt
 RUN apt-get update -y && apt-get install -y cron
 ADD crontab /etc/cron.d/crontab
 RUN chmod 644 /etc/cron.d/crontab
-RUN cron && touch /etc/cron.d/crontab
 
 # Launch
-CMD env > /home/cron-env.sh && chmod u+x /home/cron-env.sh && ./start_server.sh
+CMD env > /home/cron-env.sh && chmod u+x /home/cron-env.sh && cron && touch /etc/cron.d/crontab && ./start_server.sh

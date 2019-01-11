@@ -6,7 +6,7 @@ from bot_viber.utils.viber_api import ViberSender
 
 
 async def run():
-    with ClientSession() as client:
+    async with ClientSession() as client:
         await ViberSender(client).post_data(ViberSender.GET_ACCOUNT_INFO, {})
 
 
