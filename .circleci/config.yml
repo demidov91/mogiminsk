@@ -72,7 +72,10 @@ jobs:
           scp docker-compose.yml $AWS_USER@$AWS_HOST:/home/$AWS_USER/mogiminsk/docker-compose.yml
           ssh $AWS_USER@$AWS_HOST "
             cd mogiminsk
+            docker-compose down
+            docker system prune -af
             zcat python.tar.gz | docker load
-            echo \"export GIT_HASH=$CIRCLE_SHA1\" > set_hash.sh
+            GIT_HASH=$CIRCLE_SHA1
+            docker-compose up -d --no-build
           "
 
