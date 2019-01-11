@@ -2,10 +2,11 @@ import os
 import logging.config
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN', '')
-VIBER_TOKEN = os.environ.get('VIBER_TOKEN', '')
-TELEGRAM_API_KEY = os.environ.get('TELEGRAM_API_KEY', '')
-VIBER_API_KEY = os.environ.get('VIBER_API_KEY', '')
+TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
+VIBER_TOKEN = os.environ['VIBER_TOKEN']
+TELEGRAM_API_KEY = os.environ['TELEGRAM_API_KEY']
+VIBER_API_KEY = os.environ['VIBER_API_KEY']
+
 
 DB_CONNECTION = {
     'drivername': 'postgres',

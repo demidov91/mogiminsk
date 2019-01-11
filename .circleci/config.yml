@@ -5,11 +5,19 @@ jobs:
    docker:
     - image: circleci/python:3.6
       environment:
-        POSTGRES_PASSWORD: anytemppass
         DB_HOST: localhost
+        DB_PORT: 5432
+        DB_DATABASE: postgres
+        DB_USERNAME: postgres
+        DB_PASSWORD: anytemppass
+        TELEGRAM_API_KEY: quite-simple-one
+        VIBER_API_KEY: quite-simple-one
+        TELEGRAM_TOKEN: tele:token
+        VIBER_TOKEN: viber-token
     - image: circleci/postgres:9.6
       environment:
         POSTGRES_PASSWORD: anytemppass
+        POSTGRES_DB: test_postgres
 
    steps:
     - checkout
