@@ -20,11 +20,8 @@ jobs:
         POSTGRES_DB: test_postgres
 
    steps:
+    - setup_remote_docker
     - checkout
-
-    - add_ssh_keys:
-        fingerprints:
-          - "45:a3:78:84:ed:6d:78:c8:85:ce:90:2f:90:60:8f:e1"
 
     - run:
         name: interaction
@@ -51,3 +48,30 @@ jobs:
     - run: |
         . env/bin/activate
         pytest
+
+    - run:
+        name: build image
+        command: docker build -t dzmitry/mogiminsk:$CIRCLE_SHA1 .
+
+    - run:
+        name: save image
+        command: |
+          docker save dzmitry/mogiminsk:$CIRCLE_SHA1 |gzip > python.tar.gz
+          ls -l python.tar.gz
+
+    - add_ssh_keys:
+        fingerprints:
+          - "45:a3:78:84:ed:6d:78:c8:85:ce:90:2f:90:60:8f:e1"
+
+    - run:
+        name: uploda image
+        command: |
+          mkdir -p ~/.ssh/
+          echo '|1|X8RdkooHIKF0zlqOUc7R+hyXAT0=|G7IQk3BedSMbUE3IIz4vGwQCBhs= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFx56CIPJLfDFVY2TVyWOOMQdNk7lr5HnryrS+4zkVFrVzsZCQ06vgU3gW4Pp8YjSvd08E1fVpUxvhWm3iY1bC8=' >> ~/.ssh/known_hosts
+          scp python.tar.gz $AWS_USER@$AWS_HOST:/home/$AWS_USER/mogiminsk/python.tar.gz
+          scp docker-compose.yml $AWS_USER@$AWS_HOST:/home/$AWS_USER/mogiminsk/docker-compose.yml
+          ssh $EC2_USER@$EC2_HOST "
+            cd mogiminsk
+            zcat python.tar.gz | docker load
+          "
+
