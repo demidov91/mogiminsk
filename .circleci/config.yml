@@ -1,0 +1,105 @@
+version: 2
+
+jobs:
+  build:
+   docker:
+    - image: circleci/python:3.6
+      environment:
+        DB_HOST: localhost
+        DB_PORT: 5432
+        DB_DATABASE: postgres
+        DB_USERNAME: postgres
+        DB_PASSWORD: anytemppass
+        TELEGRAM_API_KEY: quite-simple-one
+        VIBER_API_KEY: quite-simple-one
+        TELEGRAM_TOKEN: tele:token
+        VIBER_TOKEN: viber-token
+    - image: circleci/postgres:9.6
+      environment:
+        POSTGRES_PASSWORD: anytemppass
+        POSTGRES_DB: test_postgres
+
+   steps:
+    - checkout
+
+    - run:
+        name: interaction
+        command: git clone git@bitbucket.org:demidov91/mogiminsk_interaction.git mogiminsk_interaction
+
+    - restore_cache:
+         name: Restore venv.
+         key: python3.6-v1-{{ checksum "requirements.txt" }}
+
+    - run:
+        name: prepare env
+        command: |
+          python -m venv env
+          . env/bin/activate
+          pip install pip-tools
+          pip-sync
+
+    - save_cache:
+         name: Save venv.
+         key: python3.6-v1-{{ checksum "requirements.txt" }}
+         paths:
+          - env
+
+    - run:
+        name: pytest
+        command: |
+          . env/bin/activate
+          pytest
+
+  deploy:
+   docker:
+    - image: circleci/python:3.6
+   steps:
+    - setup_remote_docker
+    - checkout
+
+    - run:
+        name: add interaction
+        command: git clone git@bitbucket.org:demidov91/mogiminsk_interaction.git mogiminsk_interaction
+
+    - run:
+        name: build image
+        command: docker build -t dzmitry/mogiminsk:$CIRCLE_SHA1 .
+
+    - run:
+        name: save image
+        command: |
+          docker save dzmitry/mogiminsk:$CIRCLE_SHA1 |gzip > python.tar.gz
+          ls -l python.tar.gz
+
+    - add_ssh_keys:
+        fingerprints:
+          - "45:a3:78:84:ed:6d:78:c8:85:ce:90:2f:90:60:8f:e1"
+
+    - run:
+        name: uploda image
+        command: |
+          mkdir -p ~/.ssh/
+          echo '|1|X8RdkooHIKF0zlqOUc7R+hyXAT0=|G7IQk3BedSMbUE3IIz4vGwQCBhs= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFx56CIPJLfDFVY2TVyWOOMQdNk7lr5HnryrS+4zkVFrVzsZCQ06vgU3gW4Pp8YjSvd08E1fVpUxvhWm3iY1bC8=' >> ~/.ssh/known_hosts
+          scp python.tar.gz $AWS_USER@$AWS_HOST:/home/$AWS_USER/mogiminsk/python.tar.gz
+          scp docker-compose.yml $AWS_USER@$AWS_HOST:/home/$AWS_USER/mogiminsk/docker-compose.yml
+          ssh $AWS_USER@$AWS_HOST "
+            cd mogiminsk
+            docker-compose down
+            docker system prune -af
+            zcat python.tar.gz | docker load
+            export GIT_HASH=$CIRCLE_SHA1
+            docker-compose up -d --no-build
+          "
+
+workflows:
+  version: 2
+  default:
+    jobs:
+     - build
+     - deploy:
+         requires:
+          - build
+         filters:
+           branches:
+             only:
+              - master

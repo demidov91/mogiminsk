@@ -8,7 +8,7 @@ from bot_viber.utils.viber_api import ViberSender
 
 
 async def run(url: str):
-    with ClientSession() as client:
+    async with ClientSession() as client:
         await ViberSender(client).post_data(ViberSender.SET_WEBHOOK, {
             'url': url,
             "event_types": [
