@@ -27,7 +27,7 @@ async def init_client(app):
 
 
 async def destroy_client(app):
-    app['client'].close()
+    await app['client'].close()
 
 
 def create_db():

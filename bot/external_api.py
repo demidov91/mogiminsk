@@ -118,7 +118,7 @@ async def purchase(user, context: dict, sms_code: str=None) ->BaseConnector:
         sms_code=sms_code,
     )
 
-    connector.close()
+    await connector.close()
     return connector
 
 
@@ -152,12 +152,12 @@ async def cancel_purchase(user, context, sms_code=None) ->BaseConnector:
         if not sms_was_expicitely_set:
             sms_storage.set_sms_code(None, trip=trip)
             if sms_code:
-                connector.close()
+                await connector.close()
                 return await cancel_purchase(user, context)
 
             logger.error("Got WRONG_SMS result for a None SMS. It shouldn't happen!")
 
-    connector.close()
+    await connector.close()
 
     return connector
 
