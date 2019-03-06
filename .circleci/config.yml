@@ -89,6 +89,7 @@ jobs:
             zcat python.tar.gz | docker load
             export GIT_HASH=$CIRCLE_SHA1
             docker-compose up -d --no-build
+            rm python.tar.gz
           "
 
 workflows:

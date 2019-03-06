@@ -1,6 +1,10 @@
 import os
 import logging.config
 
+import sentry_sdk
+from sentry_sdk.integrations.logging import LoggingIntegration
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
 VIBER_TOKEN = os.environ['VIBER_TOKEN']
@@ -29,7 +33,6 @@ VIBER_CONTACT = 'demidov91@mail.ru'
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
     'formatters': {
         'standard': {
             'format': '%(asctime)s [p%(process)d] [%(levelname)s] %(name)s: %(message)s'
@@ -41,23 +44,24 @@ LOGGING = {
             'formatter': 'standard',
             'class': 'logging.StreamHandler',
         },
-        'sentry': {
-            'level': 'WARNING',
-            'class': 'raven.handlers.logging.SentryHandler',
-            'dsn': os.environ['SENTRY_DSN'],
-            'formatter': 'standard',
-            'environment': os.environ['SENTRY_ENVIRONMENT'],
-            'enable_breadcrumbs': False,
-        },
-
     },
     'loggers': {
         '': {
-            'handlers': ['filesystem', 'sentry'],
+            'handlers': ['filesystem'],
             'level': 'DEBUG',
-            'propagate': True
         },
     }
 }
 
 logging.config.dictConfig(LOGGING)
+
+sentry_sdk.init(
+    dsn=os.environ['SENTRY_DSN'],
+    environment=os.environ['SENTRY_ENVIRONMENT'],
+    integrations=[
+        LoggingIntegration(
+            level=logging.DEBUG,
+            event_level=logging.WARNING
+        ),
+    ],
+)
