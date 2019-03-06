@@ -17,6 +17,14 @@ services:
       - VIBER_API_KEY=$VIBER_API_KEY
       - TELEGRAM_TOKEN=$TELEGRAM_TOKEN
       - VIBER_TOKEN=$VIBER_TOKEN
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "eu-central-1"
+        awslogs-group: "mogiminsk"
+        awslogs-stream: "mogiminsk-python"
+        awslogs-create-group: "true"
+
 
   postgres:
     image: "postgres:9.6"
@@ -26,6 +34,13 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - mogiminsk.dzmitry.psql:/var/lib/postgresql/data
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "eu-central-1"
+        awslogs-group: "mogiminsk"
+        awslogs-stream: "mogiminsk-postgres"
+        awslogs-create-group: "true"
 
 volumes:
   mogiminsk.dzmitry.psql:

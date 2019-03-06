@@ -12,3 +12,4 @@ mogiminsk_interaction
 .cache
 mogiminsk/local_settings.py
 viberbot
+docker-compose.override.yml
