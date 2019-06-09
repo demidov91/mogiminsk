@@ -11,6 +11,7 @@ lxml>=3.8.0
 multidict>=3.1.0
 psycopg2>=2.7.3.2
 pytest>=3.1.3
+pytest-asyncio
 python-dateutil>=2.6.1
 pytz>=2017.2
 regex>=2018.8.29
