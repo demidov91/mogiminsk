@@ -5,20 +5,30 @@ import sentry_sdk
 from sentry_sdk.integrations.logging import LoggingIntegration
 
 
+logger = logging.getLogger(__name__)
+
+
+def get_env(key: str) -> str:
+    if key not in os.environ:
+        logger.warning('%s is not set in environment', key)
+        return None
+    return os.environ[key]
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
-VIBER_TOKEN = os.environ['VIBER_TOKEN']
-TELEGRAM_API_KEY = os.environ['TELEGRAM_API_KEY']
-VIBER_API_KEY = os.environ['VIBER_API_KEY']
+TELEGRAM_TOKEN = get_env('TELEGRAM_TOKEN')
+VIBER_TOKEN = get_env('VIBER_TOKEN')
+TELEGRAM_API_KEY = get_env('TELEGRAM_API_KEY')
+VIBER_API_KEY = get_env('VIBER_API_KEY')
 
 
 DB_CONNECTION = {
     'drivername': 'postgres',
-    'host': os.environ['DB_HOST'],
-    'port': os.environ['DB_PORT'],
-    'database': os.environ['DB_DATABASE'],
-    'username': os.environ['DB_USERNAME'],
-    'password':  os.environ['DB_PASSWORD'],
+    'host': get_env('DB_HOST'),
+    'port': get_env('DB_PORT'),
+    'database': get_env('DB_DATABASE'),
+    'username': get_env('DB_USERNAME'),
+    'password':  get_env('DB_PASSWORD'),
 }
 LANGUAGE = 'ru'
 
@@ -56,8 +66,8 @@ LOGGING = {
 logging.config.dictConfig(LOGGING)
 
 sentry_sdk.init(
-    dsn=os.environ['SENTRY_DSN'],
-    environment=os.environ['SENTRY_ENVIRONMENT'],
+    dsn=get_env('SENTRY_DSN'),
+    environment=get_env('SENTRY_ENVIRONMENT'),
     integrations=[
         LoggingIntegration(
             level=logging.DEBUG,

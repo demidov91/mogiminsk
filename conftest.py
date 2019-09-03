@@ -14,6 +14,9 @@ def pytest_configure(config):
     logging.config.dictConfig(LOGGING)
 
     db_connection = DB_CONNECTION.copy()
+    if not db_connection['database']:
+        return
+
     db_connection['database'] = 'test_' + db_connection['database']
     engine = get_db_engine(db_connection)
     Base.metadata.drop_all(engine)
