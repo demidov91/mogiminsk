@@ -44,6 +44,10 @@ def run():
         {'provider': 'novaja_linija', 'kind': 'mts', 'value': '+375333597597'},
         {'provider': 'novaja_linija', 'kind': 'web', 'value': 'https://7311.by'},
 
+        {'provider': 'atlas', 'kind': 'velcom', 'value': '+375293597597'},
+        {'provider': 'atlas', 'kind': 'mts', 'value': '+375333597597'},
+        {'provider': 'atlas', 'kind': 'web', 'value': 'https://atlasbus.by'},
+
         {'provider': 'dve_stolicy', 'kind': 'velcom', 'value': '+375296024444'},
         {'provider': 'dve_stolicy', 'kind': 'mts', 'value': '+375336024444'},
         {'provider': 'dve_stolicy', 'kind': 'life', 'value': '+375256024444'},
