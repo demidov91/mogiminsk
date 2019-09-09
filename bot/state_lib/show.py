@@ -5,26 +5,46 @@ from aiohttp_translation import gettext_lazy as _
 from bot.messages.base import BotMessage, BACK
 from bot.state_lib.base import BaseState
 from bot_telegram.defines import FULL_TRIPS_SWITCH
+from mogiminsk.defines import DEFAULT_MOG_MINSK_PRICE
 from mogiminsk.models import Trip
 from mogiminsk.services.trip import TripService
 from mogiminsk_interaction.utils import has_connector
 
 
+def _build_trip_description_part_1(ts: TripService):
+    if ts.instance.cost != DEFAULT_MOG_MINSK_PRICE:
+        provider_name = ts.provider_short_name()
+    else:
+        provider_name = ts.provider_name()
+
+    return '{}, {}'.format(
+        ts.instance.start_datetime.strftime('%H:%M'),
+        provider_name
+    )
+
+
+def _build_trip_description_part_2(ts: TripService):
+    if ts.instance.cost != DEFAULT_MOG_MINSK_PRICE:
+        return _('%dr.') % ts.instance.cost
+
+    return ''
+
+
+def _build_trip_description_part_3(ts: TripService):
+    if ts.instance.remaining_seats:
+        return '({})'.format(ts.instance.remaining_seats)
+    return ''
+
+
 def trip_to_line(trip: Trip) -> Collection[Dict]:
     trip_service = TripService(trip)
 
-    if trip.remaining_seats:
-        description = '{}, {} ({})'.format(
-            trip_service.instance.start_datetime.strftime('%H:%M'),
-            trip_service.provider_name(),
-            trip_service.instance.remaining_seats
-        )
-
-    else:
-        description = '{}, {}'.format(
-            trip_service.instance.start_datetime.strftime('%H:%M'),
-            trip_service.provider_name()
-        )
+    parts = [
+        _build_trip_description_part_1(trip_service),
+        _build_trip_description_part_2(trip_service),
+        _build_trip_description_part_3(trip_service),
+    ]
+    description = ' '.join([x for x in parts if x])
 
     is_bookable = has_connector(trip_service.provider().identifier)
     action = f'purchase_{trip_service.id}' if is_bookable else f'trip_{trip_service.id}'

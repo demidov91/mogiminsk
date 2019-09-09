@@ -16,6 +16,9 @@ class TripService(BaseService):
     def provider_name(self):
         return self.instance.car.provider.name
 
+    def provider_short_name(self):
+        return self.instance.car.provider.short_name
+
     def direction_name(self):
         if self.instance.direction == Trip.MOG_MINSK_DIRECTION:
             return _('Mogilev - Minsk')

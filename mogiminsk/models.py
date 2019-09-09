@@ -47,6 +47,16 @@ class Provider(Base):
     contacts = relationship('ProviderContact', back_populates='provider')
     stations = relationship('Station', back_populates='provider')
 
+    @property
+    def short_name(self):
+        if not self.name:
+            return self.name
+
+        if self.name.startswith('Атлас'):
+            return 'Атлас'
+
+        return self.name
+
 
 class ProviderContact(Base):
     __tablename__ = 'mogiminsk_provider_contact'

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-28 09:04+0300\n"
+"POT-Creation-Date: 2019-09-09 09:11+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,27 +58,27 @@ msgstr "Выбирете дату:"
 msgid "What time?"
 msgstr "Во сколько?"
 
-#: bot/messages/time.py:24 bot/messages/time.py:261
+#: bot/messages/time.py:23 bot/messages/time.py:156
 msgid "Earlier 🌅"
 msgstr "Раньше 🌅"
 
-#: bot/messages/time.py:222
+#: bot/messages/time.py:117
 msgid "Later 🌞"
 msgstr "Позже 🌞"
 
-#: bot/messages/time.py:236
+#: bot/messages/time.py:131
 msgid "Before 6:00"
 msgstr "Раньше 6:00"
 
-#: bot/messages/time.py:355 bot/messages/time.py:606
+#: bot/messages/time.py:250 bot/messages/time.py:385
 msgid "Later 🌇"
 msgstr "Позже 🌇"
 
-#: bot/messages/time.py:397
+#: bot/messages/time.py:291
 msgid "Earlier 🌞"
 msgstr "Раньше 🌞"
 
-#: bot/messages/time.py:635
+#: bot/messages/time.py:414
 msgid "After 22:00"
 msgstr "22:00 и позже"
 
@@ -98,7 +98,7 @@ msgstr "⬅ Назад"
 msgid "Cancel ❌"
 msgstr "Отменить ❌"
 
-#: bot/state_lib/base.py:92
+#: bot/state_lib/base.py:97
 msgid "Unexpected response."
 msgstr "Непредвиденный ответ"
 
@@ -235,11 +235,16 @@ msgstr "Ваш заказ"
 msgid "How many seats?"
 msgstr "Сколько мест?"
 
-#: bot/state_lib/show.py:57
+#: bot/state_lib/show.py:28
+#, python-format
+msgid "%dr."
+msgstr "%dр."
+
+#: bot/state_lib/show.py:77
 msgid "More"
 msgstr "... и ещё"
 
-#: bot/state_lib/show.py:62
+#: bot/state_lib/show.py:82
 msgid "Choose trip:"
 msgstr "Выберите поездку:"
 
@@ -255,7 +260,7 @@ msgstr "ещё..."
 msgid "Choose start station:"
 msgstr "Место посадки:"
 
-#: bot/state_lib/time.py:47
+#: bot/state_lib/time.py:69
 msgid "No trips found :("
 msgstr "Поездки не найдены :("
 
@@ -328,20 +333,20 @@ msgstr "Демонстрация 🎥"
 msgid "Something went wrong..."
 msgstr "Что-то пошло не так..."
 
-#: mogiminsk/services/trip.py:21
+#: mogiminsk/services/trip.py:24
 msgid "Mogilev - Minsk"
 msgstr "Могилёв - Минск"
 
-#: mogiminsk/services/trip.py:24
+#: mogiminsk/services/trip.py:27
 msgid "Minsk - Mogilev"
 msgstr "Минск - Могилёв"
 
 #: mogiminsk_interaction/connectors/fortima.py:170
-#: mogiminsk_interaction/connectors/fortima.py:176
+#: mogiminsk_interaction/connectors/fortima.py:195
 msgid "Trip is booked! You'll be notified with SMS shortly."
 msgstr "Поездка заказана! Скоро придёт SMS."
 
-#: mogiminsk_interaction/connectors/fortima.py:187
+#: mogiminsk_interaction/connectors/fortima.py:206
 msgid "Trip is booked! Operator will call you before departure."
 msgstr "Поездка заказана! Диспетчер позвонит Вам перед отправлением."
 
