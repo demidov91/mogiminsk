@@ -33,6 +33,7 @@ class TripFactory(SQLAlchemyModelFactory):
     id = factory.Sequence(lambda x: x)
     car = factory.SubFactory(CarFactory)
     direction = Trip.MOG_MINSK_DIRECTION
+    is_removed = False
 
 
 class UserFactory(SQLAlchemyModelFactory):
