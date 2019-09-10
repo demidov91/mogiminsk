@@ -57,6 +57,9 @@ class Provider(Base):
 
         return self.name
 
+    def __str__(self):
+        return self.name
+
 
 class ProviderContact(Base):
     __tablename__ = 'mogiminsk_provider_contact'

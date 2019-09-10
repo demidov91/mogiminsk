@@ -1,8 +1,6 @@
 from functools import lru_cache
 import logging
 
-from sqlalchemy import and_
-
 from mogiminsk.models import Provider, ProviderContact
 from mogiminsk.utils import threaded_session
 
@@ -17,11 +15,10 @@ def get_provider(identifier):
 
 def find_contact(provider, kind, value):
     return threaded_session.query(ProviderContact, Provider).filter(
-        and_(
-            Provider.identifier == provider,
-            ProviderContact.kind == kind,
-            ProviderContact.contact == value
-        )
+        Provider.identifier == provider,
+        ProviderContact.kind == kind,
+        ProviderContact.contact == value,
+        ProviderContact.provider_id == Provider.id
     ).first()
 
 
@@ -53,18 +50,6 @@ def run():
         {'provider': 'dve_stolicy', 'kind': 'life', 'value': '+375256024444'},
         {'provider': 'dve_stolicy', 'kind': 'web', 'value': 'https://2stolict.com'},
 
-        {'provider': 'grand_express', 'kind': 'velcom', 'value': '+375291602222'},
-        {'provider': 'grand_express', 'kind': 'velcom', 'value': '+375291612222'},
-        {'provider': 'grand_express', 'kind': 'mts', 'value': '+375295462222'},
-        {'provider': 'grand_express', 'kind': 'mts', 'value': '+375295452222'},
-        {'provider': 'grand_express', 'kind': 'life', 'value': '+375255102222'},
-        {'provider': 'grand_express', 'kind': 'web', 'value': 'http://grandexpress.by'},
-
-        {'provider': 'stolica_plus', 'kind': 'velcom', 'value': '+375293522215'},
-        {'provider': 'stolica_plus', 'kind': 'mts', 'value': '+375333522215'},
-        {'provider': 'stolica_plus', 'kind': 'life', 'value': '+375259560707'},
-        {'provider': 'stolica_plus', 'kind': 'web', 'value': 'https://m4minsk.by'},
-
         {'provider': 'minsk_express', 'kind': 'velcom', 'value': '+375447885533'},
         {'provider': 'minsk_express', 'kind': 'mts', 'value': '+375297885533'},
         {'provider': 'minsk_express', 'kind': 'life', 'value': '+375257885533'},
@@ -90,12 +75,14 @@ def run():
             if model_to_save is None:
                 continue
 
+            logger.info('New contact will be added: %s', contact)
             db.add(model_to_save)
     except:
         logger.exception('Failed to load.')
         db.rollback()
     else:
         db.commit()
+        logger.info('Updated successfully.')
 
 
 if __name__ == '__main__':
