@@ -5,14 +5,13 @@ from aiohttp_translation import gettext_lazy as _
 from bot.messages.base import BotMessage, BACK
 from bot.state_lib.base import BaseState
 from bot_telegram.defines import FULL_TRIPS_SWITCH
-from mogiminsk.defines import DEFAULT_MOG_MINSK_PRICE
 from mogiminsk.models import Trip
 from mogiminsk.services.trip import TripService
 from mogiminsk_interaction.utils import has_connector
 
 
 def _build_trip_description_part_1(ts: TripService):
-    if ts.instance.cost != DEFAULT_MOG_MINSK_PRICE:
+    if not ts.instance.is_default_price():
         provider_name = ts.provider_short_name()
     else:
         provider_name = ts.provider_name()
@@ -24,7 +23,7 @@ def _build_trip_description_part_1(ts: TripService):
 
 
 def _build_trip_description_part_2(ts: TripService):
-    if ts.instance.cost != DEFAULT_MOG_MINSK_PRICE:
+    if not ts.instance.is_default_price():
         return _('%dr.') % ts.instance.cost
 
     return ''
@@ -32,7 +31,11 @@ def _build_trip_description_part_2(ts: TripService):
 
 def _build_trip_description_part_3(ts: TripService):
     if ts.instance.remaining_seats:
+        if not ts.instance.is_default_price():
+            return _('({} seats)').format(ts.instance.remaining_seats)
+
         return '({})'.format(ts.instance.remaining_seats)
+
     return ''
 
 

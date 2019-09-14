@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-09-09 09:11+0300\n"
+"POT-Creation-Date: 2019-09-14 23:17+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -235,16 +235,20 @@ msgstr "Ваш заказ"
 msgid "How many seats?"
 msgstr "Сколько мест?"
 
-#: bot/state_lib/show.py:28
+#: bot/state_lib/show.py:27
 #, python-format
 msgid "%dr."
 msgstr "%dр."
 
-#: bot/state_lib/show.py:77
+#: bot/state_lib/show.py:35
+msgid "({} seats)"
+msgstr "({} мест)"
+
+#: bot/state_lib/show.py:80
 msgid "More"
 msgstr "... и ещё"
 
-#: bot/state_lib/show.py:82
+#: bot/state_lib/show.py:85
 msgid "Choose trip:"
 msgstr "Выберите поездку:"
 

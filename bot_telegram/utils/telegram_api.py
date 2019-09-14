@@ -5,7 +5,7 @@ import logging
 from aiohttp_translation import activate
 from bot_telegram.utils.telegram_messages import TextButtonFormatter, InlineButtonFormatter
 from bot.messages.base import BotMessage
-from bot_telegram.defines import TELEGRAM_BOT
+from bot_telegram.defines import TELEGRAM_BOT, TelegramMethod
 from mogiminsk.settings import TELEGRAM_TOKEN, LANGUAGE
 from mogiminsk.models import User
 from mogiminsk.services import UserService
@@ -120,7 +120,7 @@ class Update(OptionalObjectFactoryMixin):
 def to_telegram_message(message: BotMessage, chat_id):
     formatted = {
         'text': message.text,
-        'method': 'sendMessage',
+        'method': TelegramMethod.SEND_MESSAGE,
         'chat_id': chat_id,
     }
 
@@ -162,7 +162,7 @@ class TgSender:
 
         if callback_message_id is not None and not messages[0].is_tg_text_buttons:
             converted_messages[0].update({
-                'method': 'editMessageText',
+                'method': TelegramMethod.EDIT_TEXT,
                 'message_id': callback_message_id,
             })
 
@@ -180,7 +180,7 @@ class TgSender:
         prev_messages -= set(dont_touch)
         await asyncio.gather(*(
             self.post_data({
-                'method': 'deleteMessage',
+                'method': TelegramMethod.DELETE_MESSAGE,
                 'chat_id': self.chat_id,
                 'message_id': x
             }) for x in prev_messages)
@@ -192,12 +192,18 @@ class TgSender:
         })
 
     async def post_data(self, request_to_tg_server: dict):
-        url = self.get_api_url(request_to_tg_server.pop('method'))
+        method = request_to_tg_server.pop('method')
+        url = self.get_api_url(method)
         logger.info(f'Response ({url}):\n{request_to_tg_server}')
 
         async with self.client.post(url, json=request_to_tg_server) as response:
             if response.status != 200:
-                logger.error('Got unexpected tg server response status: %s.\n'
+                if method == TelegramMethod.DELETE_MESSAGE:
+                    logger_method = logger.info
+                else:
+                    logger_method = logger.error
+
+                logger_method('Got unexpected tg server response status: %s.\n'
                              'Request: %s.\n'
                              'Response: %s',
                              response.status,

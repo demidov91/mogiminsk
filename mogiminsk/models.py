@@ -1,3 +1,5 @@
+from mogiminsk import defines
+
 from sqlalchemy import Column, Integer, String, ForeignKey, \
     JSON, SmallInteger, DateTime, UniqueConstraint, Boolean, DECIMAL, Text
 from sqlalchemy.orm import relationship
@@ -123,6 +125,9 @@ class Trip(Base):
 
     def __str__(self):
         return f'{self.start_datetime} {self.direction} trip by {self.car}'
+
+    def is_default_price(self):
+        return self.cost == defines.DEFAULT_MOG_MINSK_PRICE
 
 
 class Station(Base):

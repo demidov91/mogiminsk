@@ -4,3 +4,9 @@ FULL_TRIPS_SWITCH = 'show_full_trips'
 
 # Context **bot** value for telegram.
 TELEGRAM_BOT = 'tg'
+
+
+class TelegramMethod:
+    DELETE_MESSAGE = 'deleteMessage'
+    SEND_MESSAGE = 'sendMessage'
+    EDIT_TEXT = 'editMessageText'
