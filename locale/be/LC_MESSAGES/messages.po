@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-09-14 23:17+0300\n"
+"POT-Creation-Date: 2019-09-16 01:41+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,7 +137,7 @@ msgstr ""
 msgid "Wrong SMS. Enter again."
 msgstr ""
 
-#: bot/state_lib/finish_purchase_with_sms.py:44 bot/state_lib/purchase.py:124
+#: bot/state_lib/finish_purchase_with_sms.py:44 bot/state_lib/purchase.py:125
 msgid "Failed to purchase the trip. Try another provider."
 msgstr ""
 
@@ -149,11 +149,11 @@ msgstr ""
 msgid "Add some notes:"
 msgstr ""
 
-#: bot/state_lib/phone.py:10
-msgid "Tap the button below to share your phone number."
+#: bot/state_lib/phone.py:11
+msgid "Tap the button below to share your phone number or enter it."
 msgstr ""
 
-#: bot/state_lib/phone.py:12
+#: bot/state_lib/phone.py:13
 msgid "Share phone number"
 msgstr ""
 
@@ -183,19 +183,24 @@ msgstr ""
 
 #: bot/state_lib/purchase.py:90
 #, python-format
-msgid "Pick up: %s"
+msgid "Phone: %s"
 msgstr ""
 
 #: bot/state_lib/purchase.py:91
 #, python-format
+msgid "Pick up: %s"
+msgstr ""
+
+#: bot/state_lib/purchase.py:92
+#, python-format
 msgid "%s seat(s)"
 msgstr ""
 
-#: bot/state_lib/purchase.py:94
+#: bot/state_lib/purchase.py:95
 msgid "⬅️ Back"
 msgstr ""
 
-#: bot/state_lib/purchase.py:95
+#: bot/state_lib/purchase.py:96
 msgid "Book it! ✅"
 msgstr ""
 

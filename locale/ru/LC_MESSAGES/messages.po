@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-09-14 23:17+0300\n"
+"POT-Creation-Date: 2019-09-16 01:41+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -144,7 +144,7 @@ msgstr ""
 msgid "Wrong SMS. Enter again."
 msgstr "Неправильный SMS-код. Введите ещё раз."
 
-#: bot/state_lib/finish_purchase_with_sms.py:44 bot/state_lib/purchase.py:124
+#: bot/state_lib/finish_purchase_with_sms.py:44 bot/state_lib/purchase.py:125
 msgid "Failed to purchase the trip. Try another provider."
 msgstr "Не удалось заказать поездку. Попробуйте другого перевозчика."
 
@@ -156,11 +156,11 @@ msgstr "Как Вас зовут?"
 msgid "Add some notes:"
 msgstr "Добавьте замечание:"
 
-#: bot/state_lib/phone.py:10
-msgid "Tap the button below to share your phone number."
-msgstr "Нажмите на кнопку ниже, чтобы отправить свой номер."
+#: bot/state_lib/phone.py:11
+msgid "Tap the button below to share your phone number or enter it."
+msgstr "Нажмите на кнопку ниже, чтобы отправить свой номер или наберите его."
 
-#: bot/state_lib/phone.py:12
+#: bot/state_lib/phone.py:13
 msgid "Share phone number"
 msgstr "Отправить номер телефона"
 
@@ -194,20 +194,24 @@ msgid "Name: %s"
 msgstr "Имя: %s"
 
 #: bot/state_lib/purchase.py:90
+msgid "Phone: %s"
+msgstr "Телефон: %s"
+
+#: bot/state_lib/purchase.py:91
 #, python-format
 msgid "Pick up: %s"
 msgstr "Посадка: %s"
 
-#: bot/state_lib/purchase.py:91
+#: bot/state_lib/purchase.py:92
 #, python-format
 msgid "%s seat(s)"
 msgstr "Места: %s"
 
-#: bot/state_lib/purchase.py:94
+#: bot/state_lib/purchase.py:95
 msgid "⬅️ Back"
 msgstr "⬅ Назад"
 
-#: bot/state_lib/purchase.py:95
+#: bot/state_lib/purchase.py:96
 msgid "Book it! ✅"
 msgstr "Заказать! ✅"
 

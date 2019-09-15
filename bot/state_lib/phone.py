@@ -8,13 +8,20 @@ from bot.state_lib.base import BaseState
 
 class PhoneState(BaseState):
     _intro_message = BotMessage(
-        text=_('Tap the button below to share your phone number.'),
+        text=_('Tap the button below to share your phone number or enter it.'),
         buttons=[[{
             'text': _('Share phone number'),
             'type': 'phone',
         }, BACK]],
         is_tg_text_buttons=True
     )
+
+    async def get_back_state(self):
+        if self.user.phone:
+            return 'show'
+
+        return 'purchase'
+
 
     async def process(self):
         if self.text and self.text.lower() == 'back':
