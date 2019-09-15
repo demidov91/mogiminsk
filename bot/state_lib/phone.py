@@ -2,17 +2,20 @@ import re
 from typing import Optional
 
 from aiohttp_translation import gettext_lazy as _
-from bot.messages.base import BotMessage, BACK
+from bot.messages.base import BotMessage
 from bot.state_lib.base import BaseState
 
 
 class PhoneState(BaseState):
     _intro_message = BotMessage(
         text=_('Tap the button below to share your phone number or enter it.'),
-        buttons=[[{
-            'text': _('Share phone number'),
-            'type': 'phone',
-        }, BACK]],
+        buttons=[
+            [{
+                'text': _('Share phone number'),
+                'type': 'phone',
+            }],
+            [_('⬅️ Back')]
+        ],
         is_tg_text_buttons=True
     )
 
@@ -22,16 +25,14 @@ class PhoneState(BaseState):
 
         return 'purchase'
 
-
     async def process(self):
-        if self.text and self.text.lower() == 'back':
-            self.set_state('show')
+        if self.text and self.text.startswith('⬅️'):
+            self.set_state(await self.get_back_state())
             return
 
         phone = (self.contact and self.contact.phone) or validate_phone(self.text)
 
         if phone is None:
-            self.set_state('show')
             self.message_was_not_recognized = True
             return
 

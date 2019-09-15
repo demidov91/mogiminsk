@@ -46,6 +46,5 @@ class TestPhone:
         tested.text = text
         await tested.process()
         assert tested.message_was_not_recognized
-        assert tested.get_state() == 'show'
 
 
