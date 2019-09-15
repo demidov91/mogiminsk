@@ -20,7 +20,7 @@ Base = declarative_base(cls=TimeTrackingBase)
 class User(Base):
     __tablename__ = 'mogiminsk_user'
     id = Column(Integer, primary_key=True)
-    phone = Column(String(12), nullable=True, unique=True)
+    phone = Column(String(12), nullable=True)
     first_name = Column(String(31), nullable=True)
     language = Column(String(5), nullable=True)
     external = Column(JSON, default={})
