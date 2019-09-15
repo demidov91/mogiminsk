@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-09-16 01:41+0300\n"
+"POT-Creation-Date: 2019-09-16 01:44+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -194,8 +194,9 @@ msgid "Name: %s"
 msgstr "Имя: %s"
 
 #: bot/state_lib/purchase.py:90
-msgid "Phone: %s"
-msgstr "Телефон: %s"
+#, python-format
+msgid "Phone: +%s"
+msgstr "Телефон: +%s"
 
 #: bot/state_lib/purchase.py:91
 #, python-format

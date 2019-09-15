@@ -87,7 +87,7 @@ class PurchaseState(BaseState):
 
         return [
             [{'text': _('Name: %s') % self.user.first_name, 'data': 'firstname'}],
-            [{'text': _('Phone: %s') % self.user.phone, 'data': 'phone'}],
+            [{'text': _('Phone: +%s') % self.user.phone, 'data': 'phone'}],
             [{'text': _('Pick up: %s') % self.data["station_name"], 'data': 'station'}],
             [{'text': _('%s seat(s)') % self.data["seat"], 'data': 'seat'}],
             [{'text': notes, 'data': 'notes'}],
