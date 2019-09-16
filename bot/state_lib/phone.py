@@ -20,10 +20,7 @@ class PhoneState(BaseState):
     )
 
     async def get_back_state(self):
-        if self.user.phone:
-            return 'show'
-
-        return 'purchase'
+        return 'purchase' if self.user.phone else 'show'
 
     async def process(self):
         if self.text and self.text.startswith('⬅'):
