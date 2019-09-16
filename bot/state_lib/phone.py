@@ -14,7 +14,7 @@ class PhoneState(BaseState):
                 'text': _('Share phone number'),
                 'type': 'phone',
             }],
-            [_('⬅️ Back')]
+            [_('⬅ Back')]
         ],
         is_tg_text_buttons=True
     )
@@ -26,7 +26,7 @@ class PhoneState(BaseState):
         return 'purchase'
 
     async def process(self):
-        if self.text and self.text.startswith('⬅️'):
+        if self.text and self.text.startswith('⬅'):
             self.set_state(await self.get_back_state())
             return
 

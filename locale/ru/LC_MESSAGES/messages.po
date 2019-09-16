@@ -209,7 +209,7 @@ msgid "%s seat(s)"
 msgstr "Места: %s"
 
 #: bot/state_lib/purchase.py:95
-msgid "⬅️ Back"
+msgid "⬅ Back"
 msgstr "⬅ Назад"
 
 #: bot/state_lib/purchase.py:96
