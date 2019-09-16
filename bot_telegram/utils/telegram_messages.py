@@ -1,3 +1,6 @@
+from speaklater import is_lazy_string
+
+
 class ButtonFormatter:
     def __init__(self, button):
         self.button = button
@@ -27,7 +30,7 @@ class InlineButtonFormatter(ButtonFormatter):
 
 class TextButtonFormatter(ButtonFormatter):
     def __init__(self, button):
-        if isinstance(button, str):
+        if isinstance(button, str) or is_lazy_string(button):
             button = {
                 'text': button,
                 'type': 'text',

@@ -49,7 +49,7 @@ class StationState(BaseState):
         return BotMessage(_('Choose start station:'), buttons=buttons)
 
     async def get_back_state(self):
-        if self.data.get('station') is not None and self.data['station'].isdigit():
+        if self.data.get('station') is not None and str(self.data['station']).isdigit():
             return 'purchase'
 
         return 'show'
