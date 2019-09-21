@@ -26,6 +26,7 @@ class TestPhone:
         '375 29 2020327',
         '+375 (29) 2020327',
         '202 and +375 (29) 2020327',
+        '292020327',
     ])
     async def test_process__valid_text(self, text):
         user = UserFactory()
@@ -37,7 +38,7 @@ class TestPhone:
     @pytest.mark.asyncio
     @pytest.mark.parametrize('text', [
         '75292020327',
-        '+375 and 292020327',
+        '29 and 2020327',
         'A3N7Y5t2e9x2t0w2i0t3h2i7n',
     ])
     async def test_process__invalid_text(self, text):

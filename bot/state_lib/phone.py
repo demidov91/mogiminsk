@@ -43,8 +43,15 @@ def validate_phone(phone: Optional[str]) -> Optional[str]:
 
     phone = re.sub(r'[^A-Za-z\d]', '', phone)
 
-    match = re.search(r'(\d{12})', phone)
+    match = re.search(r'(\d{9,})', phone)
     if not match:
         return None
 
-    return match.group(1)
+    phone = match.group(1)
+    if len(phone) == 9:
+        phone = '375' + phone
+
+    if len(phone) != 12:
+        return None
+
+    return phone
