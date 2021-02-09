@@ -2,6 +2,7 @@ import argparse
 
 from aiohttp import web
 
+from api.views import trips
 from mogiminsk.middleware import (
     initilize_session,
     suppress_error,
@@ -25,6 +26,7 @@ def init():
 
     app.router.add_post("/mogiminsk/tg/", TgServer.webhook)
     app.router.add_post("/mogiminsk/viber/{token}/", ViberServer.webhook)
+    app.router.add_get("/api/trips/", trips)
 
     app.on_startup.append(init_client)
 
