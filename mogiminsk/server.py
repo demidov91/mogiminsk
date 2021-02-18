@@ -2,7 +2,7 @@ import argparse
 
 from aiohttp import web
 
-from api.views import trips
+from api.views import providers, trips
 from mogiminsk.middleware import (
     initilize_session,
     suppress_error,
@@ -15,21 +15,37 @@ from mogiminsk.utils import (
 
 
 def init():
+    app = web.Application()
+    app.add_subapp('/mogiminsk/', init_messagers())
+    app.add_subapp('/api/', init_api())
+    return app
+
+
+def init_messagers():
+    from bot_telegram.tg_server import TgServer
+    from bot_viber.viber_server import ViberServer
+
     app = web.Application(middlewares=[
         suppress_error.middleware,
         clear_tasklocal.middleware,
         initilize_session.middleware,
     ])
 
-    from bot_telegram.tg_server import TgServer
-    from bot_viber.viber_server import ViberServer
-
-    app.router.add_post("/mogiminsk/tg/", TgServer.webhook)
-    app.router.add_post("/mogiminsk/viber/{token}/", ViberServer.webhook)
-    app.router.add_get("/api/trips/", trips)
+    app.router.add_post("/tg/", TgServer.webhook)
+    app.router.add_post("/viber/{token}/", ViberServer.webhook)
 
     app.on_startup.append(init_client)
+    app.on_cleanup.append(destroy_client)
 
+    return app
+    
+
+def init_api():
+    app = web.Application()
+    app.router.add_get("/trips/", trips)
+    app.router.add_get("/providers/", providers)
+
+    app.on_startup.append(init_client)
     app.on_cleanup.append(destroy_client)
 
     return app
