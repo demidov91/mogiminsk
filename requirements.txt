@@ -5,44 +5,118 @@
 #    pip-compile --output-file requirements.txt requirements.in
 #
 aiohttp==3.5.2
+    # via -r requirements.in
 alembic==1.0.5
-async-timeout==3.0.1      # via aiohttp
-atomicwrites==1.2.1       # via pytest
-attrs==18.2.0             # via aiohttp, pytest
+    # via -r requirements.in
+async-timeout==3.0.1
+    # via aiohttp
+atomicwrites==1.2.1
+    # via pytest
+attrs==18.2.0
+    # via
+    #   aiohttp
+    #   pytest
 babel==2.6.0
-certifi==2018.11.29       # via requests, sentry-sdk
-chardet==3.0.4            # via aiohttp, requests
+    # via -r requirements.in
+certifi==2022.12.7
+    # via
+    #   requests
+    #   sentry-sdk
+chardet==3.0.4
+    # via
+    #   aiohttp
+    #   requests
 cssselect==1.0.3
+    # via -r requirements.in
 dateparser==0.7.0
+    # via -r requirements.in
 factory-boy==2.11.1
-faker==1.0.1              # via factory-boy
+    # via -r requirements.in
+faker==1.0.1
+    # via factory-boy
 freezegun==0.3.11
+    # via -r requirements.in
 future==0.17.1
+    # via -r requirements.in
 gunicorn==19.9.0
-idna-ssl==1.1.0           # via aiohttp
+    # via -r requirements.in
 idna==2.8
+    # via
+    #   -r requirements.in
+    #   requests
+    #   yarl
 lxml==4.3.0
-mako==1.0.7               # via alembic
-markupsafe==1.1.0         # via mako
-more-itertools==5.0.0     # via pytest
+    # via -r requirements.in
+mako==1.0.7
+    # via alembic
+markupsafe==1.1.0
+    # via mako
+more-itertools==5.0.0
+    # via pytest
 multidict==4.5.2
-pluggy==0.8.1             # via pytest
-psycopg2-binary
-py==1.7.0                 # via pytest
-pytest-asyncio==0.10.0
+    # via
+    #   -r requirements.in
+    #   aiohttp
+    #   yarl
+pluggy==0.8.1
+    # via pytest
+psycopg2-binary==2.9.5
+    # via -r requirements.in
+py==1.7.0
+    # via pytest
 pytest==4.1.0
+    # via
+    #   -r requirements.in
+    #   pytest-asyncio
+pytest-asyncio==0.10.0
+    # via -r requirements.in
 python-dateutil==2.7.5
-python-editor==1.0.3      # via alembic
+    # via
+    #   -r requirements.in
+    #   alembic
+    #   dateparser
+    #   faker
+    #   freezegun
+python-editor==1.0.3
+    # via alembic
 pytz==2018.9
+    # via
+    #   -r requirements.in
+    #   babel
+    #   dateparser
+    #   tzlocal
 regex==2018.11.22
+    # via
+    #   -r requirements.in
+    #   dateparser
 requests==2.21.0
+    # via -r requirements.in
 sentry-sdk==0.7.6
-six==1.12.0               # via faker, freezegun, more-itertools, pytest, python-dateutil
+    # via -r requirements.in
+six==1.12.0
+    # via
+    #   faker
+    #   freezegun
+    #   more-itertools
+    #   pytest
+    #   python-dateutil
 speaklater==1.3
+    # via -r requirements.in
 sqlalchemy==1.2.15
-text-unidecode==1.2       # via faker
-typing-extensions==3.6.6  # via aiohttp
+    # via
+    #   -r requirements.in
+    #   alembic
+text-unidecode==1.2
+    # via faker
 tzlocal==1.5.1
-urllib3==1.24.1           # via requests, sentry-sdk
+    # via
+    #   -r requirements.in
+    #   dateparser
+urllib3==1.24.1
+    # via
+    #   requests
+    #   sentry-sdk
 uvloop==0.11.3
-yarl==1.3.0               # via aiohttp
+    # via -r requirements.in
+yarl==1.3.0
+    # via aiohttp
